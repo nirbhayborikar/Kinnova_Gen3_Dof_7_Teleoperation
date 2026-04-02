@@ -1,0 +1,43 @@
+cmake_minimum_required(VERSION 3.14)
+include(FetchContent)
+
+project(kortex_api)
+
+#Future:
+# convert API_URL components from CMAKE_SYSTEM variables.
+# The kinova artifactory server artifacts have slightly different expectations and they need some transformations
+# Could build something like: (URL_OS)_(URL_PROCESSOR)_(?)_(URL_COMPILER).zip
+# string(REPLACE "_" "-" URL_PROCESSOR ${CMAKE_SYSTEM_PROCESSOR}) # x86_64 -> x86-64
+# string(TOLOWER ${CMAKE_SYSTEM_NAME} URL_OS) # Linux -> linux
+
+#Current: only support Linux x86_64 and aarch64
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux" AND CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64")
+  FetchContent_Declare(
+    kinova_binary_api
+    URL https://artifactory.kinovaapps.com:443/artifactory/generic-local-public/kortex/API/2.6.0/linux_aarch64_gcc_5.4.zip
+    URL_HASH MD5=052fc8f4d9901c78c1b4287bd1de71e0
+  )
+elseif(CMAKE_SYSTEM_NAME STREQUAL "Linux" AND CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
+  FetchContent_Declare(
+    kinova_binary_api
+    URL https://artifactory.kinovaapps.com:443/artifactory/generic-local-public/kortex/API/2.6.0/linux_x86_64_gcc_5.4.zip
+    URL_HASH MD5=a990f7941ecd9e3d1d986b1aa461cc81
+  )
+else()
+  set(API_URL "")
+  message(FATAL_ERROR "Unsupported System: currently support is for Linux x68_64 or aarch64. Detected ${CMAKE_SYSTEM_NAME} and ${CMAKE_SYSTEM_PROCESSOR}")
+endif()
+
+FetchContent_MakeAvailable(kinova_binary_api)
+
+find_package(ament_cmake REQUIRED)
+
+ament_export_include_directories(include/kortex_api)
+
+install(DIRECTORY ${kinova_binary_api_SOURCE_DIR}/include/client/ DESTINATION include/kortex_api)
+install(DIRECTORY ${kinova_binary_api_SOURCE_DIR}/include/common/ DESTINATION include/kortex_api)
+install(DIRECTORY ${kinova_binary_api_SOURCE_DIR}/include/messages/ DESTINATION include/kortex_api)
+install(DIRECTORY ${kinova_binary_api_SOURCE_DIR}/include/client_stubs/ DESTINATION include/kortex_api)
+install(DIRECTORY ${kinova_binary_api_SOURCE_DIR}/include/google/protobuf DESTINATION include/kortex_api/google)
+
+ament_package()

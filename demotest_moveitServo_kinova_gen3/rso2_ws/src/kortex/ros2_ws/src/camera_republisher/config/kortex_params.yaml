@@ -1,0 +1,34 @@
+# Camera Republisher Node Parameters
+# Topic routing is now handled by launch file remapping
+camera_republisher_node:
+  ros__parameters:
+    # All 9 topics (4 inputs + 5 outputs) are configured here and 
+    # parsed by the launch file to generate remappings
+    
+    # Input topics (4 inputs)
+    input_camera_topic: "/do_not_use_this/color/image_raw"
+    input_camera_info_topic: "/do_not_use_this/color/camera_info"  
+    input_depth_topic: "/do_not_use_this/depth/image_raw"
+    input_depth_info_topic: "/do_not_use_this/depth/camera_info"
+    
+    # Output topics (5 outputs total)
+    # 4 from republisher:
+    output_camera_topic: "/kortex_vision/color/image_raw"
+    output_camera_info_topic: "/kortex_vision/color/camera_info"
+    output_depth_topic: "/kortex_vision/depth/image_raw"
+    output_depth_info_topic: "/kortex_vision/depth/camera_info"
+    output_points_topic: "/kortex_vision/points"
+
+# Register Node Parameters
+register_node:
+  ros__parameters:
+    depth_image_transport: "raw"
+    queue_size: 5
+    fill_upsampling_holes: false
+    use_rgb_timestamp: false
+
+# Point Cloud XYZ RGB Node Parameters  
+point_cloud_xyzrgb_node:
+  ros__parameters:
+    queue_size: 5
+    approximate_sync: true

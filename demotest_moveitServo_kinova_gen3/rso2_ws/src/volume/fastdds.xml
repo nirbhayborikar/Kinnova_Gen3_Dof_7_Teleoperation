@@ -1,0 +1,15 @@
+<profiles>
+  <participant profile_name="default" is_default_profile="true">
+    <rtps>
+      <builtin>
+        <interfaces>
+          <interface>wlo1</interface>
+        </interfaces>
+      </builtin>
+
+      <!-- Avoid multicast issues on Wi-Fi -->
+      <avoid_builtin_multicast>true</avoid_builtin_multicast>
+    </rtps>
+  </participant>
+</profiles>
+

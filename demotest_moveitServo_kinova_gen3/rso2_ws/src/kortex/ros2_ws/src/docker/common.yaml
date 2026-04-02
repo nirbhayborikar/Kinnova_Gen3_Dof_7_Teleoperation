@@ -1,0 +1,40 @@
+services:
+  kortex_common:
+    image: fbe-dockerreg.rwu.de/prj-iki-ros2/robots/kortex:jazzy
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    environment:
+      DISPLAY: $DISPLAY
+    network_mode: host
+    ipc: host
+    privileged: true
+    stdin_open: true
+    restart: unless-stopped
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - /run/user/1000/gdm/Xauthority:/root/.Xauthority:ro
+      - ../iki_kortex_bringup:/root/ros2_ws/src/prj-iki-ros2/robots/kortex/iki_kortex_bringup
+      - ../iki_kortex_config:/root/ros2_ws/src/prj-iki-ros2/robots/kortex/iki_kortex_config
+      - ../iki_kortex_moveit_config:/root/ros2_ws/src/prj-iki-ros2/robots/kortex/iki_kortex_moveit_config
+      - ../iki_kortex_description:/root/ros2_ws/src/prj-iki-ros2/robots/kortex/iki_kortex_description
+    command: tail -f /dev/null
+
+  kortex_common_nvidia:
+    extends: kortex_common
+    runtime: nvidia
+    environment:
+      QT_X11_NO_MITSHM: "1"
+      NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: compute,video,utility,graphics
+
+  kortex_real:
+    extends: kortex_common_nvidia
+    environment:
+      ROS_DOMAIN_ID: 145
+    
+  kortex_sim:
+    extends: kortex_common_nvidia
+    environment:
+      ROS_DOMAIN_ID: $ROS_DOMAIN_ID
+      ROS_AUTOMATIC_DISCOVERY_RANGE: "LOCALHOST"

@@ -1,0 +1,7 @@
+version: "2.4"
+services:
+  iki_object_models:
+    image: fbe-dockerreg.rwu.de/prj-iki-ros2/knowledgebase/iki_object_models
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile

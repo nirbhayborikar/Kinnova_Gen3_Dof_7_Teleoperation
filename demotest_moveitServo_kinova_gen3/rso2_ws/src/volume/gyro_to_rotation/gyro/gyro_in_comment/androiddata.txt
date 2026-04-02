@@ -1,0 +1,399 @@
+1.WakeUp Sensor :False type=android.sensor.accelerometer
+
+{"timestamp":3775142699309855,"values":[0.64247286,3.3083763,9.094521],"type":"android.sensor.accelerometer"} 
+Only gravity + motion
+
+❌ No rotation (yaw impossible)
+
+
+2. Gyro 
+
+values":[0.34035173,0.58509606,-0.20213377],"type":"android.sensor.gyroscope"
+Angular velocity
+
+❌ Needs integration → drift
+
+3. Rotation
+{"timestamp":3775730393983871,"values":[-0.001850891,-0.015265242,-0.8313532,0.5555317,-1.0],"type":"android.sensor.rotation_vector"}
+
+👉 This is quaternion (qx, qy, qz, qw)
+👉 Already fused + stable
+👉 Includes yaw (Z rotation)
+
+
+
+Phone action vs robot
+
+| Phone action               | What it actually changes |
+| -------------------------- | ------------------------ |
+| Tilt forward/back          | **Pitch**                |
+| Tilt left/right            | **Roll**                 |
+| Rotate like steering wheel | **Yaw (Z)**              |
+
+🎯 3. Correct mapping (THIS is what you need)
+
+You are already close, but let’s fix it cleanly:
+
+📱 Assume:
+
+Phone in portrait
+
+Screen facing you
+
+
+
+
+// Euler from quaternion
+roll  = left/right tilt
+pitch = forward/back tilt
+yaw   = rotation (twist wrist)
+
+//Robot mapping (base_link frame)
+
+
+linear.x  =  pitch   → forward/backward
+linear.y  =  roll    → left/right
+angular.z =  yaw     → rotation
+
+====================================================================================
+
+0. come out from singularity
+ros2 topic pub --once /joint_trajectory_controller/joint_trajectory trajectory_msgs/msg/JointTrajectory "{
+  joint_names: ['joint_1', 'joint_2', 'joint_3', 'joint_4', 'joint_5', 'joint_6', 'joint_7'],
+  points: [{
+    positions: [0.0, 0.5, 1.57, -1.57, 0.0, 1.0, 0.0],
+    time_from_start: {sec: 5}
+  }]
+}"
+
+
+
+ros2 topic pub --once /joint_trajectory_controller/joint_trajectory trajectory_msgs/msg/JointTrajectory "{
+  header: {
+    stamp: {sec: 0, nanosec: 0},
+    frame_id: ''
+  },
+  joint_names: ['joint_1', 'joint_2', 'joint_3', 'joint_4', 'joint_5', 'joint_6', 'joint_7'],
+  points: [{
+    positions: [0.0, 0.26, 3.14, -2.27, 0.0, 0.96, 1.57],
+    time_from_start: {sec: 5, nanosec: 0}
+  }]
+}"
+
+1. Monitoring Robot State in real time:
+
+
+# Terminal 3: Watch joint states
+ros2 topic echo /joint_states --field position
+array('d', [0.6949995140251882, -0.5995231309505831, 1.1656952247019108, 3.067675512550975, -0.4622806871368703, -1.484973898755929, 1.3034722256067464, 3.081574535207332])
+---
+array('d', [0.6949995140251882, -0.5995231309505831, 1.1656952247019108, 3.067675512550975, -0.4622806871368703, -1.484973898755929, 1.3034722256067464, 3.081574535207332])
+
+
+# Terminal 4: Watch servo status
+ros2 topic echo /servo_node/status
+code: 2
+message: Very close to a singularity, emergency stop
+---
+
+
+
+
+
+
+Check for Singularity:
+
+# If servo stops, check why:
+ros2 topic echo /servo_node/status | grep halt
+message: Close to a joint bound (position or velocity), halting
+
+
+# You'll see messages like:
+# "Halting for singularity: condition_number = 150.3"
+# "Halting for collision"
+# "Halting for joint limits"
+
+(
+
+ros2 launch moveit_servo servo_kinovagen3.launch.py 
+[servo_node-1] [WARN] [1774084473.030435811] [servo_node.servo_node.moveit.ros.servo]: Very close to a singularity, emergency stop
+
+
+
+
+
+
+
+
+
+
+
+
+
+)
+
+2. COORDINATE FRAME MISMATCH
+
+Problem:
+"Robot Y going different than mobile app axis"
+Your phone orientation doesn't match robot coordinate frame
+
+# Terminal: Watch velocity commands
+ros2 topic echo /servo_node/delta_twist_cmds
+
+
+Then test each axis:
+
+Tilt phone FORWARD → Watch which velocity changes
+Tilt phone LEFT → Watch which velocity changes
+Rotate phone CLOCKWISE → Watch angular Z
+
+3. Fix Coordinate Mapping: In Yaml
+Edit teleop_params.yaml and try different combinations:
+
+# OPTION 1: Current settings
+invert_x: false
+invert_y: true
+invert_z: true
+
+# OPTION 2: If robot moves backward when tilting forward
+invert_x: false
+invert_y: false  # Change this
+invert_z: true
+
+# OPTION 3: If left/right is reversed
+invert_x: true   # Change this
+invert_y: true
+invert_z: true
+
+# OPTION 4: If rotation is reversed
+invert_x: false
+invert_y: true
+invert_z: false  # Change this
+
+
+==================================Test===================================
+## **HOW TO CONTROL THE ROBOT**
+
+### **Phone Gestures:**
+
+| Phone Motion | Robot Motion | Axis | Math |
+|-------------|--------------|------|------|
+| **Tilt forward** ↑ | Move forward | X+ | Pitch+ |
+| **Tilt backward** ↓ | Move backward | X- | Pitch- |
+| **Tilt left** ← | Move left | Y+ | Roll+ |
+| **Tilt right** → | Move right | Y- | Roll- |
+| **Rotate clockwise** ↻ | Move UP | Z+ | Yaw+ |
+| **Rotate counter-clockwise** ↺ | Move DOWN | Z- | Yaw- |
+
+---
+
+## **VISUAL GUIDE**
+```
+Phone held flat (portrait mode):
+
+      FORWARD TILT
+           ↑
+           │
+    LEFT ←─┼─→ RIGHT
+    TILT   │   TILT
+           ↓
+      BACKWARD TILT
+
+    ROTATE CLOCKWISE ↻
+         = UP (Z+)
+
+    ROTATE CCW ↺
+         = DOWN (Z-)
+
+
+         *******************
+
+
+
+         [ERROR] [1774093844.539523463] [joint_trajectory_controller]: Velocity of last trajectory point of joint joint_1 is not zero: -0.000020194185678
+
+
+======================Fight for singularity ==============================
+
+1. Robot keeps hitting singularity because the X-Y-Z mapping is pushing the arm into unsafe configurations. Let me fix this properly.
+
+Once this works safely, gradually increase:
+
+
+First: gyro_linear_scale: 0.3
+Then: max_linear_velocity: 0.05
+Finally: deadzone: 0.03
+
+
+
+ROOT CAUSE OF YOUR ISSUES
+ProblemCauseFixSingularitygyro_linear_scale: 0.8 too highReduce to 0.3 or 0.2OverextensionNo angle limitingAdd MAX_TILT check in codeZ only one wayWrong invert_z flagTest and adjustToo sensitivedeadzone: 0.02 too smallIncrease to 0.03 or 0.
+
+
+
+1. ros2 topic echo /olive/olixSense/x1/id001/imu
+
+header:
+  stamp:
+    sec: 1716815462
+    nanosec: 910308704
+  frame_id: id001_base_link
+orientation:
+  x: -0.02321319460468025
+  y: 0.0249037350193348
+  z: 0.3229082471852347
+  w: 0.945802092984968
+orientation_covariance:
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+angular_velocity:
+  x: 0.0004889475445212625
+  y: 0.0015679133779631204
+  z: -5.98916726351693e-05
+angular_velocity_covariance:
+- 1.45176e-06
+- 0.0
+- 0.0
+- 0.0
+- 1.45176e-06
+- 0.0
+- 0.0
+- 0.0
+- 1.45176e-06
+linear_acceleration:
+  x: -0.7967552253891805
+  y: -0.23570953675295545
+  z: -9.731345426796132
+linear_acceleration_covariance:
+- 1.36091e-05
+- 0.0
+- 0.0
+- 0.0
+- 1.36091e-05
+- 0.0
+- 0.0
+- 0.0
+- 1.36091e-05
+---
+
+
+2. ros2 topic status
+
+level: "\0"
+name: id001
+message: ok
+hardware_id: 004A00323331510C39353336
+values:
+- key: CPU usage
+  value: '44.680851'
+- key: Memory usage
+  value: '25'
+- key: Disk usage
+  value: '14441037824'
+- key: Disk available
+  value: '16186404864'
+- key: Disk all
+  value: '30627442688'
+- key: Network RX
+  value: '0'
+- key: Network TX
+  value: '9278'
+- key: CPU Temperature
+  value: '30'
+- key: Uptime
+  value: 0 days, 0 hours, 11 minutes, 55 seconds
+- key: Serial number
+  value: 004A00323331510C39353336
+- key: Firmware version
+  value: 3.2.0
+- key: Patch version
+  value: '2137'
+- key: Network IP
+  value: 192.168.7.100
+
+
+3. 
+ros2 topic echo /olive/olixSense/x1/id001/acceleration
+
+
+header:
+  stamp:
+    sec: 1716815704
+    nanosec: 419883322
+  frame_id: id001_base_link
+accel:
+  linear:
+    x: -3.1426327228546143
+    y: 0.0
+    z: 3.3287603855133057
+  angular:
+    x: 7.052493430450003
+    y: 14.351077978634395
+    z: 0.12346295378247865
+---
+
+4.ros2 topic echo /olive/olixSense/x1/id001/velocity
+
+header:
+  stamp:
+    sec: 1716815768
+    nanosec: 630665823
+  frame_id: id001_base_link
+twist:
+  linear:
+    x: 0.41079083091085755
+    y: -1.252459873787004
+    z: 0.8484267467014857
+  angular:
+    x: 0.20269182208054398
+    y: -0.2993716998835335
+    z: 0.2534571237687641
+
+
+
+
+
+
+
+
+
+# APRIL 1
+
+
+
+
+
+
+
+┌──────────────────────────────────────────────────────┐
+│ LAYER 1: Workspace Cartesian Limits                  │
+│ → Keep TCP in safe box (prevents singularities)      │
+└──────────────────────────────────────────────────────┘
+                    ↓
+┌──────────────────────────────────────────────────────┐
+│ LAYER 2: Joint Position Limits (Exponential Decay)   │
+│ → Smooth velocity reduction near limits              │
+└──────────────────────────────────────────────────────┘
+                    ↓
+┌──────────────────────────────────────────────────────┐
+│ LAYER 3: Velocity & Acceleration Limits              │
+│ → Prevent sudden movements                           │
+└──────────────────────────────────────────────────────┘
+                    ↓
+┌──────────────────────────────────────────────────────┐
+│ LAYER 4: MoveIt Servo Built-in Safety                │
+│ → Singularity detection, collision avoidance         │
+└──────────────────────────────────────────────────────┘
+                    ↓
+┌──────────────────────────────────────────────────────┐
+│ LAYER 5: Auto-Home Recovery (Your Existing Code)     │
+│ → Go to safe position when servo halts               │
+└──────────────────────────────────────────────────────┘

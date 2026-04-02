@@ -1,0 +1,30 @@
+function export_path {
+    local model_path=$(ros2 pkg prefix iki_object_models)/share/iki_object_models/models
+
+    local model_paths=($(find $model_path -name '*model*.sdf' | xargs dirname | xargs dirname))
+    local unique_model_paths=$(printf "%s\n" "${model_paths[@]}" | sort -ru | tr '\n' ' ')
+    local model_paths_string=""
+    for dir in $unique_model_paths
+    do
+        if [[ "$dir" == "$model_path" ]]
+        then
+            # You want to have the main model path at the beginning
+            continue
+        fi
+        model_paths_string="$dir${model_paths_string:+:${model_paths_string}}"
+    done
+
+    model_paths_string="$model_path${model_paths_string:+:${model_paths_string}}"
+
+    export GAZEBO_MODEL_PATH=$model_paths_string${GAZEBO_MODEL_PATH:+:${GAZEBO_MODEL_PATH}}
+    export IGN_GAZEBO_MODEL_PATH=$model_paths_string${GAZEBO_MODEL_PATH:+:${GAZEBO_MODEL_PATH}}
+    export GZ_SIM_MODEL_PATH=$model_paths_string${GAZEBO_MODEL_PATH:+:${GAZEBO_MODEL_PATH}}
+    export GAZEBO_RESOURCE_PATH=$model_paths_string${GAZEBO_RESOURCE_PATH:+:${GAZEBO_RESOURCE_PATH}}
+    export IGN_GAZEBO_RESOURCE_PATH=$model_paths_string${GAZEBO_RESOURCE_PATH:+:${GAZEBO_RESOURCE_PATH}}
+    export GZ_SIM_RESOURCE_PATH=$model_paths_string${GAZEBO_RESOURCE_PATH:+:${GAZEBO_RESOURCE_PATH}}
+
+}
+
+export_path
+#ament_prepend_unique_value GAZEBO_MODEL_PATH "$GAZEBO_MODEL_PATH"
+#ament_prepend_unique_value GAZEBO_RESOURCE_PATH "$GAZEBO_RESOURCE_PATH"

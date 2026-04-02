@@ -1,0 +1,134 @@
+# sensagram_teleop:
+#   ros__parameters:
+
+#     # ========== NETWORK ==========
+#     udp_port: 5005
+
+#     # ========== CONTROL ==========
+#     control_rate_hz: 50.0
+
+#     # ========== VELOCITY LIMITS ==========
+#     max_linear_velocity: 0.3      # m/s - forward/backward/up-down speed
+#     max_angular_velocity: 0.8     # rad/s - rotation speed
+
+#     # ========== ACCELERATION LIMITS ==========
+#     max_linear_accel: 1.0         # m/s²  - how quickly linear speed can change
+#     max_angular_accel: 1.0        # rad/s² - how quickly rotation changes
+#                                   # FIXED: max_angular_accel is now actually applied
+#                                   #        (previously silently ignored — bug fixed in limitAcceleration)
+
+#     # ========== FILTERING ==========
+#     deadzone: 0.005               # Ignore small tilts (rad) ~0.3 degrees
+#     smoothing_factor: 0.3         # Smoothing (0=none, 1=max)
+
+#     # ========== SAFETY / TIMEOUT ==========
+#     timeout_ms: 500.0             # ms — stop robot if no UDP data for this long
+#     max_consecutive_timeouts: 3   # Allow 3 missed packets before stopping
+
+#     # ADDED: homing trigger threshold
+#     # After UDP data has been absent for home_timeout_ms the arm automatically
+#     # moves to the home joint configuration (see home_joint_* below).
+#     # Must be greater than timeout_ms.
+#     home_timeout_ms: 10000.0      # ms — 10 seconds after data loss → execute home
+
+#     # ========== ORIENTATION SCALING ==========
+#     gyro_linear_scale: 0.8        # Pitch/Roll angle → X/Y linear velocity
+#     gyro_angular_scale: 1.5       # (reserved — angular rotation currently set to 0)
+
+#     # ADDED: separate scale for yaw → Z (up/down) mapping.
+#     # Yaw-to-Z has a very different feel from tilt-to-XY; tune independently.
+#     gyro_z_scale: 0.5             # Yaw angle → Z linear velocity (up/down)
+
+#     # ========== COORDINATE MAPPING ==========
+#     # RPY of the phone controls velocity on each TCP axis:
+#     #   Pitch → X (forward / backward)
+#     #   Roll  → Y (left / right)
+#     #   Yaw   → Z (up / down)
+#     invert_x: false               # Roll  → Y
+#     invert_y: true                # Pitch → X
+#     invert_z: true                # Yaw   → Z
+
+#     # ========== SINGULARITY ESCAPE ==========
+#     # ADDED: When MoveIt Servo reports APPROACHING_SINGULARITY or HALT_FOR_SINGULARITY,
+#     #        the node blends a corrective velocity to pull the arm out of the singularity:
+#     #          -X  direction (back toward the robot base)
+#     #          +Z  direction (upward, to lift out of the flat singularity plane)
+#     #        Both axes use the same escape magnitude (m/s).
+#     singularity_escape_linear: 0.05   # m/s — escape velocity magnitude per axis
+
+#     # ========== HOME JOINT CONFIGURATION ==========
+#     # ADDED: target position for the homing sequence (triggered after home_timeout_ms).
+#     # Values captured from /joint_states at startup (sec=6, nanosec=495000000):
+#     #   finger_joint :  0.6950 rad  ( 39.8°)
+#     #   joint_1      :  ≈0     rad  (  0.0°)
+#     #   joint_2      :  0.2600 rad  ( 14.9°)
+#     #   joint_3      :  3.1400 rad  (179.9°)
+#     #   joint_4      : -2.2700 rad  (-130.1°)
+#     #   joint_5      :  ≈0     rad  (  0.0°)
+#     #   joint_6      :  0.9600 rad  ( 55.0°)
+#     #   joint_7      :  1.5700 rad  ( 90.0°)
+#     home_joint_names:
+#       - finger_joint
+#       - joint_1
+#       - joint_2
+#       - joint_3
+#       - joint_4
+#       - joint_5
+#       - joint_6
+#       - joint_7
+
+#     home_joint_positions:
+#       - 0.6950   # finger_joint  39.8°
+#       - 0.0000   # joint_1        0.0°
+#       - 0.2600   # joint_2       14.9°
+#       - 3.1400   # joint_3      179.9°
+#       - -2.2700  # joint_4     -130.1°
+#       - 0.0000   # joint_5        0.0°
+#       - 0.9600   # joint_6       55.0°
+#       - 1.5700   # joint_7       90.0°
+
+
+
+
+
+
+sensagram_teleop:
+  ros__parameters:
+    # ========== NETWORK ==========
+    udp_port: 5005
+    
+    # ========== CONTROL ==========
+    control_rate_hz: 50.0
+    
+    # ========== VELOCITY LIMITS ==========
+    max_linear_velocity: 0.08
+    max_angular_velocity: 0.15
+    
+    # ========== ACCELERATION LIMITS ==========
+    max_linear_accel: 0.4
+    max_angular_accel: 0.6
+    
+    # ========== FILTERING ==========
+    deadzone: 0.02
+    smoothing_factor: 0.4 #0.5
+    
+    # ========== SAFETY ==========
+    timeout_ms: 500.0
+    max_consecutive_timeouts: 3
+    
+    # ========== ORIENTATION SCALING ==========
+    gyro_linear_scale: 0.3
+    gyro_angular_scale: 0.5
+    
+    # ========== JOINT LIMIT AVOIDANCE ==========
+    joint_limit_warning_margin: 0.3
+    
+    # ========== FLAT PHONE DETECTION ==========
+    flat_phone_threshold: 0.05    # ~2.9 degrees - adjust as needed
+    # Increase to 0.1 (~5.7°) if too sensitive
+    # Decrease to 0.03 (~1.7°) if robot moves when phone is nearly flat
+
+    # ========== COORDINATE MAPPING ==========
+    invert_x: false
+    invert_y: true
+    invert_z: true

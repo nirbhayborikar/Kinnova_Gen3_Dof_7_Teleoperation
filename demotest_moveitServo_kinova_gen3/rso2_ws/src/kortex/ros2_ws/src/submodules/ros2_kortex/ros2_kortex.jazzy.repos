@@ -1,0 +1,36 @@
+repositories:
+  control_msgs:
+    type: git
+    url: https://github.com/ros-controls/control_msgs.git
+    version: master
+  ros2_control:
+    type: git
+    url: https://github.com/ros-controls/ros2_control.git
+    version: master
+  # Temporarily added this clone waiting for Jazzy sync that allows rosdep to find it
+  ros2_control_cmake:
+    type: git
+    url: https://github.com/ros-controls/ros2_control_cmake.git
+    version: master
+  # Temporarily added this clone waiting for Jazzy sync that allows rosdep to find it
+  generate_parameter_library:
+    type: git
+    url: https://github.com/PickNikRobotics/generate_parameter_library.git
+    version: main
+  # Temporarily added this clone waiting for Jazzy sync that allows rosdep to find it
+  control_toolbox:
+    type: git
+    url: https://github.com/ros-controls/control_toolbox.git
+    version: ros2-master
+  ros2_controllers:
+    type: git
+    url: https://github.com/ros-controls/ros2_controllers.git
+    version: master
+  ros2_robotiq_gripper:
+    type: git
+    url: https://github.com/picknikrobotics/ros2_robotiq_gripper.git
+    version: main
+  gz_ros2_control:
+    type: git
+    url: https://github.com/ros-controls/gz_ros2_control.git
+    version: jazzy

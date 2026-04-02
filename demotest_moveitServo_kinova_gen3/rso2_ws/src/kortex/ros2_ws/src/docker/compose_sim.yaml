@@ -1,0 +1,50 @@
+services:
+  # kortex_gz_server:
+  #   container_name: kortex_gz_server
+  #   extends:
+  #     file: common.yaml
+  #     service: kortex_sim
+  #   command: 
+  #     - bash
+  #     - -c
+  #     - |
+  #       ros2 launch iki_kortex_bringup kortex_sim.launch.py
+
+  # kortex_gz_gui:
+  #   container_name: kortex_gz_gui
+  #   extends:
+  #     file: common.yaml
+  #     service: kortex_sim
+  #   command: 
+  #     - bash
+  #     - -c
+  #     - |
+  #       sleep 2
+  #       gz sim -g -v4 
+#--gui-config /root/ros2_ws/src/prj-iki/barrob/robots/dumper/dumper-sim/gz_config/harmonic.config
+  
+  kortex_rviz:
+    container_name: kortex_rviz
+    extends:
+      file: common.yaml
+      service: kortex_sim
+    command: 
+      - bash
+      - -c
+      - |
+        sleep 4
+        colcon build --packages-select iki_kortex_bringup
+        sleep 5
+        ros2 launch iki_kortex_bringup rviz.launch.py rviz_config:=kortex_sim.rviz use_sim_time:=true
+
+  kortex_moveit:
+    container_name: kortex_moveit
+    extends:
+      file: common.yaml
+      service: kortex_sim
+    command:
+      - bash
+      - -c
+      - |
+        sleep 6
+        ros2 launch iki_kortex_bringup moveit.launch.py use_sim_time:=true enable_sensors_3d:=true

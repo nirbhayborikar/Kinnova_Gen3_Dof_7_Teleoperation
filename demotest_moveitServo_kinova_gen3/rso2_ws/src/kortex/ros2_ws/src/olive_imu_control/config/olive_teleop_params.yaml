@@ -1,0 +1,41 @@
+olive_teleop_node:
+  ros__parameters:
+    # ========== TOPICS ==========
+    olive_imu_topic: "/olive/olixSense/x1/id001/imu"
+    olive_accel_topic: "/olive/olixSense/x1/id001/acceleration"
+    
+    # ========== CONTROL ==========
+    control_rate_hz: 50.0
+    
+    # ========== VELOCITY LIMITS ==========
+    max_linear_velocity: 0.1       # m/s
+    max_angular_velocity: 0.2      # rad/s
+    
+    # ========== ACCELERATION LIMITS ==========
+    max_linear_accel: 0.4
+    max_angular_accel: 0.6
+    
+    # ========== FILTERING ==========
+    deadzone: 0.03                 # rad (~1.7 degrees)
+    smoothing_factor: 0.6          # 0=no smoothing, 1=max
+    timeout_ms: 500.0              # Stop if no data
+    
+    # ========== ORIENTATION TO VELOCITY MAPPING ==========
+    # Linear velocity (TCP translation)
+    roll_to_linear_y_scale: 0.5    # Roll → Y (left/right)
+    pitch_to_linear_x_scale: 0.5   # Pitch → X (forward/back)
+    yaw_to_linear_z_scale: 0.3     # Yaw → Z (up/down)
+    
+    # Angular velocity (TCP rotation)
+    roll_to_angular_x_scale: 0.0
+    pitch_to_angular_y_scale: 0.0
+    yaw_to_angular_z_scale: 0.4    # Yaw → rotation
+    
+    # ========== COORDINATE MAPPING ==========
+    invert_roll: false
+    invert_pitch: false
+    invert_yaw: false
+    
+    # ========== ACCELERATION (Optional) ==========
+    use_acceleration: false
+    accel_scale: 0.02

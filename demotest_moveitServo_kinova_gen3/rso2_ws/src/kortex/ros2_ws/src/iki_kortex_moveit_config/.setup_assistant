@@ -1,0 +1,10 @@
+moveit_setup_assistant_config:
+  urdf:
+    package: iki_kortex_moveit_config
+    relative_path: config/kortex.urdf
+  srdf:
+    relative_path: config/kortex.srdf
+  package_settings:
+    author_name: me
+    author_email: yesitsme@me.me
+    generated_timestamp: 1754297209

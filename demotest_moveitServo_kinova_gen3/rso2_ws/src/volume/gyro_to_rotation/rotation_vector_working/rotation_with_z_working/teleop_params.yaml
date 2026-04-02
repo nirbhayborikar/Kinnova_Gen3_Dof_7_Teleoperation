@@ -1,0 +1,124 @@
+# sensagram_teleop:
+#   ros__parameters:
+#     udp_port: 5005
+#     control_rate_hz: 50.0
+#     max_linear_velocity: 0.1
+#     max_angular_velocity: 0.3
+#     max_linear_accel: 0.5
+#     max_angular_accel: 1.0
+#     deadzone: 0.02
+#     smoothing_factor: 0.5
+#     timeout_ms: 500.0
+#     max_consecutive_timeouts: 3
+#     orientation_linear_scale: 0.5
+#     orientation_angular_scale: 1.0
+#     invert_x: false
+#     invert_y: false
+#     invert_z: false
+
+
+
+
+
+
+
+
+
+
+
+sensagram_teleop:
+  ros__parameters:
+    # ========== NETWORK ==========
+    udp_port: 5005
+    
+    # ========== CONTROL ==========
+    control_rate_hz: 50.0
+    
+    # ========== VELOCITY LIMITS ==========
+    max_linear_velocity: 0.1   #0.05 #     # m/s - forward/backward speed #0.3
+    max_angular_velocity: 0.15  #0.15 #0.8     # rad/s - rotation speed #0.8 
+    
+    # ========== ACCELERATION LIMITS ==========
+    max_linear_accel: 0.5    #1.0      # m/s² - how quickly speed can change #1.0
+    max_angular_accel: 0.5 #0.5       # rad/s² - how quickly rotation changes #2.0
+    
+    # ========== FILTERING ==========
+    deadzone: 0.02 #0.02              # Ignore small tilts (rad) ~0.3 degrees  #0.005
+    smoothing_factor: 0.5 #0.5          # Smoothing (0=none, 1=max) #0.3
+    
+    # ========== SAFETY ==========
+    timeout_ms: 500.0             # Stop if no data for 500ms
+    max_consecutive_timeouts: 3   # Allow 3 missed packets
+    
+    # ========== ORIENTATION SCALING ==========
+    gyro_linear_scale: 0.8 #0.3        # Tilt angle → linear velocity # 0.8  
+    gyro_angular_scale: 0.5     # 1.5   # Rotation → angular velocity #1.5
+    
+    # ========== COORDINATE MAPPING ==========
+    invert_x: false               # Left/right
+    invert_y: true                # Forward/back
+    invert_z: false                # Rotation #true
+
+
+
+    # invert_x: false   # Roll → Y (left/right)
+    # invert_y: false   # Pitch → X (forward/back)
+    # invert_z: false   # Yaw → Z (up/down)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# ##### The old work
+# sensagram_teleop:
+#   ros__parameters:
+#     # Network
+#     udp_port: 5005
+    
+#     # Control
+#     control_rate_hz: 50.0 # how often the commands are processed
+    
+#     # Velocity limits (INCREASED)
+#     # improve safety and control
+#     max_linear_velocity: 0.3 # Caps forward/backward speed (m/s)
+#     max_angular_velocity: 0.8 # caps rotation speed (rad/s)
+    
+#     # Acceleration limits (INCREASED)
+#     max_linear_accel: 1.0 # Limits how quickly linear speed can change.
+#     max_angular_accel: 2.0 # Limits how quickly rotation speed changes
+    
+#     # Filtering (REDUCED for responsiveness)
+#     deadzone: 0.005 # Ignores very small input values.
+#     smoothing_factor: 0.3 # Blends new input with previous values. Reduces jitter Makes motion smoother
+    
+#     # Safety (RELAXED timeout)
+#     timeout_ms: 2000.0 #Time before considering signal lost (0.5 sec).
+#     max_consecutive_timeouts: 50 # Number of missed updates before stopping.
+#     # Adds tolerance for brief network hiccups while still ensuring safety.
+    
+#     # Scaling (INCREASED sensitivity)
+#     gyro_linear_scale: 0.8 # Converts gyro input → linear velocity.Controls how much tilt/motion affects forward movement.
+#     gyro_angular_scale: 1.5 # Converts gyro input → rotation.Makes turning more responsive to input.
+    
+#     # Coordinate mapping
+#     invert_x: false # controls left/right
+#     invert_y: true # forward/back usually needs flippin
+#     invert_z: true  # gravity direction often inverted
+
+
+# # if front tilt move back robot 
+# # if side way tilt going in forward x 

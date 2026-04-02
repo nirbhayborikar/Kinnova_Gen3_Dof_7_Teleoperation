@@ -1,0 +1,39 @@
+- ros_topic_name: "/kortex_vision/color/image"
+  gz_topic_name: "/wrist_mounted_camera/image"
+  ros_type_name: "sensor_msgs/msg/Image"
+  gz_type_name: "gz.msgs.Image"
+  lazy: true
+  direction: GZ_TO_ROS
+  queue_size: 1
+
+- ros_topic_name: "/kortex_vision/depth/image"
+  gz_topic_name: "/wrist_mounted_camera/depth_image"
+  ros_type_name: "sensor_msgs/msg/Image"
+  gz_type_name: "gz.msgs.Image"
+  lazy: true
+  direction: GZ_TO_ROS
+  queue_size: 1
+
+- ros_topic_name: "/kortex_vision/depth/color/points"
+  gz_topic_name: "/wrist_mounted_camera/points"
+  ros_type_name: "sensor_msgs/msg/PointCloud2"
+  gz_type_name: "gz.msgs.PointCloudPacked"
+  lazy: true
+  direction: GZ_TO_ROS
+  queue_size: 1
+
+- ros_topic_name: "/kortex_vision/color/camera_info"
+  gz_topic_name: "/wrist_mounted_camera/camera_info"
+  ros_type_name: "sensor_msgs/msg/CameraInfo"
+  gz_type_name: "gz.msgs.CameraInfo"
+  lazy: true
+  direction: GZ_TO_ROS
+  queue_size: 1
+
+- ros_topic_name: "/kortex_vision/depth/camera_info"
+  gz_topic_name: "/wrist_mounted_camera/camera_info"
+  ros_type_name: "sensor_msgs/msg/CameraInfo"
+  gz_type_name: "gz.msgs.CameraInfo"
+  lazy: true
+  direction: GZ_TO_ROS
+  queue_size: 1

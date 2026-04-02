@@ -1,0 +1,15 @@
+services:
+  kortex:
+    container_name: kortex
+    extends:
+      file: common.yaml
+      service: kortex_real
+    ulimits:
+      rtprio: 99
+      memlock: -1
+      nice: -20
+    command: 
+      - bash
+      - -c
+      - |
+        ros2 launch iki_kortex_bringup kortex.launch.py

@@ -1,0 +1,44 @@
+workflow:
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      when: always
+    - if: '$CI_COMMIT_BRANCH == "jazzy"'
+      when: always
+    - when: never
+
+image: fbe-dockerreg.rwu.de/adm-iki/systems/gitlab-runner-docker:master
+
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+  GIT_SUBMODULE_FORCE_HTTPS: "true"
+
+stages:
+    - build_image
+    - build_arm_image
+    - docker_multi_arch_image
+
+build_image:
+    stage: build_image
+    tags:
+       - image-build
+    script: 
+      - docker buildx build --platform linux/amd64 -t fbe-dockerreg.rwu.de/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}:jazzy_x86 -f docker/Dockerfile .
+      - docker push fbe-dockerreg.rwu.de/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}:jazzy_x86
+
+build_arm_image:
+    stage: build_arm_image
+    tags:
+       - image-build
+    script: 
+        - docker buildx build --platform linux/arm64 -t fbe-dockerreg.rwu.de/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}:jazzy_arm -f docker/Dockerfile .
+        - docker push fbe-dockerreg.rwu.de/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}:jazzy_arm
+
+docker_multi_arch_image:
+    stage: docker_multi_arch_image
+    script: 
+        - >
+            docker manifest create fbe-dockerreg.rwu.de/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}:jazzy
+            --amend fbe-dockerreg.rwu.de/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}:jazzy_x86
+            --amend fbe-dockerreg.rwu.de/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}:jazzy_arm
+        - docker manifest push fbe-dockerreg.rwu.de/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}:jazzy
+

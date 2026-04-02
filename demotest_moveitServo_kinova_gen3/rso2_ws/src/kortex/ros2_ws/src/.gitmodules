@@ -1,0 +1,16 @@
+[submodule "submodules/ros2_robotiq_gripper"]
+	path = submodules/ros2_robotiq_gripper
+	url = https://github.com/picknikrobotics/ros2_robotiq_gripper
+[submodule "submodules/ros2_kortex_vision"]
+	path = submodules/ros2_kortex_vision
+	url = https://github.com/Kinovarobotics/ros2_kortex_vision.git
+	branch = ros2
+[submodule "submodules/serial"]
+	path = submodules/serial
+	url = https://github.com/tylerjw/serial.git
+[submodule "submodules/iki_object_models"]
+	path = submodules/iki_object_models
+	url = git@gitlab.rwu.de:prj-iki-ros2/knowledgebase/iki_object_models.git
+[submodule "submodules/ros2_kortex"]
+	path = submodules/ros2_kortex
+	url = https://github.com/DavidG-Develop/ros2_kortex.git

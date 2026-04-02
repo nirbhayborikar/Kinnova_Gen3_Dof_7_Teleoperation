@@ -1,0 +1,25 @@
+version: '3.9'
+services:
+  iki_object_models:
+    container_name: iki_object_models
+    image: fbe-dockerreg.rwu.de/prj-iki-ros2/knowledgebase/iki_object_models
+    runtime: nvidia
+    environment:
+      ROS_DOMAIN_ID: $ROS_DOMAIN_ID
+      DISPLAY: $DISPLAY
+      QT_X11_NO_MITSHM: '1'
+      NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: compute,video,utility,graphics
+    network_mode: host
+    ipc: host
+    privileged: true
+    stdin_open: true
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - $HOME/.Xauthority:/root/.Xauthority
+    command: 
+      - bash
+      - -c
+      - |
+          source /usr/share/gazebo/setup.bash
+          ros2 launch iki_object_models robocup_arena.launch.py

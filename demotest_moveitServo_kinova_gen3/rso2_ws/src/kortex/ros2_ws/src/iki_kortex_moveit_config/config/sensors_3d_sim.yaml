@@ -1,0 +1,13 @@
+sensors:
+  - kortex_vision
+kortex_vision:
+  filtered_cloud_topic: ""
+  max_range: 3.5
+  max_update_rate: 1.0
+  padding_offset: 0.1
+  padding_scale: 1.0
+  point_cloud_topic: /kortex_vision/depth/color/points
+  point_subsample: 1
+  sensor_plugin: occupancy_map_monitor/PointCloudOctomapUpdater
+
+octomap_resolution: 0.02

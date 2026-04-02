@@ -1,0 +1,35 @@
+services:
+  kortex_vision:
+    container_name: kortex_vision
+    extends:
+      file: common.yaml
+      service: kortex_real
+    command:
+      - bash
+      - -c
+      - |
+        sleep 2
+        ros2 launch iki_kortex_bringup kortex_vision.launch.py
+
+  kortex_rviz:
+    container_name: kortex_rviz
+    extends:
+      file: common.yaml
+      service: kortex_real
+    command: 
+      - bash
+      - -c
+      - |
+        ros2 launch iki_kortex_bringup rviz.launch.py
+
+  kortex_moveit:
+    container_name: kortex_moveit
+    extends:
+      file: common.yaml
+      service: kortex_real
+    command:
+      - bash
+      - -c
+      - |
+        sleep 4
+        ros2 launch iki_kortex_bringup moveit.launch.py
