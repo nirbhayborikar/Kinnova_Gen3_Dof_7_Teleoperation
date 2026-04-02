@@ -22,7 +22,8 @@ find_package(std_msgs REQUIRED)
 find_package(std_srvs REQUIRED)
 find_package(trajectory_msgs REQUIRED)
 find_package(tf2 REQUIRED)                    # ADDED THIS
-find_package(tf2_ros REQUIRED)                # ADD THIS
+find_package(tf2_ros REQUIRED)  
+              # ADD THIS
 find_package(tf2_geometry_msgs REQUIRED)      # ADD THIS
 
 find_package(Eigen3 REQUIRED)

@@ -7,12 +7,14 @@ SensagramTeleopNode::SensagramTeleopNode(const rclcpp::NodeOptions& options)
       udp_socket_(-1),
       running_(false),
       max_velocity_seen_(0.0),  
-      last_reset_time_(std::chrono::steady_clock::now()),  // ADD THIS
-      servo_status_code_(0),  // ADD THIS   
-      initial_orientation_set_(false),  // Fixed order
+      last_reset_time_(std::chrono::steady_clock::now()),
+      servo_status_code_(0),
+      consecutive_servo_errors_(0),
+      startup_time_(std::chrono::steady_clock::now()),
+      initial_orientation_set_(false),
       packets_received_(0),
       consecutive_timeouts_(0),
-      is_recovering_(false)   // the home function flag
+      is_recovering_(false)
 
 
 {
@@ -128,63 +130,39 @@ void SensagramTeleopNode::setupROS() {
         std::bind(&SensagramTeleopNode::openGripperAtStart, this));
 
 
-    // Subscribe to servo status (Int8 message) this unc omment , later 1 april 19:24
-    // servo_status_sub_ = this->create_subscription<std_msgs::msg::Int8>(
-    //     "/servo_node/status", 10,
-    //     [this](const std_msgs::msg::Int8::SharedPtr msg) {
-    //         servo_status_code_ = msg->data;
-            
-    //         // Status codes:
-    //         // 0 = NO_WARNING
-    //         // 1 = DECELERATE_FOR_APPROACHING_SINGULARITY
-    //         // 2 = HALT_FOR_SINGULARITY
-    //         // 6 = JOINT_BOUND
-            
-    //         if (msg->data == 2) {
-    //             RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 2000,
-    //                                "⚠️ Servo HALTED for singularity!");
-    //         } else if (msg->data == 6) {
-    //             RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 2000,
-    //                                "⚠️ Servo HALTED for joint limit!");
-    //         }
-    //     });
-
-
     // Initialize Action Client for recovery (the home position logic)
     home_action_client_ = rclcpp_action::create_client<FollowJointTrajectory>(
         this, "/joint_trajectory_controller/follow_joint_trajectory");
 
-    // Update status subscriber
+    // Update status subscriber - WITH DEBOUNCE
     servo_status_sub_ = this->create_subscription<std_msgs::msg::Int8>(
         "/servo_node/status", 10,
         [this](const std_msgs::msg::Int8::SharedPtr msg) {
             this->servo_status_code_ = msg->data;
             
-            // Block new triggers if already recovering
             if (is_recovering_) return;
 
-            bool trigger_recovery = false;
-            std::string reason = "";
+            // Grace period: ignore warnings for first 5 seconds after startup
+            auto uptime = std::chrono::steady_clock::now() - startup_time_;
+            if (uptime < std::chrono::seconds(5)) return;
 
-            // Status 2: Emergency Stop / Singularity
-            if (msg->data == 2) { 
-                trigger_recovery = true;
-                reason = "SINGULARITY EMERGENCY HALT";
-            } 
-            // Status 6: Joint Limit reached (Joint 2 or Joint 6)
-            else if (msg->data == 6) { 
-                trigger_recovery = true;
-                reason = "JOINT LIMIT REACHED (likely Joint 2 or 6)";
+            // Count consecutive errors before triggering recovery
+            if (msg->data == 2 || msg->data == 6) {
+                consecutive_servo_errors_++;
+                RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 1000,
+                    "⚠️ Servo status %d (%d/%d before recovery)",
+                    msg->data, consecutive_servo_errors_, SERVO_ERROR_THRESHOLD);
+            } else {
+                consecutive_servo_errors_ = 0;
             }
 
-            if (trigger_recovery) {
-                RCLCPP_WARN(this->get_logger(), "🚨 %s! Initiating Auto-Home...", reason.c_str());
+            // Only trigger recovery after sustained consecutive errors
+            if (consecutive_servo_errors_ >= SERVO_ERROR_THRESHOLD) {
+                RCLCPP_WARN(this->get_logger(), "🚨 Sustained servo error (status=%d)! Going home...", msg->data);
+                consecutive_servo_errors_ = 0;
                 this->goHomeRecovery();
             }
         });
-
-
-
 
 
     servo_mode_client_ = this->create_client<moveit_msgs::srv::ServoCommandType>(
@@ -333,26 +311,6 @@ bool SensagramTeleopNode::isPhoneFlat(double roll, double pitch, double yaw) {
 }
 
 // ==================== DETECT IF ROBOT IS STUCK ====================
-// bool SensagramTeleopNode::isRobotStuck(const Eigen::Vector3d& commanded_vel) {
-//     if (!latest_joint_state_ || latest_joint_state_->velocity.size() < 7) {
-//         return false;
-//     }
-    
-//     bool commanding_motion = commanded_vel.norm() > 0.01;
-//     if (!commanding_motion) return false;
-    
-//     double total_joint_velocity = 0.0;
-//     for (size_t i = 0; i < 7; ++i) {
-//         total_joint_velocity += std::abs(latest_joint_state_->velocity[i]);
-//     }
-    
-//     return (total_joint_velocity < 0.05);
-// }
-
-
-
-
-
 bool SensagramTeleopNode::isRobotStuck(const Eigen::Vector3d& commanded_vel) {
     if (!latest_joint_state_ || latest_joint_state_->velocity.size() < 7) {
         return false;
@@ -393,13 +351,8 @@ bool SensagramTeleopNode::isRobotStuck(const Eigen::Vector3d& commanded_vel) {
     }
     
     // ========== STUCK DETECTION LOGIC ==========
-    // Only detect stuck if:
-    // 1. Robot WAS moving significantly (> 0.2 rad/s total across all joints)
-    // 2. Robot is NOW barely moving (< 0.05 rad/s)
-    // 3. We're still commanding motion
-    
-    const double WAS_MOVING_THRESHOLD = 0.2;   // Robot achieved at least 0.2 rad/s
-    const double NOW_STOPPED_THRESHOLD = 0.05; // But now less than 0.05 rad/s
+    const double WAS_MOVING_THRESHOLD = 0.2;
+    const double NOW_STOPPED_THRESHOLD = 0.05;
     
     bool was_moving = (max_velocity_seen_ > WAS_MOVING_THRESHOLD);
     bool now_stopped = (total_joint_velocity < NOW_STOPPED_THRESHOLD);
@@ -422,17 +375,6 @@ bool SensagramTeleopNode::isRobotStuck(const Eigen::Vector3d& commanded_vel) {
     
     return stuck;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 // ==================== CONTROL LOOP ====================
@@ -506,24 +448,22 @@ VelocityCommand SensagramTeleopNode::processGyroData(const IMUData& imu) {
     
 
     // ========== SERVO BLOCKING CHECK ==========
-    // Status codes: 2 = HALT_FOR_SINGULARITY, 6 = JOINT_BOUND
+    // Don't override with hardcoded escape velocities - they can push into more limits.
+    // The debounced recovery in the status callback handles real emergencies.
     bool servo_blocking = (servo_status_code_ == 2 || servo_status_code_ == 6);
     
     if (servo_blocking) {
-        RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 500,
-                           "🚨 SERVO BLOCKING (status=%d)! Strong escape",
+        RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 1000,
+                           "⚠️ Servo warning (status=%d) - letting debounce handle it",
                            servo_status_code_);
-        
-        final_linear.x() = -0.12;
-        final_linear.y() = 0.0;
-        final_linear.z() = 0.08;
+        final_linear.setZero();
+        final_angular.setZero();
     }
     else if (isRobotStuck(final_linear)) {
-        RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 500,
-                           "🚨 ROBOT STUCK! Applying escape");
-        final_linear.x() = -0.08;
-        final_linear.y() = 0.0;
-        final_linear.z() = 0.05;
+        RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 2000,
+                           "⚠️ Robot may be stuck - zeroing commands");
+        final_linear.setZero();
+        final_angular.setZero();
     }
     
     // ========== AGGRESSIVE ZERO CLAMPING ==========
@@ -547,11 +487,11 @@ VelocityCommand SensagramTeleopNode::processGyroData(const IMUData& imu) {
 // From moveit_servo (check with: ros2 topic echo /servo_node/status)
 // 0  = NO_WARNING
 // 1  = DECELERATE_FOR_APPROACHING_SINGULARITY
-// 2  = HALT_FOR_SINGULARITY                      // ← Use this
+// 2  = HALT_FOR_SINGULARITY
 // 3  = DECELERATE_FOR_LEAVING_SINGULARITY
 // 4  = DECELERATE_FOR_COLLISION
 // 5  = HALT_FOR_COLLISION
-// 6  = JOINT_BOUND                                // ← Use this
+// 6  = JOINT_BOUND
 
 // ==================== FILTERING ====================
 Eigen::Vector3d SensagramTeleopNode::applyDeadzone(const Eigen::Vector3d& input) {
@@ -651,14 +591,7 @@ void SensagramTeleopNode::logStatus() {
 }
 
 
-
-
-
-
-
-
 // gripper open function
-
 void SensagramTeleopNode::openGripperAtStart() {
     // Stop the timer so it doesn't loop
     this->gripper_init_timer_->cancel();
@@ -670,17 +603,15 @@ void SensagramTeleopNode::openGripperAtStart() {
 
     auto goal_msg = GripperCommand::Goal();
     goal_msg.command.position = 0.0;     // Open
-    goal_msg.command.max_effort = 50.0;  // Match your CLI test
+    goal_msg.command.max_effort = 50.0;
 
     RCLCPP_INFO(this->get_logger(), "🚀 Sending initial Gripper Open action...");
 
-    // async_send_goal ensures your node keeps running while the gripper moves
     this->gripper_action_client_->async_send_goal(goal_msg);
 }
 
 
-// the home function that is called when singularity (2) or (6) joint limit is detected
-
+// the home function that is called when sustained singularity (2) or (6) joint limit is detected
 void SensagramTeleopNode::goHomeRecovery() {
     is_recovering_ = true; // This flag stops controlLoopCallback from sending Twists
     
@@ -707,15 +638,14 @@ void SensagramTeleopNode::goHomeRecovery() {
     
     send_goal_options.result_callback = [this](const auto & result) {
         RCLCPP_INFO(this->get_logger(), "✅ Home reached. Ready for teleop!");
-        this->is_recovering_ = false; // RESUME TELEOP
+        this->consecutive_servo_errors_ = 0;
+        this->servo_status_code_ = 0;
+        this->startup_time_ = std::chrono::steady_clock::now(); // 5s grace after recovery too
+        this->is_recovering_ = false;
     };
 
     home_action_client_->async_send_goal(goal_msg, send_goal_options);
 }
-
-
-
-
 
 
 // ==================== MAIN ====================

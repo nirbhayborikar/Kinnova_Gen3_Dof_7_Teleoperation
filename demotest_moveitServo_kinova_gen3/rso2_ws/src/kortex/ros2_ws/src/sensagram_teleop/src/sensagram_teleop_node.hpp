@@ -2,7 +2,7 @@
 #define SENSAGRAM_TELEOP_NODE_HPP
 
 #include <rclcpp/rclcpp.hpp>
-#include <rclcpp_action/rclcpp_action.hpp>  // <--- IS THIS LINE HERE for action client
+#include <rclcpp_action/rclcpp_action.hpp>
 
 // home position action
 #include "control_msgs/action/follow_joint_trajectory.hpp"
@@ -104,7 +104,7 @@ private:
     // ===== ROS INTERFACES =====
     rclcpp::Publisher<geometry_msgs::msg::TwistStamped>::SharedPtr twist_pub_;
     rclcpp::Subscription<sensor_msgs::msg::JointState>::SharedPtr joint_state_sub_;
-    rclcpp::Subscription<std_msgs::msg::Int8>::SharedPtr servo_status_sub_;  // FIXED
+    rclcpp::Subscription<std_msgs::msg::Int8>::SharedPtr servo_status_sub_;
     rclcpp::Client<moveit_msgs::srv::ServoCommandType>::SharedPtr servo_mode_client_;
     rclcpp::TimerBase::SharedPtr control_timer_;
     rclcpp::TimerBase::SharedPtr diagnostics_timer_;
@@ -121,8 +121,6 @@ private:
 
     // Function to send the goal
     void openGripperAtStart();
-    
-
 
     // the home position recovery function
 
@@ -131,18 +129,11 @@ private:
     using GoalHandleFollowJointTrajectory = rclcpp_action::ClientGoalHandle<FollowJointTrajectory>;
 
     // --- MEMBER VARIABLES ---
-    // The Action Client for sending the robot to the Home position
     rclcpp_action::Client<FollowJointTrajectory>::SharedPtr home_action_client_;
-    
-    // CRITICAL: This flag prevents teleop commands from fighting the "Go Home" movement
     bool is_recovering_; 
 
     // --- FUNCTIONS ---
     void goHomeRecovery();
-
-
-
-
 
     // ===== UDP SOCKET =====
     int udp_socket_;
@@ -163,6 +154,9 @@ private:
     double max_velocity_seen_;
     std::chrono::steady_clock::time_point last_reset_time_;
     int servo_status_code_;
+    static constexpr int SERVO_ERROR_THRESHOLD = 25;
+    int consecutive_servo_errors_;
+    std::chrono::steady_clock::time_point startup_time_;
     
     // ===== ORIENTATION TRACKING =====
     Eigen::Quaterniond initial_orientation_;

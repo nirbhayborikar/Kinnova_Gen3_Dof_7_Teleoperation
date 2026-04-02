@@ -26,7 +26,7 @@ services:
   gpu:
     image: moveit/moveit2:${DOCKER_IMAGE}
     # build: .
-    container_name: moveit2_container_demo
+    container_name: moveit2_container_demo_2
     privileged: true
     network_mode: host
     ipc: host
