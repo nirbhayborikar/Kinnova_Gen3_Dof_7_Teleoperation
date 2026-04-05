@@ -26,20 +26,20 @@ services:
       - /tmp/.X11-unix:/tmp/.X11-unix
       - $XAUTHORITY:/root/.Xauthority
 
-      - /home/nirbhayborikar/framework/ros2_ws/src/sensagram:/root/ws_moveit/src/sensagram 
+      - /home/nirbhayborikar/framework/Kinnova_Gen3_Dof_7_Teleoperation/ros2_ws/src/sensagram:/root/ws_moveit/src/sensagram 
       # - /home/nirbhayborikar/framework/demotest_moveitServo_kinova_gen3/rso2_ws/src/volume:/root/volume
       #- /home/nirbhayborikar/framework/demotest_moveitServo_kinova_gen3/rso2_ws/src/volume:/root/ws_moveit/src/volume
       # - /home/nirbhayborikar/framework/demotest_moveitServo_kinova_gen3/rso2_ws/src/volume/kortex_servo_gen3:/root/ws_moveit/src/kortex_servo_gen3
-      - /home/nirbhayborikar/framework/demotest_moveitServo_kinova_gen3/rso2_ws/src/kortex/ros2_ws/src:/root/ws_moveit/src/moveit2/moveit_ros/moveit_servo/kortex/ros2_ws/src
-      - /home/nirbhayborikar/framework/demotest_moveitServo_kinova_gen3/rso2_ws/src/volume/kortex_servo_gen3/launch/servo_kinovagen3.launch.py:/root/ws_moveit/src/moveit2/moveit_ros/moveit_servo/launch/servo_kinovagen3.launch.py
-      - /home/nirbhayborikar/framework/demotest_moveitServo_kinova_gen3/rso2_ws/src/volume/kortex_servo_gen3/config/gen3_servo.yaml:/root/ws_moveit/src/moveit2/moveit_ros/moveit_servo/config/gen3_servo.yaml
-      - /home/nirbhayborikar/framework/demotest_moveitServo_kinova_gen3/rso2_ws/src/kortex/ros2_ws/src/iki_kortex_moveit_config/config/kortex.srdf:/root/ws_moveit/src/moveit2/moveit_ros/moveit_servo/config/kortex.srdf
-      - /home/nirbhayborikar/framework/demotest_moveitServo_kinova_gen3/rso2_ws/src/kortex/ros2_ws/src/iki_kortex_moveit_config/config/joint_limits.yaml:/root/ws_moveit/src/moveit2/moveit_ros/moveit_servo/config/joint_limits.yaml
-      - /home/nirbhayborikar/framework/demotest_moveitServo_kinova_gen3/rso2_ws/src/kortex/ros2_ws/src/iki_kortex_moveit_config/config/kinematics.yaml:/root/ws_moveit/src/moveit2/moveit_ros/moveit_servo/config/kinematics.yaml
+      - /home/nirbhayborikar/framework/Kinnova_Gen3_Dof_7_Teleoperation/demotest_moveitServo_kinova_gen3/rso2_ws/src/kortex/ros2_ws/src:/root/ws_moveit/src/moveit2/moveit_ros/moveit_servo/kortex/ros2_ws/src
+      - /home/nirbhayborikar/framework/Kinnova_Gen3_Dof_7_Teleoperation/demotest_moveitServo_kinova_gen3/rso2_ws/src/volume/kortex_servo_gen3/launch/servo_kinovagen3.launch.py:/root/ws_moveit/src/moveit2/moveit_ros/moveit_servo/launch/servo_kinovagen3.launch.py
+      - /home/nirbhayborikar/framework/Kinnova_Gen3_Dof_7_Teleoperation/demotest_moveitServo_kinova_gen3/rso2_ws/src/volume/kortex_servo_gen3/config/gen3_servo.yaml:/root/ws_moveit/src/moveit2/moveit_ros/moveit_servo/config/gen3_servo.yaml
+      - /home/nirbhayborikar/framework/Kinnova_Gen3_Dof_7_Teleoperation/demotest_moveitServo_kinova_gen3/rso2_ws/src/kortex/ros2_ws/src/iki_kortex_moveit_config/config/kortex.srdf:/root/ws_moveit/src/moveit2/moveit_ros/moveit_servo/config/kortex.srdf
+      - /home/nirbhayborikar/framework/Kinnova_Gen3_Dof_7_Teleoperation/demotest_moveitServo_kinova_gen3/rso2_ws/src/kortex/ros2_ws/src/iki_kortex_moveit_config/config/joint_limits.yaml:/root/ws_moveit/src/moveit2/moveit_ros/moveit_servo/config/joint_limits.yaml
+      - /home/nirbhayborikar/framework/Kinnova_Gen3_Dof_7_Teleoperation/demotest_moveitServo_kinova_gen3/rso2_ws/src/kortex/ros2_ws/src/iki_kortex_moveit_config/config/kinematics.yaml:/root/ws_moveit/src/moveit2/moveit_ros/moveit_servo/config/kinematics.yaml
       # - /home/nirbhayborikar/framework/demotest_moveitServo_kinova_gen3/rso2_ws/src/kortex/iki_kortex_description/urdf_xarco/kortex_standalone.urdf.xarco:/root/ws_moveit/src/moveit2/moveit_ros/moveit_servo/config/kortex_standalone.urdf.xarco
-      - /home/nirbhayborikar/framework/demotest_moveitServo_kinova_gen3/rso2_ws/src/kortex/ros2_ws/src/iki_kortex_description/config/initial_positions.yaml:/root/ws_moveit/src/moveit2/moveit_ros/moveit_servo/config/initial_positions.yaml
+      - /home/nirbhayborikar/framework/Kinnova_Gen3_Dof_7_Teleoperation/demotest_moveitServo_kinova_gen3/rso2_ws/src/kortex/ros2_ws/src/iki_kortex_description/config/initial_positions.yaml:/root/ws_moveit/src/moveit2/moveit_ros/moveit_servo/config/initial_positions.yaml
       # - /home/nirbhayborikar/framework/demotest_moveitServo_kinova_gen3/rso2_ws/src/volume/kortex_servo_gen3/config:/root/ws_moveit/src/moveit2/moveit_ros/moveit_servo/config
-      - /home/nirbhayborikar/framework/demotest_moveitServo_kinova_gen3/rso2_ws/src/kortex/ros2_ws/src/iki_kortex_moveit_config/config/ros2_controllers.yaml:/root/ws_moveit/src/moveit2/moveit_ros/moveit_servo/config/ros2_controllers.yaml
+      - /home/nirbhayborikar/framework/Kinnova_Gen3_Dof_7_Teleoperation/demotest_moveitServo_kinova_gen3/rso2_ws/src/kortex/ros2_ws/src/iki_kortex_moveit_config/config/ros2_controllers.yaml:/root/ws_moveit/src/moveit2/moveit_ros/moveit_servo/config/ros2_controllers.yaml
    
     command:
       - bash
