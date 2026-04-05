@@ -57,7 +57,8 @@ services:
         #colcon build --packages-select olive_imu_control &&
         source install/setup.bash &&
         cd ~/ws_moveit/ &&
-        colcon build --packages-select moveit_servo &&
+        rm -rf install/moveit_servo/ &&
+        colcon build --packages-select moveit_servo --symlink-install &&
         source install/setup.bash &&
         #ros2 run moveit_servo servo_node &&
         #ros2 launch moveit_servo servo_kinovagen3.launch.py &&
@@ -85,7 +86,10 @@ services:
 
 
 
+#ros2 param get /servo_node moveit_servo.lower_singularity_threshold    (check gen3_servo.yaml changing or not )
 
 
+
+# ros2 param get /servo_node moveit_servo.lower_singularity_threshold
 
 
