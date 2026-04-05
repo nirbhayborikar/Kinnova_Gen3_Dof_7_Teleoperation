@@ -1,3 +1,5 @@
+// Rotation Vector Implementation for Sensagram Teleoperation
+
 #include "sensagram_teleop_node.hpp"
 #include <cmath>
 
@@ -6,22 +8,15 @@ SensagramTeleopNode::SensagramTeleopNode(const rclcpp::NodeOptions& options)
     : Node("sensagram_teleop_node", options),
       udp_socket_(-1),
       running_(false),
-      max_velocity_seen_(0.0),  
-      last_reset_time_(std::chrono::steady_clock::now()),
-      servo_status_code_(0),
-      consecutive_servo_errors_(0),
-      startup_time_(std::chrono::steady_clock::now()),
-      initial_orientation_set_(false),
       packets_received_(0),
-      consecutive_timeouts_(0),
-      is_recovering_(false)
-
-
+      initial_orientation_set_(false),
+      consecutive_timeouts_(0)
 {
     RCLCPP_INFO(this->get_logger(), "========================================");
-    RCLCPP_INFO(this->get_logger(), "  Sensagram Teleoperation (Simple Mode)");
+    RCLCPP_INFO(this->get_logger(), "  Sensagram Teleoperation (Rotation Vector Mode)");
     RCLCPP_INFO(this->get_logger(), "========================================");
     
+    // Initialize quaternion to identity
     initial_orientation_ = Eigen::Quaterniond::Identity();
     
     loadParameters();
@@ -29,37 +24,44 @@ SensagramTeleopNode::SensagramTeleopNode(const rclcpp::NodeOptions& options)
     setupROS();
     activateServoMode();
     
-    RCLCPP_INFO(this->get_logger(), "✓ Ready! Port %d", udp_port_);
-    RCLCPP_INFO(this->get_logger(), "📱 Hold phone FLAT to calibrate");
+    RCLCPP_INFO(this->get_logger(), "✓ Ready! Listening on UDP port %d", udp_port_);
+    RCLCPP_INFO(this->get_logger(), "📱 Hold phone FLAT - auto-calibrates on first packet");
 }
 
 // ==================== DESTRUCTOR ====================
 SensagramTeleopNode::~SensagramTeleopNode() {
     RCLCPP_INFO(this->get_logger(), "Shutting down...");
+    
     running_ = false;
-    if (udp_thread_.joinable()) udp_thread_.join();
-    if (udp_socket_ >= 0) close(udp_socket_);
+    if (udp_thread_.joinable()) {
+        udp_thread_.join();
+    }
+    
+    if (udp_socket_ >= 0) {
+        close(udp_socket_);
+    }
+    
     stopRobot();
+    RCLCPP_INFO(this->get_logger(), "✓ Shutdown complete");
 }
 
 // ==================== LOAD PARAMETERS ====================
 void SensagramTeleopNode::loadParameters() {
     this->declare_parameter("udp_port", 5005);
     this->declare_parameter("control_rate_hz", 50.0);
-    this->declare_parameter("max_linear_velocity", 0.12);
-    this->declare_parameter("max_angular_velocity", 0.2);
-    this->declare_parameter("max_linear_accel", 0.6);
-    this->declare_parameter("max_angular_accel", 0.8);
-    this->declare_parameter("deadzone", 0.02);
-    this->declare_parameter("smoothing_factor", 0.4);
+    this->declare_parameter("max_linear_velocity", 0.3);
+    this->declare_parameter("max_angular_velocity", 0.8);
+    this->declare_parameter("max_linear_accel", 1.0);
+    this->declare_parameter("max_angular_accel", 2.0);
+    this->declare_parameter("deadzone", 0.005);
+    this->declare_parameter("smoothing_factor", 0.3);
     this->declare_parameter("timeout_ms", 500.0);
     this->declare_parameter("max_consecutive_timeouts", 3);
-    this->declare_parameter("gyro_linear_scale", 0.4);
-    this->declare_parameter("gyro_angular_scale", 0.5);
+    this->declare_parameter("gyro_linear_scale", 0.8);
+    this->declare_parameter("gyro_angular_scale", 1.5);
     this->declare_parameter("invert_x", false);
     this->declare_parameter("invert_y", true);
     this->declare_parameter("invert_z", true);
-    this->declare_parameter("flat_phone_threshold", 0.05);
     
     udp_port_ = this->get_parameter("udp_port").as_int();
     control_rate_hz_ = this->get_parameter("control_rate_hz").as_double();
@@ -76,37 +78,51 @@ void SensagramTeleopNode::loadParameters() {
     invert_x_ = this->get_parameter("invert_x").as_bool();
     invert_y_ = this->get_parameter("invert_y").as_bool();
     invert_z_ = this->get_parameter("invert_z").as_bool();
-    flat_phone_threshold_ = this->get_parameter("flat_phone_threshold").as_double();
     
-    RCLCPP_INFO(this->get_logger(), "✓ Params: Gyro=%.2f, Flat=%.3f rad", 
-                gyro_linear_scale_, flat_phone_threshold_);
+    RCLCPP_INFO(this->get_logger(), "Parameters:");
+    RCLCPP_INFO(this->get_logger(), "  UDP Port: %d", udp_port_);
+    RCLCPP_INFO(this->get_logger(), "  Control Rate: %.1f Hz", control_rate_hz_);
+    RCLCPP_INFO(this->get_logger(), "  Max Linear Vel: %.2f m/s", max_linear_vel_);
+    RCLCPP_INFO(this->get_logger(), "  Max Angular Vel: %.2f rad/s", max_angular_vel_);
+    RCLCPP_INFO(this->get_logger(), "  Deadzone: %.3f", deadzone_);
+    RCLCPP_INFO(this->get_logger(), "  Smoothing: %.2f", smoothing_factor_);
 }
 
 // ==================== SETUP UDP ====================
 void SensagramTeleopNode::setupUDP() {
     udp_socket_ = socket(AF_INET, SOCK_DGRAM, 0);
     if (udp_socket_ < 0) {
+        RCLCPP_FATAL(this->get_logger(), "Failed to create UDP socket!");
         throw std::runtime_error("UDP socket creation failed");
     }
     
+    // Enable port reuse
     int reuse = 1;
     setsockopt(udp_socket_, SOL_SOCKET, SO_REUSEADDR, &reuse, sizeof(reuse));
+    #ifdef SO_REUSEPORT
+    setsockopt(udp_socket_, SOL_SOCKET, SO_REUSEPORT, &reuse, sizeof(reuse));
+    #endif
     
+    // Non-blocking
     int flags = fcntl(udp_socket_, F_GETFL, 0);
     fcntl(udp_socket_, F_SETFL, flags | O_NONBLOCK);
     
+    // Bind
     memset(&server_addr_, 0, sizeof(server_addr_));
     server_addr_.sin_family = AF_INET;
     server_addr_.sin_port = htons(udp_port_);
     server_addr_.sin_addr.s_addr = INADDR_ANY;
     
     if (bind(udp_socket_, (struct sockaddr*)&server_addr_, sizeof(server_addr_)) < 0) {
+        RCLCPP_FATAL(this->get_logger(), "Failed to bind UDP socket to port %d", udp_port_);
         close(udp_socket_);
         throw std::runtime_error("UDP bind failed");
     }
     
     running_ = true;
     udp_thread_ = std::thread(&SensagramTeleopNode::udpReceiverThread, this);
+    
+    RCLCPP_INFO(this->get_logger(), "✓ UDP socket bound to port %d", udp_port_);
 }
 
 // ==================== SETUP ROS ====================
@@ -114,57 +130,6 @@ void SensagramTeleopNode::setupROS() {
     twist_pub_ = this->create_publisher<geometry_msgs::msg::TwistStamped>(
         "/servo_node/delta_twist_cmds", 10);
     
-    joint_state_sub_ = this->create_subscription<sensor_msgs::msg::JointState>(
-        "/joint_states", 10,
-        [this](const sensor_msgs::msg::JointState::SharedPtr msg) {
-            latest_joint_state_ = msg;
-        });
-
-    // Initialize the Action Client
-    this->gripper_action_client_ = rclcpp_action::create_client<GripperCommand>(
-        this, "/robotiq_gripper_controller/gripper_cmd");
-
-    // Start a 2-second timer to give the system time to settle before opening
-    gripper_init_timer_ = this->create_wall_timer(
-        std::chrono::seconds(2), 
-        std::bind(&SensagramTeleopNode::openGripperAtStart, this));
-
-
-    // Initialize Action Client for recovery (the home position logic)
-    home_action_client_ = rclcpp_action::create_client<FollowJointTrajectory>(
-        this, "/joint_trajectory_controller/follow_joint_trajectory");
-
-    // Update status subscriber - WITH DEBOUNCE
-    servo_status_sub_ = this->create_subscription<std_msgs::msg::Int8>(
-        "/servo_node/status", 10,
-        [this](const std_msgs::msg::Int8::SharedPtr msg) {
-            this->servo_status_code_ = msg->data;
-            
-            if (is_recovering_) return;
-
-            // Grace period: ignore warnings for first 5 seconds after startup
-            auto uptime = std::chrono::steady_clock::now() - startup_time_;
-            if (uptime < std::chrono::seconds(5)) return;
-
-            // Count consecutive errors before triggering recovery
-            if (msg->data == 2 || msg->data == 6) {
-                consecutive_servo_errors_++;
-                RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 1000,
-                    "⚠️ Servo status %d (%d/%d before recovery)",
-                    msg->data, consecutive_servo_errors_, SERVO_ERROR_THRESHOLD);
-            } else {
-                consecutive_servo_errors_ = 0;
-            }
-
-            // Only trigger recovery after sustained consecutive errors
-            if (consecutive_servo_errors_ >= SERVO_ERROR_THRESHOLD) {
-                RCLCPP_WARN(this->get_logger(), "🚨 Sustained servo error (status=%d)! Going home...", msg->data);
-                consecutive_servo_errors_ = 0;
-                this->goHomeRecovery();
-            }
-        });
-
-
     servo_mode_client_ = this->create_client<moveit_msgs::srv::ServoCommandType>(
         "/servo_node/switch_command_type");
     
@@ -175,14 +140,20 @@ void SensagramTeleopNode::setupROS() {
         std::bind(&SensagramTeleopNode::controlLoopCallback, this));
     
     diagnostics_timer_ = this->create_wall_timer(
-        2s, std::bind(&SensagramTeleopNode::logStatus, this));
+        2s,
+        std::bind(&SensagramTeleopNode::logStatus, this));
+    
+    RCLCPP_INFO(this->get_logger(), "✓ ROS interfaces created");
 }
 
 // ==================== ACTIVATE SERVO MODE ====================
 void SensagramTeleopNode::activateServoMode() {
     while (!servo_mode_client_->wait_for_service(1s)) {
-        if (!rclcpp::ok()) return;
-        RCLCPP_INFO(this->get_logger(), "Waiting for servo...");
+        if (!rclcpp::ok()) {
+            RCLCPP_ERROR(this->get_logger(), "Interrupted while waiting for servo service");
+            return;
+        }
+        RCLCPP_INFO(this->get_logger(), "Waiting for servo service...");
     }
     
     auto request = std::make_shared<moveit_msgs::srv::ServoCommandType::Request>();
@@ -192,7 +163,9 @@ void SensagramTeleopNode::activateServoMode() {
     
     if (rclcpp::spin_until_future_complete(this->get_node_base_interface(), result)
         == rclcpp::FutureReturnCode::SUCCESS) {
-        RCLCPP_INFO(this->get_logger(), "✓ Servo activated");
+        RCLCPP_INFO(this->get_logger(), "✓ Servo activated in TWIST mode");
+    } else {
+        RCLCPP_WARN(this->get_logger(), "Failed to activate servo");
     }
 }
 
@@ -217,10 +190,17 @@ void SensagramTeleopNode::udpReceiverThread() {
             last_packet_time_ = now;
             packets_received_++;
             
+            // AUTO-CALIBRATE on first quaternion
             if (!initial_orientation_set_ && imu.has_quaternion) {
                 initial_orientation_ = imu.quaternion;
                 initial_orientation_set_ = true;
-                RCLCPP_INFO(this->get_logger(), "✓ Calibrated");
+                
+                double roll, pitch, yaw;
+                quaternionToEuler(initial_orientation_, roll, pitch, yaw);
+                
+                RCLCPP_INFO(this->get_logger(), 
+                           "✓ Calibrated - Initial: R=%.1f° P=%.1f° Y=%.1f°",
+                           roll * 180.0/M_PI, pitch * 180.0/M_PI, yaw * 180.0/M_PI);
             }
         }
         
@@ -239,14 +219,17 @@ bool SensagramTeleopNode::receiveUDPPacket(IMUData& imu) {
     
     if (received > 0) {
         buffer[received] = '\0';
+        
         try {
             parseJSON(std::string(buffer), imu);
             imu.timestamp = std::chrono::steady_clock::now();
             return true;
         } catch (const std::exception& e) {
-            return false;
+            RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 2000,
+                                 "Failed to parse JSON: %s", e.what());
         }
     }
+    
     return false;
 }
 
@@ -280,17 +263,21 @@ void SensagramTeleopNode::parseJSON(const std::string& json_str, IMUData& imu) {
                         imu.quaternion.y() = values[1].get<double>();
                         imu.quaternion.z() = values[2].get<double>();
                         imu.quaternion.w() = values[3].get<double>();
+                        
                         imu.quaternion.normalize();
                         imu.has_quaternion = true;
                     }
                 }
-            } catch (...) {}
+            } catch (const std::exception& e) {
+                // Skip malformed JSON
+            }
         }
+        
         pos = end;
     }
     
     if (!imu.has_quaternion) {
-        throw std::runtime_error("No rotation vector");
+        throw std::runtime_error("No rotation vector found in JSON");
     }
 }
 
@@ -303,85 +290,8 @@ void SensagramTeleopNode::quaternionToEuler(const Eigen::Quaterniond& q,
     roll = euler[2];
 }
 
-// ==================== CHECK IF PHONE IS FLAT ====================
-bool SensagramTeleopNode::isPhoneFlat(double roll, double pitch, double yaw) {
-    return (std::abs(roll) < flat_phone_threshold_ && 
-            std::abs(pitch) < flat_phone_threshold_ && 
-            std::abs(yaw) < flat_phone_threshold_);
-}
-
-// ==================== DETECT IF ROBOT IS STUCK ====================
-bool SensagramTeleopNode::isRobotStuck(const Eigen::Vector3d& commanded_vel) {
-    if (!latest_joint_state_ || latest_joint_state_->velocity.size() < 7) {
-        return false;
-    }
-    
-    // Check if we're commanding motion
-    bool commanding_motion = commanded_vel.norm() > 0.01;  // At least 1 cm/s
-    
-    if (!commanding_motion) {
-        return false;  // Not commanding motion = not stuck
-    }
-    
-    // ========== CALCULATE CURRENT JOINT VELOCITY ==========
-    double total_joint_velocity = 0.0;
-    for (size_t i = 0; i < 7; ++i) {
-        total_joint_velocity += std::abs(latest_joint_state_->velocity[i]);
-    }
-    
-    // ========== TRACK MAXIMUM VELOCITY SEEN ==========
-    auto now = std::chrono::steady_clock::now();
-    
-    // Update max velocity if robot is moving faster than before
-    if (total_joint_velocity > max_velocity_seen_) {
-        max_velocity_seen_ = total_joint_velocity;
-        last_reset_time_ = now;
-        
-        RCLCPP_DEBUG_THROTTLE(this->get_logger(), *this->get_clock(), 2000,
-                            "Max velocity updated: %.3f rad/s", max_velocity_seen_);
-    }
-    
-    // Reset max velocity every 5 seconds (allows recovery)
-    double time_since_reset = std::chrono::duration<double>(now - last_reset_time_).count();
-    if (time_since_reset > 5.0) {
-        RCLCPP_DEBUG_THROTTLE(this->get_logger(), *this->get_clock(), 5000,
-                            "Resetting max velocity (5s elapsed)");
-        max_velocity_seen_ = 0.0;
-        last_reset_time_ = now;
-    }
-    
-    // ========== STUCK DETECTION LOGIC ==========
-    const double WAS_MOVING_THRESHOLD = 0.2;
-    const double NOW_STOPPED_THRESHOLD = 0.05;
-    
-    bool was_moving = (max_velocity_seen_ > WAS_MOVING_THRESHOLD);
-    bool now_stopped = (total_joint_velocity < NOW_STOPPED_THRESHOLD);
-    
-    bool stuck = (was_moving && now_stopped && commanding_motion);
-    
-    // ========== DEBUG LOGGING ==========
-    if (stuck) {
-        RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 1000,
-                           "🚨 STUCK DETECTED!\n"
-                           "   Was moving: %.3f rad/s (max)\n"
-                           "   Now: %.3f rad/s (current)\n"
-                           "   Commanding: %.3f m/s",
-                           max_velocity_seen_, total_joint_velocity, commanded_vel.norm());
-    }
-    
-    RCLCPP_DEBUG_THROTTLE(this->get_logger(), *this->get_clock(), 2000,
-                        "Stuck check: was_moving=%d (%.3f), now_stopped=%d (%.3f), commanding=%d",
-                        was_moving, max_velocity_seen_, now_stopped, total_joint_velocity, commanding_motion);
-    
-    return stuck;
-}
-
-
 // ==================== CONTROL LOOP ====================
 void SensagramTeleopNode::controlLoopCallback() {
-    if (is_recovering_) {
-        return; // Do nothing while the 'Go Home' action is running
-    }
     checkTimeout();
     
     IMUData imu;
@@ -409,28 +319,87 @@ void SensagramTeleopNode::controlLoopCallback() {
 // ==================== PROCESS IMU DATA ====================
 VelocityCommand SensagramTeleopNode::processGyroData(const IMUData& imu) {
     VelocityCommand cmd;
+
+
     
     if (!imu.has_quaternion || !initial_orientation_set_) {
         return cmd;
     }
     
+    // ========== COMPUTE RELATIVE ORIENTATION ==========
     Eigen::Quaterniond relative_quat = initial_orientation_.inverse() * imu.quaternion;
     
+    // Convert to Euler angles
     double roll, pitch, yaw;
     quaternionToEuler(relative_quat, roll, pitch, yaw);
+   
+   
+// // new added
+
+    // // ========== LIMIT TILT ANGLES TO PREVENT OVEREXTENSION ==========
+    // const double MAX_TILT = 0.1;  // ~17 degrees maximum #0.3
     
-    if (isPhoneFlat(roll, pitch, yaw)) {
-        return cmd;
-    }
+    // if (std::abs(pitch) > MAX_TILT) {
+    //     pitch = (pitch > 0) ? MAX_TILT : -MAX_TILT;
+    //     RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 2000,
+    //                        "⚠️ Pitch limited to %.1f°", MAX_TILT * 180.0/M_PI);
+    // }
+    
+    // if (std::abs(roll) > MAX_TILT) {
+    //     roll = (roll > 0) ? MAX_TILT : -MAX_TILT;
+    //     RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 2000,
+    //                        "⚠️ Roll limited to %.1f°", MAX_TILT * 180.0/M_PI);
+    // }
+    
+    // if (std::abs(yaw) > MAX_TILT) {
+    //     yaw = (yaw > 0) ? MAX_TILT : -MAX_TILT;
+    //     RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 2000,
+    //                        "⚠️ Yaw limited to %.1f°", MAX_TILT * 180.0/M_PI);
+    // }
+
+// //... above
+
+
+
+
+
+    //MAPPING....................
+
+    // Forward/back tilt → X (forward/backward)
+    // Left/right tilt → Y (left/right)
+    // Rotate phone → Z (up/down)
+
+
+    
+    // ========== MAP ORIENTATION TO VELOCITY ==========
+    // Eigen::Vector3d raw_linear(
+    //     pitch * gyro_linear_scale_ * (invert_y_ ? -1 : 1),
+    //     roll * gyro_linear_scale_ * (invert_x_ ? -1 : 1),
+    //     0.0
+    // );
+    
+    // Eigen::Vector3d raw_angular(
+    //     0.0,
+    //     0.0,
+    //     yaw * gyro_angular_scale_ * (invert_z_ ? -1 : 1)
+    // );
+
+
+    // New added ....... mapping 
     
     Eigen::Vector3d raw_linear(
-        pitch * gyro_linear_scale_ * (invert_y_ ? -1 : 1),
-        roll * gyro_linear_scale_ * (invert_x_ ? -1 : 1),
-        yaw * gyro_linear_scale_ * (invert_z_ ? -1 : 1)
+        pitch * gyro_linear_scale_ * (invert_y_ ? -1 : 1),   // Pitch → X (forward/back)
+        roll * gyro_linear_scale_ * (invert_x_ ? -1 : 1),    // Roll → Y (left/right)
+        yaw * gyro_linear_scale_ * (invert_z_ ? -1 : 1)      // Yaw → Z (up/down) ← NEW!
     );
     
-    Eigen::Vector3d raw_angular(0.0, 0.0, 0.0);
+    Eigen::Vector3d raw_angular(
+        0.0,
+        0.0,
+        0.0  // No robot rotation (using yaw for Z motion instead)
+    );
     
+    // ========== APPLY FILTERING ==========
     Eigen::Vector3d deadzone_linear = applyDeadzone(raw_linear);
     Eigen::Vector3d deadzone_angular = applyDeadzone(raw_angular);
     
@@ -446,52 +415,42 @@ VelocityCommand SensagramTeleopNode::processGyroData(const IMUData& imu) {
     Eigen::Vector3d final_linear = saturateVelocity(limited_linear, max_linear_vel_);
     Eigen::Vector3d final_angular = saturateVelocity(limited_angular, max_angular_vel_);
     
-
-    // ========== SERVO BLOCKING CHECK ==========
-    // Don't override with hardcoded escape velocities - they can push into more limits.
-    // The debounced recovery in the status callback handles real emergencies.
-    bool servo_blocking = (servo_status_code_ == 2 || servo_status_code_ == 6);
     
-    if (servo_blocking) {
-        RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 1000,
-                           "⚠️ Servo warning (status=%d) - letting debounce handle it",
-                           servo_status_code_);
-        final_linear.setZero();
-        final_angular.setZero();
-    }
-    else if (isRobotStuck(final_linear)) {
-        RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 2000,
-                           "⚠️ Robot may be stuck - zeroing commands");
-        final_linear.setZero();
-        final_angular.setZero();
-    }
     
-    // ========== AGGRESSIVE ZERO CLAMPING ==========
-    const double MIN_LINEAR_VEL = 0.001;
-    const double MIN_ANGULAR_VEL = 0.001;
+    
+    // ========== CLAMP TINY VELOCITIES TO ZERO ==========
+    const double MIN_VELOCITY = 1e-6;  // 0.000001
     
     for (int i = 0; i < 3; ++i) {
-        if (std::abs(final_linear[i]) < MIN_LINEAR_VEL) {
+        if (std::abs(final_linear[i]) < MIN_VELOCITY) {
             final_linear[i] = 0.0;
         }
-        if (std::abs(final_angular[i]) < MIN_ANGULAR_VEL) {
+        if (std::abs(final_angular[i]) < MIN_VELOCITY) {
             final_angular[i] = 0.0;
         }
     }
+
+   //....................above clamp added
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    // ========== DEBUG LOGGING ==========
+    RCLCPP_DEBUG_THROTTLE(this->get_logger(), *this->get_clock(), 500,
+                          "Orient: R=%.1f° P=%.1f° Y=%.1f° → Vel: [%.3f, %.3f, %.3f]",
+                          roll * 180.0/M_PI, pitch * 180.0/M_PI, yaw * 180.0/M_PI,
+                          final_linear.x(), final_linear.y(), final_angular.z());
     
     cmd.linear = final_linear;
     cmd.angular = final_angular;
     return cmd;
 }
-
-// From moveit_servo (check with: ros2 topic echo /servo_node/status)
-// 0  = NO_WARNING
-// 1  = DECELERATE_FOR_APPROACHING_SINGULARITY
-// 2  = HALT_FOR_SINGULARITY
-// 3  = DECELERATE_FOR_LEAVING_SINGULARITY
-// 4  = DECELERATE_FOR_COLLISION
-// 5  = HALT_FOR_COLLISION
-// 6  = JOINT_BOUND
 
 // ==================== FILTERING ====================
 Eigen::Vector3d SensagramTeleopNode::applyDeadzone(const Eigen::Vector3d& input) {
@@ -542,7 +501,11 @@ void SensagramTeleopNode::checkTimeout() {
     
     if (elapsed > timeout_ms_) {
         consecutive_timeouts_++;
+        
         if (consecutive_timeouts_ >= max_consecutive_timeouts_) {
+            RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 2000,
+                               "⏱ Connection lost (%.0f ms) → stopping robot",
+                               elapsed);
             stopRobot();
         }
     } else {
@@ -563,6 +526,7 @@ geometry_msgs::msg::TwistStamped SensagramTeleopNode::createZeroTwist() {
     return twist;
 }
 
+// ==================== PUBLISHING ====================
 void SensagramTeleopNode::publishTwist(const geometry_msgs::msg::TwistStamped& twist) {
     twist_pub_->publish(twist);
 }
@@ -571,9 +535,12 @@ void SensagramTeleopNode::publishTwist(const geometry_msgs::msg::TwistStamped& t
 void SensagramTeleopNode::logStatus() {
     double packet_rate = 0.0;
     if (!packet_intervals_.empty()) {
-        double avg = 0.0;
-        for (double interval : packet_intervals_) avg += interval;
-        packet_rate = 1000.0 / (avg / packet_intervals_.size());
+        double avg_interval = 0.0;
+        for (double interval : packet_intervals_) {
+            avg_interval += interval;
+        }
+        avg_interval /= packet_intervals_.size();
+        packet_rate = 1000.0 / avg_interval;
     }
     
     std::lock_guard<std::mutex> lock(imu_mutex_);
@@ -585,79 +552,33 @@ void SensagramTeleopNode::logStatus() {
     }
     
     RCLCPP_INFO(this->get_logger(),
-                "📊 Packets=%lu | Rate=%.1f Hz\n   R=%.1f° P=%.1f° Y=%.1f°",
-                packets_received_.load(), packet_rate,
-                roll * 180.0/M_PI, pitch * 180.0/M_PI, yaw * 180.0/M_PI);
+                "📊 Packets=%lu | Rate=%.1f Hz | Quat=%s | Timeouts=%d\n"
+                "   Orient: R=%.1f° P=%.1f° Y=%.1f°\n"
+                "   Vel: Lin=[%.3f, %.3f] | Ang=[%.3f] m/s, rad/s",
+                packets_received_.load(),
+                packet_rate,
+                latest_imu_.has_quaternion ? "✓" : "✗",
+                consecutive_timeouts_,
+                roll * 180.0/M_PI,
+                pitch * 180.0/M_PI,
+                yaw * 180.0/M_PI,
+                current_velocity_.linear.x(),
+                current_velocity_.linear.y(),
+                current_velocity_.angular.z());
 }
-
-
-// gripper open function
-void SensagramTeleopNode::openGripperAtStart() {
-    // Stop the timer so it doesn't loop
-    this->gripper_init_timer_->cancel();
-
-    if (!this->gripper_action_client_->wait_for_action_server(std::chrono::seconds(5))) {
-        RCLCPP_ERROR(this->get_logger(), "Gripper action server not available!");
-        return;
-    }
-
-    auto goal_msg = GripperCommand::Goal();
-    goal_msg.command.position = 0.0;     // Open
-    goal_msg.command.max_effort = 50.0;
-
-    RCLCPP_INFO(this->get_logger(), "🚀 Sending initial Gripper Open action...");
-
-    this->gripper_action_client_->async_send_goal(goal_msg);
-}
-
-
-// the home function that is called when sustained singularity (2) or (6) joint limit is detected
-void SensagramTeleopNode::goHomeRecovery() {
-    is_recovering_ = true; // This flag stops controlLoopCallback from sending Twists
-    
-    // 1. Stop the robot immediately
-    stopRobot();
-
-    if (!home_action_client_->wait_for_action_server(std::chrono::seconds(2))) {
-        RCLCPP_ERROR(this->get_logger(), "Recovery server not found!");
-        is_recovering_ = false;
-        return;
-    }
-
-    auto goal_msg = FollowJointTrajectory::Goal();
-    goal_msg.trajectory.joint_names = {"joint_1", "joint_2", "joint_3", "joint_4", "joint_5", "joint_6", "joint_7"};
-    
-    trajectory_msgs::msg::JointTrajectoryPoint point;
-    // Your specified Home Position
-    point.positions = {0.0, 1.0, 1.57, -1.57, 0.0, 1.0, 0.0};
-    point.time_from_start = rclcpp::Duration::from_seconds(5.0); // Safe 5-second move
-    
-    goal_msg.trajectory.points.push_back(point);
-
-    auto send_goal_options = rclcpp_action::Client<FollowJointTrajectory>::SendGoalOptions();
-    
-    send_goal_options.result_callback = [this](const auto & result) {
-        RCLCPP_INFO(this->get_logger(), "✅ Home reached. Ready for teleop!");
-        this->consecutive_servo_errors_ = 0;
-        this->servo_status_code_ = 0;
-        this->startup_time_ = std::chrono::steady_clock::now(); // 5s grace after recovery too
-        this->is_recovering_ = false;
-    };
-
-    home_action_client_->async_send_goal(goal_msg, send_goal_options);
-}
-
 
 // ==================== MAIN ====================
 int main(int argc, char** argv) {
     rclcpp::init(argc, argv);
+    
     try {
         auto node = std::make_shared<SensagramTeleopNode>();
         rclcpp::spin(node);
     } catch (const std::exception& e) {
-        RCLCPP_FATAL(rclcpp::get_logger("main"), "Fatal: %s", e.what());
+        RCLCPP_FATAL(rclcpp::get_logger("main"), "Fatal error: %s", e.what());
         return 1;
     }
+    
     rclcpp::shutdown();
     return 0;
 }

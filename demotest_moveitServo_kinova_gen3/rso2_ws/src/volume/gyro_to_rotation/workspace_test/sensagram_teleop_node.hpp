@@ -2,9 +2,18 @@
 #define SENSAGRAM_TELEOP_NODE_HPP
 
 #include <rclcpp/rclcpp.hpp>
+#include <rclcpp_action/rclcpp_action.hpp>
+
+// home position action
+#include "control_msgs/action/follow_joint_trajectory.hpp"
+
 #include <geometry_msgs/msg/twist_stamped.hpp>
+#include <sensor_msgs/msg/joint_state.hpp>
 #include <moveit_msgs/srv/servo_command_type.hpp>
 #include <std_msgs/msg/int8.hpp>
+
+// for gripper
+#include "control_msgs/action/gripper_command.hpp"
 
 #include <nlohmann/json.hpp>
 #include <Eigen/Dense>
@@ -25,7 +34,7 @@
 using json = nlohmann::json;
 using namespace std::chrono_literals;
 
-// ==================== IMU DATA (ROTATION VECTOR) ====================
+// ==================== IMU DATA ====================
 struct IMUData {
     Eigen::Quaterniond quaternion;
     bool has_quaternion;
@@ -37,7 +46,7 @@ struct IMUData {
     }
 };
 
-// ==================== FILTERED VELOCITY ====================
+// ==================== VELOCITY COMMAND ====================
 struct VelocityCommand {
     Eigen::Vector3d linear;
     Eigen::Vector3d angular;
@@ -72,6 +81,7 @@ private:
     
     // ===== QUATERNION PROCESSING =====
     void quaternionToEuler(const Eigen::Quaterniond& q, double& roll, double& pitch, double& yaw);
+    bool isPhoneFlat(double roll, double pitch, double yaw);
     
     // ===== FILTERING =====
     Eigen::Vector3d applyDeadzone(const Eigen::Vector3d& input);
@@ -80,6 +90,7 @@ private:
     Eigen::Vector3d saturateVelocity(const Eigen::Vector3d& vel, double max_vel);
     
     // ===== SAFETY =====
+    bool isRobotStuck(const Eigen::Vector3d& commanded_vel);
     void checkTimeout();
     void stopRobot();
     geometry_msgs::msg::TwistStamped createZeroTwist();
@@ -92,10 +103,38 @@ private:
     
     // ===== ROS INTERFACES =====
     rclcpp::Publisher<geometry_msgs::msg::TwistStamped>::SharedPtr twist_pub_;
+    rclcpp::Subscription<sensor_msgs::msg::JointState>::SharedPtr joint_state_sub_;
+    rclcpp::Subscription<std_msgs::msg::Int8>::SharedPtr servo_status_sub_;
     rclcpp::Client<moveit_msgs::srv::ServoCommandType>::SharedPtr servo_mode_client_;
     rclcpp::TimerBase::SharedPtr control_timer_;
     rclcpp::TimerBase::SharedPtr diagnostics_timer_;
+
+    // Define the Action types for easier reading
+    using GripperCommand = control_msgs::action::GripperCommand;
+    using GoalHandleGripper = rclcpp_action::ClientGoalHandle<GripperCommand>;
+
+    // The Action Client
+    rclcpp_action::Client<GripperCommand>::SharedPtr gripper_action_client_;
     
+    // Timer to handle the initial opening
+    rclcpp::TimerBase::SharedPtr gripper_init_timer_;
+
+    // Function to send the goal
+    void openGripperAtStart();
+
+    // the home position recovery function
+
+    // --- ACTION TYPES ---
+    using FollowJointTrajectory = control_msgs::action::FollowJointTrajectory;
+    using GoalHandleFollowJointTrajectory = rclcpp_action::ClientGoalHandle<FollowJointTrajectory>;
+
+    // --- MEMBER VARIABLES ---
+    rclcpp_action::Client<FollowJointTrajectory>::SharedPtr home_action_client_;
+    bool is_recovering_; 
+
+    // --- FUNCTIONS ---
+    void goHomeRecovery();
+
     // ===== UDP SOCKET =====
     int udp_socket_;
     struct sockaddr_in server_addr_;
@@ -107,6 +146,17 @@ private:
     IMUData latest_imu_;
     VelocityCommand current_velocity_;
     std::chrono::steady_clock::time_point last_packet_time_;
+    
+    // ===== JOINT STATE =====
+    sensor_msgs::msg::JointState::SharedPtr latest_joint_state_;
+    
+    // ===== STUCK DETECTION =====
+    double max_velocity_seen_;
+    std::chrono::steady_clock::time_point last_reset_time_;
+    int servo_status_code_;
+    static constexpr int SERVO_ERROR_THRESHOLD = 25;
+    int consecutive_servo_errors_;
+    std::chrono::steady_clock::time_point startup_time_;
     
     // ===== ORIENTATION TRACKING =====
     Eigen::Quaterniond initial_orientation_;
@@ -132,6 +182,7 @@ private:
     double timeout_ms_;
     double gyro_linear_scale_;
     double gyro_angular_scale_;
+    double flat_phone_threshold_;
     bool invert_x_, invert_y_, invert_z_;
 };
 
