@@ -1,0 +1,95 @@
+# =============================================================================
+# kinova-follower / docker-compose.yml
+#
+# Run in a SEPARATE terminal alongside the kortex stack:
+#   cd kinova-follower
+#   docker compose up
+#
+# How it connects to the kortex stack:
+#   network_mode: host   → shares the host network interface
+#   ROS_DOMAIN_ID: 0     → must match kortex stack (set in .env)
+#   RMW_IMPLEMENTATION   → must match kortex stack (rmw_zenoh_cpp)
+#
+# No port mapping needed — host network IS the network.
+#
+# Volume mount:
+#   ./src → /follower_ws/src  (live — edit code without rebuilding image)
+# =============================================================================
+
+name: kinova-follower
+
+services:
+
+  follower:
+    container_name: kinova_follower
+    build:
+      context: .
+      dockerfile: Dockerfile
+    
+    # ── Share host network so this container sees all kortex ROS2 topics ──────
+    network_mode: host
+    
+    # ── Match the kortex stack environment exactly ────────────────────────────
+    environment:
+      RMW_IMPLEMENTATION: rmw_zenoh_cpp
+      ZENOH_ROUTER_CHECK_ATTEMPTS: "0"
+      ROS_DOMAIN_ID: ${ROS_DOMAIN_ID:-0}
+      ROS_DISTRO: jazzy
+
+    # ── Volume mount: src is live — edit follower_node.py, restart container ──
+    # No image rebuild needed when you change Python code.
+    volumes:
+      - ./src:/follower_ws/src:rw
+      - ./config:/config:ro
+
+    # ── Runtime command ───────────────────────────────────────────────────────
+    command:
+      - bash
+      - -c
+      - |
+        echo "=== Waiting for joint_states from kortex stack ==="
+        until ros2 topic list 2>/dev/null | grep -q /joint_states; do
+          echo "  ...not ready yet, sleeping 3s"; sleep 3
+        done
+
+        echo "=== Waiting for /tf from apriltag service ==="
+        until ros2 topic list 2>/dev/null | grep -q "^/tf$"; do
+          echo "  ...waiting for tf, sleeping 2s"; sleep 2
+        done
+        sleep 2
+
+        echo "=== Activating twist_controller ==="
+        ros2 service call /controller_manager/switch_controller \
+          controller_manager_msgs/srv/SwitchController \
+          "{
+            activate_controllers:   [twist_controller],
+            deactivate_controllers: [joint_trajectory_controller],
+            strictness: 1,
+            activate_asap: true
+          }"
+
+        echo "=== Launching follower node ==="
+        ros2 run apriltag_follower follower_node \
+          --ros-args --params-file /config/follower_params.yaml
+
+    restart: on-failure:3
+
+  # ── Debug shell — enter running container to inspect ROS2 topics ──────────
+  # Usage: docker compose run --rm debug
+  debug:
+    container_name: kinova_follower_debug
+    build:
+      context: .
+      dockerfile: Dockerfile
+    network_mode: host
+    environment:
+      RMW_IMPLEMENTATION: rmw_zenoh_cpp
+      ROS_DOMAIN_ID: ${ROS_DOMAIN_ID:-0}
+      ZENOH_ROUTER_CHECK_ATTEMPTS: "0"
+      ROS_DISTRO: jazzy
+    volumes:
+      - ./src:/follower_ws/src:rw
+    profiles: ["debug"]
+    command: bash
+    stdin_open: true
+    tty: true

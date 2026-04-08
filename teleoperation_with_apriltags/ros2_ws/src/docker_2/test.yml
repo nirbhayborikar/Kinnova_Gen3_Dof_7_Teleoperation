@@ -1,0 +1,80 @@
+services:
+
+  follower:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: kinova_follower
+    privileged: true
+    network_mode: host
+    ipc: host
+    stdin_open: true
+    restart: unless-stopped
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [ gpu ]
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - $XAUTHORITY:/root/.Xauthority
+
+      # ── Live-mount your source — edit follower_node.py on host, ──────────
+      # restart container, no image rebuild needed
+
+      - /home/nirbhayborikar/framework/Kinnova_Gen3_Dof_7_Teleoperation/teleoperation_with_apriltags/ros2_ws/src/docker/src:/root/follower_ws/src
+
+      # ── Params file — tune kp, alpha, max_vel, workspace box here ────────
+      #- ./config/follower_params.yaml:/config/follower_params.yaml
+
+    command:
+      - bash
+      - -c
+      - |
+        source /opt/ros/jazzy/setup.bash &&
+
+        # ── Build the follower package ──────────────────────────────────────
+        cd /follower_ws &&
+        colcon build --packages-select apriltag_follower --symlink-install &&
+        source install/setup.bash &&
+
+        # # ── Wait for kortex arm driver to be ready ──────────────────────────
+        # echo "Waiting for joint_states from kortex..." &&
+        # until ros2 topic list 2>/dev/null | grep -q /joint_states; do
+        #   echo "  ...not ready, sleeping 3s"; sleep 3
+        # done &&
+
+        # # ── Wait for apriltag /tf to be ready ──────────────────────────────
+        # echo "Waiting for /tf from apriltag service..." &&
+        # until ros2 topic list 2>/dev/null | grep -q "^/tf$"; do
+        #   echo "  ...waiting, sleeping 2s"; sleep 2
+        # done &&
+        # sleep 2 &&
+
+        # # ── Switch to twist_controller (deactivates joint_trajectory_controller)
+        # echo "Activating twist_controller..." &&
+        # ros2 service call /controller_manager/switch_controller \
+        #   controller_manager_msgs/srv/SwitchController \
+        #   "{activate_controllers: [twist_controller], deactivate_controllers: [joint_trajectory_controller], strictness: 1, activate_asap: true}" &&
+
+        # # ── Run the follower node ───────────────────────────────────────────
+        # ros2 run apriltag_follower follower_node \
+        #   --ros-args --params-file /config/follower_params.yaml
+
+        # # ── To keep container alive for debugging, comment out the lines ────
+        # # above and uncomment this:
+        tail -f /dev/null
+
+
+
+    environment:
+      ROS_DOMAIN_ID: 145
+      RMW_IMPLEMENTATION: rmw_zenoh_cpp      # must match kortex stack
+      ROS_AUTOMATIC_DISCOVERY_RANGE: LOCALHOST
+      QT_X11_NO_MITSHM: 1
+      DISPLAY: $DISPLAY
+      NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: all
+      ZENOH_ROUTER_CHECK_ATTEMPTS: 0          # don't block if router starts after us

@@ -1,0 +1,67 @@
+# =============================================================================
+# kinova-follower / docker-compose.yml
+#
+# Run in a SEPARATE terminal alongside the kortex stack:
+#   cd kinova-follower
+#   docker compose up
+#
+# How it connects to the kortex stack:
+#   network_mode: host   → shares the host network interface
+#   ROS_DOMAIN_ID: 0     → must match kortex stack (set in .env)
+#   RMW_IMPLEMENTATION   → must match kortex stack (rmw_zenoh_cpp)
+#
+# No port mapping needed — host network IS the network.
+#
+# Volume mount:
+#   ./src → /follower_ws/src  (live — edit code without rebuilding image)
+
+# =============================================================================
+
+
+
+
+
+services:
+  visual_servoing_common:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    environment:
+      ROS_DOMAIN_ID: 145
+      DISPLAY: $DISPLAY
+      ROS_AUTOMATIC_DISCOVERY_RANGE: "LOCALHOST"
+      RMW_IMPLEMENTATION: rmw_zenoh_cpp
+    network_mode: host
+    ipc: host
+    privileged: true
+    stdin_open: true
+    restart: unless-stopped
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - /home/nirbhayborikar/.Xauthority:/root/.Xauthority:ro    # changed this
+      - ../../src:/root/ros2_ws/src
+
+
+    command:
+      - bash
+      - -c
+      - |
+        source /opt/ros/jazzy/setup.bash &&
+
+        #ros2 run apriltag_follower follower_node &&
+
+        tail -f /dev/null
+
+
+
+
+
+  visual_servoing_common_nvidia:
+    extends: visual_servoing_common
+    runtime: nvidia
+    environment:
+      QT_X11_NO_MITSHM: "1"
+      NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: compute,video,utility,graphics
+
+
