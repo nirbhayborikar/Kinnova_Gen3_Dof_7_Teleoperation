@@ -1,0 +1,12 @@
+/**:
+  ros__parameters:
+    family:       36h11
+    size:         0.04
+    max_hamming:  0
+    z_up:         true
+    decimate:     2.0
+    blur:         0.0
+    refine_edges: true
+    sharpening:   0.25
+    debug:        false
+    threads:      1

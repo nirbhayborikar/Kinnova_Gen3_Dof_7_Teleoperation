@@ -1,0 +1,17 @@
+LICENSE
+package.xml
+setup.cfg
+setup.py
+../../build/apriltag_inspector/apriltag_inspector.egg-info/PKG-INFO
+../../build/apriltag_inspector/apriltag_inspector.egg-info/SOURCES.txt
+../../build/apriltag_inspector/apriltag_inspector.egg-info/dependency_links.txt
+../../build/apriltag_inspector/apriltag_inspector.egg-info/entry_points.txt
+../../build/apriltag_inspector/apriltag_inspector.egg-info/requires.txt
+../../build/apriltag_inspector/apriltag_inspector.egg-info/top_level.txt
+../../build/apriltag_inspector/apriltag_inspector.egg-info/zip-safe
+apriltag_inspector/__init__.py
+apriltag_inspector/apriltag_inspector_node.py
+resource/apriltag_inspector
+test/test_copyright.py
+test/test_flake8.py
+test/test_pep257.py

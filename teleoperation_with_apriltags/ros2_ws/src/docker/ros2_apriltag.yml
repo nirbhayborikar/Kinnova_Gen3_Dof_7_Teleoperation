@@ -1,0 +1,43 @@
+services:
+
+
+# apriltag
+  apriltag_detection:
+    container_name: ros2_apriltag_detection
+    image: fbe-dockerreg.rwu.de/prj-iki-ros2/perception/apriltag:humble
+    environment:
+      ROS_DOMAIN_ID: $ROS_DOMAIN_ID
+    network_mode: host
+    restart: 'unless-stopped'
+    privileged: true
+    stdin_open: true
+    tty: true
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      #- /home/nirbhayborikar/.Xauthority:/root/.Xauthority:ro    # changed this
+      - ../../../ros2_ws:/root/ros2_ws/   # this is only to have build install file in system
+      - ../../config/:/root/ros2_ws/install/apriltag_ros/share/apriltag_ros/cfg
+
+
+    command:
+      - bash
+      - -c
+      - |
+        echo "=== Starting AprilTag detection ===" &&
+        source /root/ros2_ws/install/setup.bash &&
+        echo "=== Packages ===" &&
+        ros2 pkg list | grep april &&
+        echo "=== Launching apriltag_node ===" &&
+        ros2 run apriltag_ros apriltag_node --ros-args \
+          -r image_rect:=/kortex_vision/color/image_raw \
+          -r camera_info:=/kortex_vision/color/camera_info \
+          --params-file $(ros2 pkg prefix apriltag_ros)/share/apriltag_ros/cfg/tags_36h11.yaml
+
+
+
+
+
+
+
+
+

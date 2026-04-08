@@ -1,0 +1,8 @@
+{
+  "package_name": "apriltag_msgs",
+  "non_idl_tuples": [
+    "/root/ros2_ws/src/ros2-apriltags/submodules/apriltag_msgs:msg/Point.msg",
+    "/root/ros2_ws/src/ros2-apriltags/submodules/apriltag_msgs:msg/AprilTagDetection.msg",
+    "/root/ros2_ws/src/ros2-apriltags/submodules/apriltag_msgs:msg/AprilTagDetectionArray.msg"
+  ]
+}

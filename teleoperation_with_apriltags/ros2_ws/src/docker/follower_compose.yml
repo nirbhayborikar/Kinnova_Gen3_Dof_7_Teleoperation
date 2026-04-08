@@ -38,7 +38,8 @@ services:
     restart: unless-stopped
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix
-      - /home/nirbhayborikar/.Xauthority:/root/.Xauthority:ro    # changed this
+      - $XAUTHORITY:/root/.Xauthority    # changed this
+      - ../../../ros2_ws:/root/ros2_ws/   # this is only to have build install file in system
       - ../../src:/root/ros2_ws/src
 
 
