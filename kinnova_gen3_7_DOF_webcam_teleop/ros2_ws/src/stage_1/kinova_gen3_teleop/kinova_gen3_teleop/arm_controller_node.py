@@ -30,12 +30,11 @@ import time
 class ArmControllerNode(Node):
     """Subscribes to hand pose and drives Kinova Gen3 via IK."""
 
-    # Kinova Gen3 7-DOF joint names (from URDF)
-    ARM_JOINTS = [f'joint_{i}' for i in range(1, 8)]
+
     # Creates: ['joint_1', 'joint_2', 'joint_3', 'joint_4', 'joint_5', 'joint_6', 'joint_7']
 
     # MoveIt2 planning group name (from Kinova MoveIt config SRDF)
-    PLANNING_GROUP = 'manipulator'
+    
 
     # Gripper joint name (Robotiq 2F-85)
     GRIPPER_JOINT = 'finger_joint' # from joint state the top name is consider as  gripper name : ros2 topic echo /joint_states --once
@@ -43,7 +42,15 @@ class ArmControllerNode(Node):
     def __init__(self):
         super().__init__('arm_controller')
 
+
         self.cb_group = ReentrantCallbackGroup()
+        self.PLANNING_GROUP = "manipulator"
+
+
+        # Kinova Gen3 7-DOF joint names (from URDF)
+        self.ARM_JOINTS = [f'joint_{i}' for i in range(1, 8)]
+
+
 
         # ---- Subscribers (from teleop_node) ----
         self.create_subscription(
@@ -90,9 +97,10 @@ class ArmControllerNode(Node):
             self.current_joint_state = msg
 
     def _pose_cb(self, msg):
-        if self._arm_busy:
-            return
-        self._arm_busy = True
+        # if self._arm_busy:  # test 1
+        #     return
+        # self._arm_busy = True
+        self.get_logger().info(f'Using planning group: {self.PLANNING_GROUP}') # test 2
         threading.Thread(
             target=self._solve_ik,
             args=(msg,),
@@ -108,6 +116,8 @@ class ArmControllerNode(Node):
             req.ik_request.avoid_collisions = True
             req.ik_request.pose_stamped = pose_msg
 
+            req.ik_request.ik_link_name = "grasping_frame" # GPT (TEST) April 11
+
             # Seed with current joint state
             with self.js_lock:
                 if self.current_joint_state:
@@ -119,7 +129,7 @@ class ArmControllerNode(Node):
 
             # Wait with timeout
             start = time.time()
-            while not future.done() and (time.time() - start) < 0.3:
+            while not future.done() and (time.time() - start) < 1.0:  # 0.3 test 1
                 time.sleep(0.005)
 
             if not future.done():
@@ -142,6 +152,7 @@ class ArmControllerNode(Node):
                 if jn in sol.name:
                     positions.append(sol.position[sol.name.index(jn)])
                 else:
+                    self.get_logger().warn(f'Missing joint {jn} in IK solution') # test 1
                     return
 
             # Publish trajectory
@@ -149,7 +160,8 @@ class ArmControllerNode(Node):
             traj.joint_names = self.ARM_JOINTS
             pt = JointTrajectoryPoint()
             pt.positions = positions
-            pt.time_from_start = Duration(sec=0, nanosec=200_000_000)
+            # pt.time_from_start = Duration(sec=0, nanosec=200_000_000) # test 1
+            pt.time_from_start = Duration(sec=1) # test 1
             traj.points.append(pt)
             self.arm_pub.publish(traj)
 
