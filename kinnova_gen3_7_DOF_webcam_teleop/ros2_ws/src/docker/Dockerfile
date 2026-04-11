@@ -27,6 +27,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-${ROS_DISTRO}-tf2-tools \
     ros-${ROS_DISTRO}-tf-transformations \
     ros-${ROS_DISTRO}-generate-parameter-library \
+    ros-jazzy-rmw-zenoh-cpp \
+    ros-jazzy-rmw-cyclonedds-cpp \
     # Camera & GUI
     libv4l-dev \
     v4l-utils \
@@ -50,8 +52,7 @@ RUN mkdir -p ${WS}/src
 WORKDIR ${WS}/src
 
 # ---- Clone ros2_kortex (Jazzy = main branch) ----
-RUN git clone --branch main --depth 1 --recurse-submodules \
-    https://github.com/Kinovarobotics/ros2_kortex.git
+
 
 # ---- Install ROS dependencies ----
 WORKDIR ${WS}

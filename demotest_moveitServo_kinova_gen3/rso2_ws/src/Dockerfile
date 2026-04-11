@@ -19,6 +19,8 @@ RUN apt-get update && apt-get install -y \
     ros-jazzy-moveit-msgs \
     nlohmann-json3-dev \
     ros-jazzy-rmw-zenoh-cpp \
+    ros-jazzy-rmw-cyclonedds-cpp \
+
     && rm -rf /var/lib/apt/lists/*
 
 ENV INTERFACE_WS=/root/ros2_ws
