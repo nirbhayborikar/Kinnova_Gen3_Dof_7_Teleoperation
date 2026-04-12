@@ -56,7 +56,7 @@ class HandPosePublisher(Node):
         self.declare_parameter('alpha',            0.4)
         self.declare_parameter('dead_zone',        0.005)
         # delta scale: how many robot-metres per normalised pixel unit per frame
-        self.declare_parameter('delta_scale_xy',   0.003)
+        self.declare_parameter('delta_scale_xy',   0.03) #  0.003
         self.declare_parameter('delta_scale_z',    0.003)
         self.declare_parameter('robot_x_min',      0.20)
         self.declare_parameter('robot_x_max',      0.60)

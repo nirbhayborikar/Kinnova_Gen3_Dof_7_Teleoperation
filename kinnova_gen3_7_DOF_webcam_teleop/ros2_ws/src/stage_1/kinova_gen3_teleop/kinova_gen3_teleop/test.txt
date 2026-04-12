@@ -702,3 +702,18 @@ ros2 node info /arm_controller
     /robotiq_gripper_controller/gripper_cmd: control_msgs/action/GripperCommand
 root@nirbhayborikar-HP-Pavilion-x360-Convertible-14-dh1xxx:/ros2_ws# 
 
+
+
+ ros2 topic echo /joint_states --once
+
+    nanosec: 608000000
+  frame_id: ''
+name:
+- finger_joint
+- joint_1
+- joint_2
+- joint_3
+- joint_4
+- joint_5
+- joint_6
+- joint_7

@@ -14,7 +14,7 @@ from sensor_msgs.msg import JointState
 from moveit_msgs.srv import GetPositionIK
 from moveit_msgs.msg import PositionIKRequest, RobotState
 from builtin_interfaces.msg import Duration
-
+from rclpy.duration import Duration as RclpyDuration
 
 class IKWorker(Node):
     """Dedicated node for synchronous IK calls — runs its own executor."""
@@ -144,6 +144,7 @@ class ArmControllerNode(Node):
             return
         if (now - self._last_ik_time) < self.IK_MIN_INTERVAL:
             return
+        
 
         self.get_logger().info(
             f'pose_cb -> IK  x={msg.pose.position.x:.3f} '
@@ -156,6 +157,8 @@ class ArmControllerNode(Node):
             target=self._solve_and_move,
             args=(msg,), daemon=True).start()
 
+    
+    
     # ------------------------------------------------------------------ #
     #  IK + motion                                                         #
     # ------------------------------------------------------------------ #
@@ -167,6 +170,12 @@ class ArmControllerNode(Node):
 
             self.get_logger().info(
                 f'joint_state available: {js_snapshot is not None}')
+            
+            # before calling ik 
+            pose_msg.pose.orientation.x = 0.0
+            pose_msg.pose.orientation.y = 0.707
+            pose_msg.pose.orientation.z = 0.0
+            pose_msg.pose.orientation.w = 0.707
 
             resp = self.ik.solve(pose_msg, js_snapshot)
 
@@ -197,16 +206,20 @@ class ArmControllerNode(Node):
             traj = JointTrajectory()
             traj.header.stamp = self.get_clock().now().to_msg()
             traj.joint_names  = self.ARM_JOINTS
+            traj.header.frame_id = 'base_link'
             pt = JointTrajectoryPoint()
             pt.positions      = positions
+            pt.velocities = [0.0] * len(positions)
             # 300 ms — short enough for smooth delta tracking
-            pt.time_from_start = Duration(nanosec=300_000_000)
+            pt.time_from_start = RclpyDuration(seconds=2).to_msg()
             traj.points.append(pt)
-            self.traj_pub.publish(traj)
+            self.traj_pub.publish(traj) # this is the execution trigger
 
             self.get_logger().info(
                 f'ARM CMD: {[f"{p:.2f}" for p in positions]}',
                 throttle_duration_sec=0.5)
+            self.get_logger().info(f'IK positions: {[round(p,3) for p in positions]}')
+            self.get_logger().info(f'Publishing trajectory...')
 
         except Exception as e:
             self.get_logger().error(f'_solve_and_move error: {e}')

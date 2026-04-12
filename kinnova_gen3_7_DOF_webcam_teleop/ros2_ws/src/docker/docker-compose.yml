@@ -29,18 +29,19 @@ services:
       - |
         source /opt/ros/jazzy/setup.bash &&
         source install/setup.bash &&
-        colcon build --packages-select kortex_description kinova_gen3_teleop &&
+        
         ros2 launch kinova_gen3_teleop teleop.launch.py &&
         tail -f /dev/null
-#colcon build --packages-select kinova_gen3_teleop &&source install/setup.bash &&
+#colcon build --packages-select kinova_gen3_teleop &&source install/setup.bash && # the package colcon build
+
 #ros2 launch kinova_gen3_7dof_robotiq_2f_85_moveit_config robot.launch.py robot_ip:=192.168.1.10 use_fake_hardware:=true use_sim_time:=false &&
 
-        
+#colcon build --packages-select kortex_description kinova_gen3_teleop &&     
 
 
 # sleep 8 &&
 # source install/setup.bash &&
 # sleep 3 &&
 # ros2 run kinova_gen3_teleop arm_controller &
-# ros2 launch kinova_gen3_teleop teleop.launch.py
+# ros2 launch kinova_gen3_teleop teleop.launch.py # to start the package 
 
