@@ -159,7 +159,7 @@ def generate_launch_description():
     # servo_params["moveit_servo"]["move_group_name"] = LaunchConfiguration("planning_group")
     if "moveit_servo" not in servo_params:
         servo_params["moveit_servo"] = {}
-    servo_params["moveit_servo"]["command_in_type"] = "speed_units"
+    servo_params["moveit_servo"]["command_in_type"] = "unitless" # speed_units
     servo_params["moveit_servo"]["command_out_type"] = "trajectory_msgs/JointTrajectory"
     servo_params["moveit_servo"]["command_out_topic"] = "/joint_trajectory_controller/joint_trajectory"
     servo_params["moveit_servo"]["planning_frame"] = "base_link"
@@ -167,8 +167,8 @@ def generate_launch_description():
     servo_params["moveit_servo"]["move_group_name"] = LaunchConfiguration("planning_group") # manipulator does not exist
 
 # Topics (they might have defaults, but set them explicitly)
-    servo_params["moveit_servo"]["cartesian_command_in_topic"] = "servo_node/delta_twist_cmds"
-    servo_params["moveit_servo"]["joint_command_in_topic"] = "servo_node/delta_joint_cmds"
+    servo_params["moveit_servo"]["cartesian_command_in_topic"] = "/servo_node/delta_twist_cmds"
+    servo_params["moveit_servo"]["joint_command_in_topic"] = "/servo_node/delta_joint_cmds"
     #### 
 
     servo_params["moveit_servo"]["joint_topic"] = "/joint_states"

@@ -1,20 +1,33 @@
 from launch import LaunchDescription
 from launch_ros.actions import Node
-from ament_index_python.packages import get_package_share_directory
-import os
+from launch.actions import DeclareLaunchArgument
+from launch.substitutions import LaunchConfiguration
+
 
 def generate_launch_description():
-
-    pkg_share = get_package_share_directory('sensagram_teleop')
-
-    params_file = os.path.join(pkg_share, 'config', 'teleop_params.yaml')
-
     return LaunchDescription([
+        DeclareLaunchArgument('camera_id',       default_value='0'),
+        DeclareLaunchArgument('rate',            default_value='30.0'),
+        DeclareLaunchArgument('show_camera',     default_value='true'),
+        DeclareLaunchArgument('linear_scale',    default_value='0.35'),
+        DeclareLaunchArgument('angular_scale',   default_value='0.25'),
+        DeclareLaunchArgument('command_frame',   default_value='base_link'),
+        DeclareLaunchArgument('pinch_threshold', default_value='0.07'),
+
         Node(
             package='sensagram_teleop',
-            executable='sensagram_teleop_node',
-            name='sensagram_teleop',
+            executable='servo_teleop_node',
+            name='servo_teleop_node',
             output='screen',
-            parameters=[params_file]
-        )
+            emulate_tty=True,
+            parameters=[{
+                'camera_id':       LaunchConfiguration('camera_id'),
+                'rate':            LaunchConfiguration('rate'),
+                'show_camera':     LaunchConfiguration('show_camera'),
+                'linear_scale':    LaunchConfiguration('linear_scale'),
+                'angular_scale':   LaunchConfiguration('angular_scale'),
+                'command_frame':   LaunchConfiguration('command_frame'),
+                'pinch_threshold': LaunchConfiguration('pinch_threshold'),
+            }],
+        ),
     ])
