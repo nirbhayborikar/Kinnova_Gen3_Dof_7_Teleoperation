@@ -51,11 +51,11 @@ class ServoTeleopNode(Node):
         self.declare_parameter('rate',                30.0)
         self.declare_parameter('show_camera',         True)
         self.declare_parameter('pinch_threshold',     0.07)
-        self.declare_parameter('dead_zone',           0.008)
+        self.declare_parameter('dead_zone',           0.0001) #0.08 reduce noise increase
         # Scale: normalised pixel delta  →  m/s sent to Servo
         # Servo yaml has scale.linear=0.2, so keep this moderate
-        self.declare_parameter('linear_scale',        0.4)
-        self.declare_parameter('angular_scale',       0.3)
+        self.declare_parameter('linear_scale',        0.1)
+        self.declare_parameter('angular_scale',       0.1)
         # Frame that matches robot_link_command_frame in gen3_servo.yaml
         self.declare_parameter('command_frame',       'base_link')
 
@@ -234,12 +234,23 @@ class ServoTeleopNode(Node):
         twist.header.stamp    = self.get_clock().now().to_msg()
         twist.header.frame_id = self.command_frame
 
+
         if self.prev_wrist is None:
             self.prev_wrist = (right.wrist_x, right.wrist_y)
             return twist  # zero on first frame
 
-        raw_dx = right.wrist_x - self.prev_wrist[0]
-        raw_dy = right.wrist_y - self.prev_wrist[1]
+
+
+        # Low-pass filter to smooth deltas (reduce noise)
+        self.filtered_dx = 0.9 * self.filtered_dx + 0.1 * raw_dx
+        self.filtered_dy = 0.9 * self.filtered_dy + 0.1 * raw_dy
+
+        # Use filtered values
+        raw_dx = self.filtered_dx
+        raw_dy = self.filtered_dy
+
+        # raw_dx = right.wrist_x - self.prev_wrist[0]
+        # raw_dy = right.wrist_y - self.prev_wrist[1]
         self.prev_wrist = (right.wrist_x, right.wrist_y)
 
         # Dead zone
@@ -264,8 +275,9 @@ class ServoTeleopNode(Node):
             dr = right.rotation - self.smooth_rot
             while dr >  math.pi: dr -= 2 * math.pi
             while dr < -math.pi: dr += 2 * math.pi
-            dr = np.clip(dr, -0.1, 0.1)
-            self.smooth_rot += 0.3 * dr
+            dr = np.clip(dr, -0.02, 0.02)
+            self.filtered_rot = 0.9 * self.filtered_rot + 0.1 * dr
+            self.smooth_rot += 0.1 * self.filtered_rot
 
         twist.twist.angular.z = self.smooth_rot * self.angular_scale
 

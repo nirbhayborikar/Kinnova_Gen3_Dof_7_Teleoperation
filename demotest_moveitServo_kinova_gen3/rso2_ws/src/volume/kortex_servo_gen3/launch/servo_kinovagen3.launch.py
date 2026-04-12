@@ -18,7 +18,7 @@ def generate_launch_description():
         ),
         DeclareLaunchArgument(
             "planning_group",
-            default_value="manipulator",
+            default_value="manipulator", # manipulator,
         ),
     ]
     
@@ -170,14 +170,15 @@ def generate_launch_description():
     servo_params["moveit_servo"]["cartesian_command_in_topic"] = "/servo_node/delta_twist_cmds"
     servo_params["moveit_servo"]["joint_command_in_topic"] = "/servo_node/delta_joint_cmds"
     #### 
+    servo_params["moveit_servo"]["publish_joint_velocities"] = False # test 2
 
     servo_params["moveit_servo"]["joint_topic"] = "/joint_states"
     servo_params["moveit_servo"]["status_topic"] = "~/status"
 
     servo_params["moveit_servo"]["lower_singularity_threshold"] = 8.0
 
-    servo_params["moveit_servo"]["hard_stop_singularity_threshold"] = 20.0 # lower =lesss strict  #30.0
-    servo_params["moveit_servo"]["leaving_singularity_threshold_multiplier"] = 5.0 
+    servo_params["moveit_servo"]["hard_stop_singularity_threshold"] = 80.0 # lower =lesss strict  #30.0
+    servo_params["moveit_servo"]["leaving_singularity_threshold_multiplier"] = 50.0  # reduce sensitivity by increase # 5.0
 
     # Collision
     servo_params["moveit_servo"]["check_collisions"] = True

@@ -80,12 +80,12 @@ servo_node:
     command_in_type: "twist"
     
     scale:
-      linear: 0.2 # 0.15
-      rotational: 0.2
+      linear: 0.5 # 0.15
+      rotational: 0.3
       joint: 0.2
     
     publish_joint_positions: true
-    publish_joint_velocities: true
+    publish_joint_velocities: false # test 2
     publish_joint_accelerations: false
     
     use_smoothing: true
