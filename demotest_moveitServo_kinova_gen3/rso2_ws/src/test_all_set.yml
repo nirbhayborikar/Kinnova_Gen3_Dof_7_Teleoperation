@@ -46,19 +46,20 @@ services:
       - -c
       - |
         source /opt/ros/jazzy/setup.bash &&
+        export PYTHONPATH=/opt/ros/jazzy/lib/python3.12/site-packages:$PYTHONPATH &&
         apt-get update && 
-        apt-get install -y ros-jazzy-moveit-msgs nlohmann-json3-dev &&
+        #apt-get install -y ros-jazzy-moveit-msgs nlohmann-json3-dev &&
         cd src/moveit2/moveit_ros/moveit_servo/kortex/ros2_ws/ &&
         colcon build --packages-select iki_kortex_description &&
         colcon build --packages-select robotiq_description &&
         #colcon build --packages-select servo_keyboard_kinova &&
         colcon build --packages-select kortex_description &&
-        colcon build --packages-select sensagram_teleop &&
+        #colcon build --packages-select sensagram_teleop &&
         #colcon build --packages-select olive_imu_control &&
         source install/setup.bash &&
         cd ~/ws_moveit/ &&
         rm -rf install/moveit_servo/ &&
-        colcon build --packages-select moveit_servo --symlink-install &&
+        #colcon build --packages-select moveit_servo --symlink-install &&
         source install/setup.bash &&
         #ros2 run moveit_servo servo_node &&
         #ros2 launch moveit_servo servo_kinovagen3.launch.py &&
@@ -74,8 +75,8 @@ services:
 
    
     environment:
-      ROS_DOMAIN_ID: 0
-      RMW_IMPLEMENTATION: rmw_fastrtps_cpp
+      ROS_DOMAIN_ID: 145
+      RMW_IMPLEMENTATION: rmw_cyclonedds_cpp
       ROS_AUTOMATIC_DISCOVERY_RANGE: "LOCALHOST"
       # RMW_IMPLEMENTATION: rmw_cyclonedds_cpp
       QT_X11_NO_MITSHM: 1
