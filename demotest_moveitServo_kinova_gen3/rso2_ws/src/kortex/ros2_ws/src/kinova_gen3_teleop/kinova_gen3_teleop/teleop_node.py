@@ -66,9 +66,10 @@ class HandPosePublisher(Node):
         self.declare_parameter('robot_z_max',      0.60)
         self.declare_parameter('max_rotation',     1.57)
         # home pose the arm starts from when enabled
-        self.declare_parameter('home_x',           0.40)
-        self.declare_parameter('home_y',           0.00)
-        self.declare_parameter('home_z',           0.35)
+        self.declare_parameter('home_x',           0.5)
+        self.declare_parameter('home_y',           0.5)
+        self.declare_parameter('home_z',           0.0)
+        self.declare_parameter('home_rot',           0.0)
 
         cam_id              = self.get_parameter('camera_id').value
         self.rate           = self.get_parameter('rate').value
@@ -90,6 +91,9 @@ class HandPosePublisher(Node):
         self.pose_pub    = self.create_publisher(PoseStamped, '/target_pose',    10)
         self.gripper_pub = self.create_publisher(Bool,        '/gripper_control', 10)
 
+
+        self.arm_enabled_pub = self.create_publisher(Bool,'/arm_enabled', 10) # arm enable or not publish
+
         # ---- Camera ----
         self.cap = cv2.VideoCapture(cam_id)
         if not self.cap.isOpened():
@@ -104,6 +108,8 @@ class HandPosePublisher(Node):
         # ---- Arm enable state ----
         self.arm_enabled = False
 
+        self.last_arm_enabled = None # last arm enabled check it 
+
         # ---- Hand visibility tracking ----
         self.left_active      = False
         self.right_active     = False
@@ -117,6 +123,7 @@ class HandPosePublisher(Node):
             'x': self.get_parameter('home_x').value,
             'y': self.get_parameter('home_y').value,
             'z': self.get_parameter('home_z').value,
+            'rot': self.get_parameter('home_rot').value,
         }
         # Previous normalised wrist coords (set on first right-hand frame)
         self.prev_wrist = None
@@ -171,6 +178,18 @@ class HandPosePublisher(Node):
         elif self.left_active and (now - self.left_last_seen > self.hand_timeout):
             self.left_active = False
             self.get_logger().info('Left hand lost')
+
+        # Publish arm_enabled state on change
+        if self.arm_enabled != self.last_arm_enabled:
+            msg = Bool()
+            msg.data = self.arm_enabled
+            self.arm_enabled_pub.publish(msg)
+            self.last_arm_enabled = self.arm_enabled
+            self.get_logger().info(f'Arm enabled: {self.arm_enabled}')
+
+
+
+        
 
         # ── RIGHT HAND: move arm + gripper ───────────────────────────
         if right.detected:

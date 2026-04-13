@@ -14,7 +14,11 @@ from sensor_msgs.msg import JointState
 from moveit_msgs.srv import GetPositionIK
 from moveit_msgs.msg import PositionIKRequest, RobotState
 from builtin_interfaces.msg import Duration
-from rclpy.duration import Duration as RclpyDuration
+
+#from rclpy.duration import Duration as RclpyDuration
+
+
+
 
 class IKWorker(Node):
     """Dedicated node for synchronous IK calls — runs its own executor."""
@@ -111,20 +115,34 @@ class ArmControllerNode(Node):
             JointState, '/joint_states',
             self._js_cb, 10, callback_group=self.cb)
 
-        self.traj_pub = self.create_publisher(
-            JointTrajectory,
-            '/joint_trajectory_controller/joint_trajectory', 10)
+        # self.traj_pub = self.create_publisher(
+        #     JointTrajectory,
+        #     '/joint_trajectory_controller/joint_trajectory', 10)
 
         self.gripper_client = ActionClient(
             self, GripperCommand,
             '/robotiq_gripper_controller/gripper_cmd',
             callback_group=self.cb)
+        
+        # arm enabled 
+        self.create_subscription(
+        Bool, '/arm_enabled',  # or whatever your topic is
+        self._arm_enabled_cb, 10, callback_group=self.cb)
+
 
         self.current_js    = None
         self.js_lock       = threading.Lock()
         self._arm_busy     = False
         self._gripper_busy = False
+
+        # ✅ ADD THIS LINE:
+        self._arm_enabled  = True  # Track arm enable state
+
+
         self._last_ik_time = 0.0   # wall-clock of last IK solve start
+        self._last_pose_update = 0.0 # wall-clock of last pose update
+
+
 
         self.get_logger().info('ArmControllerNode ready')
 
@@ -139,12 +157,23 @@ class ArmControllerNode(Node):
     def _pose_cb(self, msg):
         now = self.get_clock().now().nanoseconds / 1e9
 
+        # ✅ NEW: Skip if arm is not enabled
+        if not self._arm_enabled:
+            return
+
         # Skip if arm is busy OR called too soon (rate-limit IK to ~7 Hz)
         if self._arm_busy:
             return
-        if (now - self._last_ik_time) < self.IK_MIN_INTERVAL:
-            return
+        # if (now - self._last_ik_time) < self.IK_MIN_INTERVAL:
+        #     return
         
+
+         # If hand hasn't moved in 0.5s, STOP the arm
+
+
+        # ❌ MOVED OR NOT (TEST 1): Check if pose actually moved
+        if self._pose_is_similar_to_last(msg):
+            return  #
 
         self.get_logger().info(
             f'pose_cb -> IK  x={msg.pose.position.x:.3f} '
@@ -158,6 +187,36 @@ class ArmControllerNode(Node):
             args=(msg,), daemon=True).start()
 
     
+
+
+    def _arm_enabled_cb(self, msg):
+        """Callback for /arm_enabled topic — STOP arm when disabled"""
+        self._arm_enabled = msg.data
+        
+        if not msg.data:  # When arm is disabled
+            self._stop_arm()
+            self.get_logger().info('ARM DISABLED: Stopping...')
+
+
+    #-----------ADD TOLERANCE CHECK ...GIVING 2CM TOLERANCE...........
+
+    def _pose_is_similar_to_last(self, new_pose):
+        """Skip if pose moved < 2cm"""
+        if not hasattr(self, '_last_pose'):
+            self._last_pose = new_pose
+            return False
+        
+        dx = new_pose.pose.position.x - self._last_pose.pose.position.x
+        dy = new_pose.pose.position.y - self._last_pose.pose.position.y
+        dz = new_pose.pose.position.z - self._last_pose.pose.position.z
+        
+        dist = (dx**2 + dy**2 + dz**2)**0.5
+        
+        if dist < 0.02:  # 2cm deadzone
+            return True
+        
+        self._last_pose = new_pose
+        return False
     
     # ------------------------------------------------------------------ #
     #  IK + motion                                                         #
@@ -209,9 +268,13 @@ class ArmControllerNode(Node):
             traj.header.frame_id = 'base_link'
             pt = JointTrajectoryPoint()
             pt.positions      = positions
-            pt.velocities = [0.0] * len(positions)
+            pt.velocities = [2.0] * len(positions)
             # 300 ms — short enough for smooth delta tracking
-            pt.time_from_start = RclpyDuration(seconds=2).to_msg()
+            # pt.time_from_start = RclpyDuration(seconds=0.3).to_msg()
+
+
+            pt.time_from_start.sec = 0
+            pt.time_from_start.nanosec = 300_000_000
             traj.points.append(pt)
             self.traj_pub.publish(traj) # this is the execution trigger
 
@@ -225,6 +288,48 @@ class ArmControllerNode(Node):
             self.get_logger().error(f'_solve_and_move error: {e}')
         finally:
             self._arm_busy = False
+
+
+
+        #--------------when completly stop hand left shoen ----
+    def _stop_arm(self):
+        """Hold current position"""
+
+        # extract only arm joints first then stop 
+        with self.js_lock:
+            if self.current_js is None:
+                self.get_logger().warn('No joint state available to stop arm')
+                return
+            current_positions = [] #    
+            for jn in self.ARM_JOINTS:
+                if jn in self.current_js.name:
+                    idx = self.current_js.name.index(jn)
+                    current_positions.append(self.current_js.position[idx])
+                
+                else:
+                    self.get_logger().error(f'Joint {jn} not found in joint_state')
+                
+                    return 
+
+
+        ### send trajectory
+
+
+        traj = JointTrajectory()
+        traj.header.stamp = self.get_clock().now().to_msg()
+        traj.header.frame_id = 'base_link'
+        traj.joint_names = self.ARM_JOINTS
+        
+        pt = JointTrajectoryPoint()
+        pt.positions = current_positions  # ✅ Now 7 positions for 7 joints
+        pt.velocities = [0.0] * len(current_positions)
+        pt.time_from_start.sec = 0
+        pt.time_from_start.nanosec = 100_000_000  # 0.1 seconds
+        
+        traj.points.append(pt)
+        self.traj_pub.publish(traj)
+        
+        self.get_logger().info('STOP: Arm holding current position')
 
     # ------------------------------------------------------------------ #
     #  Gripper                                                             #

@@ -80,20 +80,25 @@ servo_node:
     command_in_type: "twist"
     
     scale:
-      linear: 0.5 # 0.15
+      linear: 0.6 # 0.15
       rotational: 0.3
-      joint: 0.2
+      joint: 0.01
     
     publish_joint_positions: true
     publish_joint_velocities: false # test 2
     publish_joint_accelerations: false
     
     use_smoothing: true
-    smoothing_filter_plugin_name: "online_signal_smoothing::AccelerationLimitedPlugin"
+   
+    smoothing_filter_plugin_name: "online_signal_smoothing::ButterworthFilterPlugin"
+    #smoothing_filter_plugin_name: "online_signal_smoothing::AccelerationLimitedPlugin"
     
     is_primary_planning_scene_monitor: true
     check_octomap_collisions: false
     move_group_name: manipulator
+
+
+    planning_frame: world # the moveit planning frame
     
     # ========== SINGULARITY ==========
     lower_singularity_threshold: 8.0 # lower =lesss strict #15.0

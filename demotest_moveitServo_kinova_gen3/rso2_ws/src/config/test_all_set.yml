@@ -37,18 +37,17 @@ services:
       # - /home/nirbhayborikar/framework/demotest_moveitServo_kinova_gen3/rso2_ws/src/volume/kortex_servo_gen3:/root/ws_moveit/src/kortex_servo_gen3
       - ../src/kortex/ros2_ws/src:/root/ws_moveit/src/moveit2/moveit_ros/moveit_servo/kortex/ros2_ws/src
       - ../src/volume/kortex_servo_gen3/launch/servo_kinovagen3.launch.py:/root/ws_moveit/src/moveit2/moveit_ros/moveit_servo/launch/servo_kinovagen3.launch.py
-      #- ../src/volume/kortex_servo_gen3/config/gen3_servo.yaml:/root/ws_moveit/src/moveit2/moveit_ros/moveit_servo/config/gen3_servo.yaml
-      - ../src/volume/kortex_servo_gen3/config/gen3_servo.yaml:/root/ws_moveit/install/share/moveit_servo/config/gen3_servo.yaml
+      - ../src/volume/kortex_servo_gen3/config/gen3_servo.yaml:/root/ws_moveit/src/moveit2/moveit_ros/moveit_servo/config/gen3_servo.yaml
       - ../src/kortex/ros2_ws/src/iki_kortex_moveit_config/config/kortex.srdf:/root/ws_moveit/src/moveit2/moveit_ros/moveit_servo/config/kortex.srdf
       - ../src/kortex/ros2_ws/src/iki_kortex_moveit_config/config/joint_limits.yaml:/root/ws_moveit/src/moveit2/moveit_ros/moveit_servo/config/joint_limits.yaml
       - ../src/kortex/ros2_ws/src/iki_kortex_moveit_config/config/kinematics.yaml:/root/ws_moveit/src/moveit2/moveit_ros/moveit_servo/config/kinematics.yaml
-      - ../src/config/kortex_standalone.urdf.xacro:/root/ws_moveit/src/moveit2/moveit_ros/moveit_servo/kortex/ros2_ws/src/iki_kortex_description/urdf_xacro/kortex_standalone.urdf.xacro
+      - ../src/kortex/iki_kortex_description/urdf_xarco/kortex_standalone.urdf.xarco:/root/ws_moveit/src/moveit2/moveit_ros/moveit_servo/kortex/ros2_ws/src/iki_kortex_description/urdf_xacro/
       - ../src/kortex/ros2_ws/src/iki_kortex_description/config/initial_positions.yaml:/root/ws_moveit/src/moveit2/moveit_ros/moveit_servo/config/initial_positions.yaml
       # - /home/nirbhayborikar/framework/demotest_moveitServo_kinova_gen3/rso2_ws/src/volume/kortex_servo_gen3/config:/root/ws_moveit/src/moveit2/moveit_ros/moveit_servo/config
       - ../src/kortex/ros2_ws/src/iki_kortex_moveit_config/config/ros2_controllers.yaml:/root/ws_moveit/src/moveit2/moveit_ros/moveit_servo/config/ros2_controllers.yaml
    
 
-   #/root/ws_moveit/src/moveit2/moveitkortex_standalone.urdf.xacro_ros/moveit_servo/kortex/ros2_ws/src/iki_kortex_description/urdf_xacro/kortex_standalone.urdf.xacro
+   #/root/ws_moveit/src/moveit2/moveit_ros/moveit_servo/kortex/ros2_ws/src/iki_kortex_description/urdf_xacro/kortex_standalone.urdf.xacro
     command:
       - bash
       - -c
@@ -56,7 +55,7 @@ services:
         source /opt/ros/jazzy/setup.bash &&
         pwd &&
 
-        cd ~/ws_moveit/src/moveit2/moveit_ros/moveit_servo/kortex/ros2_ws/ &&
+        #cd ~/ws_moveit/src/moveit2/moveit_ros/moveit_servo/kortex/ros2_ws/ &&
         
 
         colcon build --packages-select iki_kortex_description &&
@@ -101,6 +100,7 @@ services:
 
 #ros2 param get /servo_node moveit_servo.lower_singularity_threshold    (check gen3_servo.yaml changing or not )
 
+#ros2 run sensagram_teleop servo_teleop_node
 
 
 # ros2 param get /servo_node moveit_servo.lower_singularity_threshold
