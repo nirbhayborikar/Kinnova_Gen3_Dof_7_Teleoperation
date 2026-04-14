@@ -826,10 +826,58 @@ builtin_interfaces/Duration time_from_start
 
 ros2 control list_controllers
 [INFO] [1776112777.438301181] [_ros2cli_197]: waiting for service /controller_manager/list_controllers to become available...
-joint_state_broadcaster     joint_state_broadcaster/JointStateBroadcaster          active  
+joint_state_broadcaster     joint_state_broadcaster/JointStateBroadcaster          inactive  
 twist_controller            picknik_twist_controller/PicknikTwistController        inactive
 robotiq_gripper_controller  position_controllers/GripperActionController           active  
-joint_trajectory_controller joint_trajectory_controller/JointTrajectoryController  active  
+joint_trajectory_controller joint_trajectory_controller/JointTrajectoryController  inactive  
+
+
+Error activating controller, check controller_manager logs
+
+ros2 control list_hardware_components
+Hardware Component 1
+	name: KortexMultiInterfaceHardware
+	type: system
+	plugin name: kortex_driver/KortexMultiInterfaceHardware
+	state: id=1 label=unconfigured
+	read/write rate: 1000 Hz
+	is_async: False
+	command interfaces
+		finger_joint/position [unavailable] [unclaimed]
+		finger_joint/set_gripper_max_velocity [unavailable] [unclaimed]
+		finger_joint/set_gripper_max_effort [unavailable] [unclaimed]
+		joint_1/position [unavailable] [unclaimed]
+		joint_1/velocity [unavailable] [unclaimed]
+		joint_1/effort [unavailable] [unclaimed]
+		joint_2/position [unavailable] [unclaimed]
+		joint_2/velocity [unavailable] [unclaimed]
+		joint_2/effort [unavailable] [unclaimed]
+		joint_3/position [unavailable] [unclaimed]
+		joint_3/velocity [unavailable] [unclaimed]
+		joint_3/effort [unavailable] [unclaimed]
+		joint_4/position [unavailable] [unclaimed]
+		joint_4/velocity [unavailable] [unclaimed]
+		joint_4/effort [unavailable] [unclaimed]
+		joint_5/position [unavailable] [unclaimed]
+		joint_5/velocity [unavailable] [unclaimed]
+		joint_5/effort [unavailable] [unclaimed]
+		joint_6/position [unavailable] [unclaimed]
+		joint_6/velocity [unavailable] [unclaimed]
+		joint_6/effort [unavailable] [unclaimed]
+		joint_7/position [unavailable] [unclaimed]
+		joint_7/velocity [unavailable] [unclaimed]
+		joint_7/effort [unavailable] [unclaimed]
+		tcp/twist.linear.x [unavailable] [unclaimed]
+		tcp/twist.linear.y [unavailable] [unclaimed]
+		tcp/twist.linear.z [unavailable] [unclaimed]
+		tcp/twist.angular.x [unavailable] [unclaimed]
+		tcp/twist.angular.y [unavailable] [unclaimed]
+		tcp/twist.angular.z [unavailable] [unclaimed]
+		reset_fault/command [unavailable] [unclaimed]
+		reset_fault/async_success [unavailable] [unclaimed]
+
+
+
 
 
 ##################steps to follow #####################################
@@ -837,7 +885,7 @@ change rmw implementation to zenoh
 
 
 ################ check with twist command wether twist working ##############
-ros2 topic pub --once /twist_controller/commands geometry_msgs/msg/Twist "{linear: {x: 0.0, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0.0}}"
+ros2 topic pub --once /twist_controller/commands geometry_msgs/msg/Twist "{linear: {x: 1.0, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0.0}}"
 
 
 
@@ -878,8 +926,164 @@ the gazebo or mock hardware simulation setups. So the twist_controller is curren
 
 
 
+Write time : 1486.082 us
+kortex          | [ros2_control_node-1] [WARN] [1776173473.129696412] [controller_manager]: Overrun detected! The controller manager missed its desired rate of 1000 Hz. The loop took 1.706272 ms (missed cycles : 2).
+kortex          | [ros2_control_node-1] [WARN] [1776173478.249854399] [controller_manager]: Overrun might occur, Total time : 1804.006 us (Expected < 1000.000 us) --> Read time : 4.783 us, Update time : 57.483 us, Write time : 1741.740 us
+kortex          | [ros2_control_node-1] [WARN] [1776173478.249996411] [controller_manager]: Overrun detected! The 
 
 
 
 
+Successfully switched controllers!   | [ros2_control_node-1] [WARN] [1776173321.429556455] [controller_manager]: Overrun detected! The controller manager missed its desired rate of 1000 Hz. The loop took 46.120766 ms (missed cycles : 47).
+kortex          | [ros2_control_node-1] [WARN] [1776173322.429406232] [controller_manager]: Overrun might occur, Total time : 49918.066 us (Expected < 1000.000 us) --> Read time : 12.914 us, Update time : 62.757 us, Write time : 49842.395 us
+kortex          | [ros2_control_node-1] [WARN] [1776173322.429590120] [controller_manager]: Overrun detected! The controller manager missed its desired rate of 1000 Hz. The loop took 50.154401 ms (missed cycles : 51).
+kortex          | [ros2_control_node-1] [ERROR] [1776173325.879307161] [controller_manager]: Exception of type : St13runtime_error thrown during write of the component 'KortexMultiInterfaceHardware': timeout detected: BaseCyclicClient::RefreshFeedback
+kortex          | [ros2_control_node-1] 
+kortex          | [ros2_control_node-1] [ERROR] [1776173325.879442273] [controller_manager]: Deactivating following hardware components as their write cycle resulted in an error: [ KortexMultiInterfaceHardware ]
+kortex          | [ros2_control_node-1] [ERROR] [1776173325.879448628] [controller_manager]: Deactivating following controllers as their hardware components write cycle resulted in an error: [ robotiq_gripper_controller joint_trajectory_controller joint_state_broadcaster fault_controller twist_controller ]
+kortex          | [ros2_control_node-1] [ERROR] [1776173325.879487106] [controller_manager]: Not acceptable command interfaces combination: 
+kortex          | [ros2_control_node-1] Start interfaces: 
+kortex          | [ros2_control_node-1] [
+kortex          | [ros2_control_node-1] ]
+kortex          | [ros2_control_node-1] Stop interfaces: 
+kortex          | [ros2_control_node-1] [
+kortex          | [ros2_control_node-1]   finger_joint/position
+kortex          | [ros2_control_node-1]   joint_1/position
+kortex          | [ros2_control_node-1]   joint_2/position
+kortex          | [ros2_control_node-1]   joint_3/position
+kortex          | [ros2_control_node-1]   joint_4/position
+kortex          | [ros2_control_node-1]   joint_5/position
+kortex          | [ros2_control_node-1]   joint_6/position
+kortex          | [ros2_control_node-1]   joint_7/position
+kortex          | [ros2_control_node-1]   reset_fault/command
+kortex          | [ros2_control_node-1]   reset_fault/async_success
+kortex          | [ros2_control_node-1]   tcp/twist.linear.x
+kortex          | [ros2_control_node-1]   tcp/twist.linear.y
+kortex          | [ros2_control_node-1]   tcp/twist.linear.z
+kortex          | [ros2_control_node-1]   tcp/twist.angular.x
+kortex          | [ros2_control_node-1]   tcp/twist.angular.y
+kortex          | [ros2_control_node-1]   tcp/twist.angular.z
+kortex          | [ros2_control_node-1] ]
+kortex          | [ros2_control_node-1] Not available: 
+kortex          | [ros2_control_node-1] [
+kortex          | [ros2_control_node-1]  finger_joint/position
+kortex          | [ros2_control_node-1]  joint_1/position
+kortex          | [ros2_control_node-1]  joint_2/position
+kortex          | [ros2_control_node-1]  joint_3/position
+kortex          | [ros2_control_node-1]  joint_4/position
+kortex          | [ros2_control_node-1]  joint_5/position
+kortex          | [ros2_control_node-1]  joint_6/position
+kortex          | [ros2_control_node-1]  joint_7/position
+kortex          | [ros2_control_node-1]  reset_fault/command
+kortex          | [ros2_control_node-1]  reset_fault/async_success
+kortex          | [ros2_control_node-1]  tcp/twist.linear.x
+kortex          | [ros2_control_node-1]  tcp/twist.linear.y
+kortex          | [ros2_control_node-1]  tcp/twist.linear.z
+kortex          | [ros2_control_node-1]  tcp/twist.angular.x
+kortex          | [ros2_control_node-1]  tcp/twist.angular.y
+kortex          | [ros2_control_node-1]  tcp/twist.angular.z
+kortex          | [ros2_control_node-1] ]
+kortex          | [ros2_control_node-1] 
+kortex          | [ros2_control_node-1] [ERROR] [1776173325.879510234] [controller_manager]: Error while attempting mode switch when deactivating controllers in write cycle!
+kortex          | [ros2_control_node-1] [WARN] [1776173325.879570892] [controller_manager]: Overrun might occur, Total time : 3050107.761 us (Expected < 1000.000 us) --> Read time : 19.277 us, Update time : 99.142 us, Write time : 3049989.342 us
+kortex          | [ros2_control_node-1] [WARN] [1776173325.879582360] [controller_manager]: Overrun detected! The controller manager missed its desired rate of 1000 Hz. The loop took 3050.149393 ms (missed cycles : 3051).
+kortex          | [ros2_control_node-1] Error Receiving: recvfrom() failed with error code : 104
+moveit_wrapper exited with code 0
+moveit_wrapper exited with code 0
+kortex          | [ros2_control_node-1] [WARN] [1776173364.617209667] [controller_manager]: Overrun detected! The controller manager missed its desired rate of 1000 Hz. The loop took 1.776975 ms (missed cycles : 2).
 
+
+w Enable Watch
+
+. Can you close the gripper with a Twist command?
+
+No, you cannot use the PicknikTwistController to control the gripper.
+
+A Twist message (geometry_msgs/Twist) strictly contains 6 numbers: Linear X, Y, Z and Angular X, Y, Z. 
+It is pure 3D spatial math meant only for the 6 (or 7) main joints of the arm.
+
+
+gripper-----------
+
+
+The Robotiq gripper is a completely separate piece of hardware with its own motor. To control
+ it, you must use the robotiq_gripper_controller (which is a GripperActionController).
+
+
+
+ error:
+  while using robotiq gripper
+ ontrol_node-1] [ERROR] [1776178573.080158077] [KortexMultiInterfaceHardware]: Error sub-code: VALUE_IS_ABOVE_MAXIMUM
+kortex          | [ros2_control_node-1] [ERROR] [1776178573.130101682] [KortexMultiInterfaceHardware]: Exception caught while sending internal gripper command!
+kortex          | [ros2_control_node-1] [ERROR] [1776178573.130147207] [KortexMultiInterfaceHardware]: Kortex exception: Device error, Error sub type=VALUE_IS_ABOVE_MAXIMUM => <srv: 2, fct: 136, msgType: 3>
+
+
+ # 0.0 (open )
+# 0.8 (closed)
+#If your driver is configured for meters, sending 0.8 tells the gripper to open to 800 millimeters, which triggers the "ABOVE MAXIMUM" error!
+
+
+check gripper open an close
+
+close gripper command:
+
+ros2 action send_goal /robotiq_gripper_controller/gripper_cmd control_msgs/action/GripperCommand "{command: {position: 0.8, max_effort: 0.0}}"
+
+
+open gripper command
+ros2 action send_goal /robotiq_gripper_controller/gripper_cmd control_msgs/action/GripperCommand "{command: {position: 0.0, max_effort: 0.0}}"
+
+
+###########the gripper control defition-------
+
+robotiq_gripper_controller # controller name
+control_msgs/action/GripperCommand # std_msg type
+
+ros2 interface show control_msgs/action/GripperCommand
+
+
+
+
+GripperCommand command
+	float64 position
+	float64 max_effort
+---
+float64 position  # The current gripper gap size (in meters)
+float64 effort    # The current effort exerted (in Newtons)
+bool stalled      # True iff the gripper is exerting max effort and not moving
+bool reached_goal # True iff the gripper position has reached the commanded setpoint
+---
+float64 position  # The current gripper gap size (in meters)
+float64 effort    # The current effort exerted (in Newtons)
+bool stalled      # True iff the gripper is exerting max effort and not moving
+bool reached_goal # True iff the gripper position has reached the commanded setpoint
+
+
+seting planning group to gripper
+and in joints moving 
+
+finger_joint to 28 deg this is the close 
+
+finger_joint to 4 deg t
+
+
+
+check with 
+/joint_states
+
+close ----------
+
+ finger_joint
+ position:
+- 0.48676077960703884
+
+effort:
+- .nan
+
+  frame_id: base_link
+
+open-------
+
+position:
+- 0.07130892161478655
+effort nan

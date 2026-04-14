@@ -9,6 +9,36 @@ Controls:
     - Closed fist = MOVING (Hand delta maps to Cartesian Twist velocity)
 """
 
+
+
+
+"""
+    # Left 
+    open gripper close gripperst 
+
+    close fist gripper close 
+    open fist gripper open
+
+    in close fist left  left right hand movement -- move arm up down
+
+    in close fitst left , up down hand movement -- move arm forward backward
+
+
+
+    # right 
+
+    open fist deactivated
+    close fist activate
+    close fist one place left arm has control
+
+    
+    close fist up downn movement -- arm left right in y direction
+    close fist left right ---- arm up down 
+    
+     """
+
+
+
 import math
 import cv2
 import numpy as np
