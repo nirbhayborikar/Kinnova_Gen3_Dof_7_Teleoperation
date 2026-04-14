@@ -58,18 +58,21 @@ services:
         cd ~/ws_moveit/src/moveit2/moveit_ros/moveit_servo/kortex/ros2_ws/ &&
         
 
-        colcon build --packages-select iki_kortex_description &&
-        colcon build --packages-select robotiq_description &&
+        #colcon build --packages-select iki_kortex_description &&
+        #colcon build --packages-select robotiq_description &&
         #colcon build --packages-select servo_keyboard_kinova &&
-        colcon build --packages-select kortex_description &&
-        colcon build --packages-select sensagram_teleop &&
+        #colcon build --packages-select kortex_description &&
+        #colcon build --packages-select sensagram_teleop &&
         #colcon build --packages-select olive_imu_control &&
-        colcon build --packages-select mediapipe &&
+        #colcon build --packages-select mediapipe &&
+        colcon build --packages-select kinova_gen3_teleop &&
+
         source install/setup.bash &&
+        ros2 launch kinova_gen3_teleop teleop.launch.py
         cd ~/ws_moveit/ &&
         #colcon build --packages-up-to moveit_servo 2>&1 | tail -50 &&
-        colcon build --packages-select moveit_servo &&
-        source ~/ws_moveit/install/setup.bash &&
+        #colcon build --packages-select moveit_servo &&
+        #source ~/ws_moveit/install/setup.bash &&
         #ros2 run moveit_servo servo_node &&
         #ros2 launch moveit_servo servo_kinovagen3.launch.py &&
         #ros2 launch sensagram_teleop teleop.launch.py &&
@@ -78,7 +81,7 @@ services:
         #ros2 topic pub --once /joint_trajectory_controller/joint_trajectory trajectory_msgs/msg/JointTrajectory "{joint_names: ['joint_1','joint_2','joint_3','joint_4','joint_5','joint_6','joint_7'], points: [{positions: [0.0,1.0,1.57,-1.57,0.0,1.0,0.0], time_from_start: {sec: 5}}]}"
         #ros2 launch olive_imu_control olive_teleop.launch.py
         #ros2 topic echo /servo_node/delta_twist_cmds #MONITOR
-        tail -f /dev/null
+
                 
 
 
@@ -104,3 +107,4 @@ services:
 # ros2 param get /servo_node moveit_servo.lower_singularity_threshold
 
 
+#colcon build --packages-select kinova_gen3_teleop

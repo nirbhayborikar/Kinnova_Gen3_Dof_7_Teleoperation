@@ -717,3 +717,169 @@ name:
 - joint_5
 - joint_6
 - joint_7
+
+
+
+
+ros2 topic list:
+
+
+/attached_collision_object
+/clock
+/collision_object
+/controller_manager/activity
+/controller_manager/introspection_data/full
+/controller_manager/introspection_data/names
+/controller_manager/introspection_data/values
+/diagnostics
+/display_contacts
+/display_planned_path
+/dynamic_joint_states
+/joint_state_broadcaster/transition_event
+/joint_states
+/joint_trajectory_controller/controller_state
+
+/joint_trajectory_controller/joint_trajectory  (this moves arm)
+
+
+
+
+/joint_trajectory_controller/transition_event
+/kortex_vision/color/camera_info
+/kortex_vision/color/image
+/kortex_vision/color/image_raw
+/kortex_vision/depth/camera_info
+/kortex_vision/depth/color/points
+/kortex_vision/depth/image
+/monitored_planning_scene
+/parameter_events
+/pipeline_state
+/planning_scene
+/planning_scene_world
+/recognized_object_array
+/robot_description
+/robot_description_semantic
+/robotiq_gripper_controller/transition_event
+/rosout
+/rviz_moveit_motion_planning_display/robot_interaction_interactive_marker_topic/feedback
+/rviz_moveit_motion_planning_display/robot_interaction_interactive_marker_topic/update
+/tf
+/tf_static
+/trajectory_execution_event
+/twist_controller/commands
+/twist_controller/transition_event
+
+
+
+
+# check with topic wether the arm moving or not
+
+ros2 topic pub --once /joint_trajectory_controller/joint_trajectory \
+  trajectory_msgs/msg/JointTrajectory \
+  "{header: {stamp: {sec: 0, nanosec: 0}, frame_id: 'base_link'}, 
+    joint_names: ['joint_1', 'joint_2', 'joint_3', 'joint_4', 'joint_5', 'joint_6', 'joint_7'],
+    points: [{positions: [0.0, 0.0, 3.14, 0.0, 0.0, -1.57, 1.57], 
+              velocities: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+              time_from_start: {sec: 3, nanosec: 0}}]}"
+
+
+
+# check what it accept 
+in pose 
+
+
+
+ ros2 interface show trajectory_msgs/msg/JointTrajectoryPoint
+
+
+
+# Each trajectory point specifies +++++++either----------- positions[, velocities[, accelerations]]
+# or positions[, effort] for the trajectory to be executed.
+# All specified values are in the same order as the joint names in JointTrajectory.msg.
+
+# Single DOF joint positions for each joint relative to their "0" position.
+# The units depend on the specific joint type: radians for revolute or
+# continuous joints, and meters for prismatic joints.
+float64[] positions
+
+# The rate of change in position of each joint. Units are joint type dependent.
+# Radians/second for revolute or continuous joints, and meters/second for
+# prismatic joints.
+float64[] velocities
+
+# Rate of change in velocity of each joint. Units are joint type dependent.
+# Radians/second^2 for revolute or continuous joints, and meters/second^2 for
+# prismatic joints.
+float64[] accelerations
+
+# The torque or the force to be applied at each joint. For revolute/continuous
+# joints effort denotes a torque in newton-meters. For prismatic joints, effort
+# denotes a force in newtons.
+float64[] effort
+
+# Desired time from the trajectory start to arrive at this trajectory point.
+builtin_interfaces/Duration time_from_start
+	int32 sec
+	uint32 nanosec
+
+
+
+ros2 control list_controllers
+[INFO] [1776112777.438301181] [_ros2cli_197]: waiting for service /controller_manager/list_controllers to become available...
+joint_state_broadcaster     joint_state_broadcaster/JointStateBroadcaster          active  
+twist_controller            picknik_twist_controller/PicknikTwistController        inactive
+robotiq_gripper_controller  position_controllers/GripperActionController           active  
+joint_trajectory_controller joint_trajectory_controller/JointTrajectoryController  active  
+
+
+##################steps to follow #####################################
+change rmw implementation to zenoh 
+
+
+################ check with twist command wether twist working ##############
+ros2 topic pub --once /twist_controller/commands geometry_msgs/msg/Twist "{linear: {x: 0.0, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0.0}}"
+
+
+
+You can also command the arm using Twist messages. Before doing so, you must active the twist_controller and deactivate the joint_trajectory_controller:
+
+# activate the twist and test it 
+
+ros2 service call /controller_manager/switch_controller controller_manager_msgs/srv/SwitchController "{
+  activate_controllers: [twist_controller],
+  deactivate_controllers: [joint_trajectory_controller],
+  strictness: 1,
+  activate_asap: true,
+}"
+
+
+# deactivate the twist, and activate the joint_trajectory_controller and test it 
+ros2 service call /controller_manager/switch_controller controller_manager_msgs/srv/SwitchController "{
+  activate_controllers: [joint_trajectory_controller],
+  deactivate_controllers: [twist_controller],
+  strictness: 1,
+  activate_asap: true,
+}"
+
+
+most important for visulization 
+
+Click Add -> By Topic -> Select /teleop_velocity_arrow.
+
+If you want the arrow's tail to physically attach to the robot's gripper and move with the arm, your node needs to know where the gripper is.
+To do that, we would need to add a tf2_ros.Buffer and TransformListener to your script to look up the tool_frame coordinates on every tick.
+
+
+#########################################################################
+
+Note: the required interface for the twist_controller does not currently exist in 
+the gazebo or mock hardware simulation setups. So the twist_controller is currently only functional on Kinova hardware.
+
+
+
+
+
+
+
+
+

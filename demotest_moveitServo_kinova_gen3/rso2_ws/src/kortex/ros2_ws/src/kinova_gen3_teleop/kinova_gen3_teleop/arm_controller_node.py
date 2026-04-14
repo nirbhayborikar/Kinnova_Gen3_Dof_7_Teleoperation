@@ -209,7 +209,7 @@ class ArmControllerNode(Node):
             traj.header.frame_id = 'base_link'
             pt = JointTrajectoryPoint()
             pt.positions      = positions
-            pt.velocities = [0.0] * len(positions)
+
             # 300 ms — short enough for smooth delta tracking
             pt.time_from_start = RclpyDuration(seconds=2).to_msg()
             traj.points.append(pt)

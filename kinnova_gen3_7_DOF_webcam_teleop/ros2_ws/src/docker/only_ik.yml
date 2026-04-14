@@ -1,0 +1,51 @@
+services:
+  kinova_teleop:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: kinova_gen3_teleop
+    container_name: kinova_gen3_teleop
+    stdin_open: true
+    tty: true
+    environment:
+      - DISPLAY=${DISPLAY}
+      - RMW_IMPLEMENTATION=rmw_cyclonedds_cpp  # cyclonedds # zenoh
+      - QT_X11_NO_MITSHM=1
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - ROS_DOMAIN_ID=145
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      
+      # - ../stage_1/kinova_gen3_teleop:/ros2_ws/src/stage_1/kinova_gen3_teleop:rw
+      - ../stage_1:/ros2_ws/src/stage_1:rw
+ 
+        
+    devices:
+      - /dev/video0:/dev/video0
+    network_mode: host
+    privileged: true
+    command:
+      - bash
+      - -c
+      - |
+        source /opt/ros/jazzy/setup.bash &&
+        source install/setup.bash &&
+        
+
+        tail -f /dev/null
+
+#ros2 launch kinova_gen3_teleop teleop.launch.py &&
+#colcon build --packages-select kinova_gen3_teleop &&source install/setup.bash && # the package colcon build
+
+#ros2 launch kinova_gen3_7dof_robotiq_2f_85_moveit_config robot.launch.py robot_ip:=192.168.1.10 use_fake_hardware:=true use_sim_time:=false &&
+
+#colcon build --packages-select kortex_description kinova_gen3_teleop &&     
+
+
+# sleep 8 &&
+# source install/setup.bash &&
+# sleep 3 &&
+# ros2 run kinova_gen3_teleop arm_controller &
+# ros2 launch kinova_gen3_teleop teleop.launch.py # to start the package 
+
