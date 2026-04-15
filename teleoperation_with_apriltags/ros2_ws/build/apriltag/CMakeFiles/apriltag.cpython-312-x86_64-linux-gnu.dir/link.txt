@@ -1,0 +1,1 @@
+/usr/bin/cc -fPIC -O3 -DNDEBUG -shared  -o apriltag.cpython-312-x86_64-linux-gnu.so "CMakeFiles/apriltag.cpython-312-x86_64-linux-gnu.dir/apriltag_pywrap.c.o"  -Wl,-rpath,/root/ros2_ws/build/apriltag: libapriltag.so.3.4.2 /usr/lib/x86_64-linux-gnu/libpython3.12.so -lm 

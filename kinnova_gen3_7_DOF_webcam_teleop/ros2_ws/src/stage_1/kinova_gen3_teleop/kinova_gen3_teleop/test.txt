@@ -1087,3 +1087,11 @@ open-------
 position:
 - 0.07130892161478655
 effort nan
+
+
+
+-------------------------------# SENSAGRAM -----------------------------
+
+
+Having the phone send data twice as fast as the robot 
+reads it is the perfect setup for minimizing latency

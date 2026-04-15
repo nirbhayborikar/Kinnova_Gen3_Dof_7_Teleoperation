@@ -1,0 +1,785 @@
+[0.000000] (-) TimerEvent: {}
+[0.000369] (apriltag) JobQueued: {'identifier': 'apriltag', 'dependencies': OrderedDict()}
+[0.000392] (apriltag_inspector) JobQueued: {'identifier': 'apriltag_inspector', 'dependencies': OrderedDict()}
+[0.000405] (apriltag_msgs) JobQueued: {'identifier': 'apriltag_msgs', 'dependencies': OrderedDict()}
+[0.000415] (follower_node) JobQueued: {'identifier': 'follower_node', 'dependencies': OrderedDict()}
+[0.000423] (apriltag_ros) JobQueued: {'identifier': 'apriltag_ros', 'dependencies': OrderedDict({'apriltag': '/root/ros2_ws/install/apriltag', 'apriltag_msgs': '/root/ros2_ws/install/apriltag_msgs'})}
+[0.000439] (apriltag) JobStarted: {'identifier': 'apriltag'}
+[0.005997] (apriltag_msgs) JobStarted: {'identifier': 'apriltag_msgs'}
+[0.008728] (apriltag_inspector) JobStarted: {'identifier': 'apriltag_inspector'}
+[0.012225] (follower_node) JobStarted: {'identifier': 'follower_node'}
+[0.017302] (apriltag) JobProgress: {'identifier': 'apriltag', 'progress': 'cmake'}
+[0.017962] (apriltag) Command: {'cmd': ['/usr/bin/cmake', '/root/ros2_ws/src/ros2-apriltags/submodules/apriltag', '-DCMAKE_INSTALL_PREFIX=/root/ros2_ws/install/apriltag'], 'cwd': '/root/ros2_ws/build/apriltag', 'env': OrderedDict({'HOSTNAME': 'IKIM30', 'SHLVL': '1', 'LD_LIBRARY_PATH': '/opt/ros/jazzy/opt/zenoh_cpp_vendor/lib:/opt/ros/jazzy/lib/x86_64-linux-gnu:/opt/ros/jazzy/lib', 'HOME': '/root', 'ROS_PYTHON_VERSION': '3', 'ROS_DISTRO': 'jazzy', '_': '/usr/bin/colcon', 'ROS_VERSION': '2', 'TERM': 'xterm', 'PATH': '/opt/ros/jazzy/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin', 'DISPLAY': ':1', 'INTERFACE_WS': '/root/ros2_ws', 'LANG': 'C.UTF-8', 'RMW_IMPLEMENTATION': 'rmw_zenoh_cpp', 'LS_COLORS': 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=00:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.avif=01;35:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:*~=00;90:*#=00;90:*.bak=00;90:*.crdownload=00;90:*.dpkg-dist=00;90:*.dpkg-new=00;90:*.dpkg-old=00;90:*.dpkg-tmp=00;90:*.old=00;90:*.orig=00;90:*.part=00;90:*.rej=00;90:*.rpmnew=00;90:*.rpmorig=00;90:*.rpmsave=00;90:*.swp=00;90:*.tmp=00;90:*.ucf-dist=00;90:*.ucf-new=00;90:*.ucf-old=00;90:', 'ROS_DOMAIN_ID': '145', 'AMENT_PREFIX_PATH': '/opt/ros/jazzy', 'ROS_AUTOMATIC_DISCOVERY_RANGE': 'LOCALHOST', 'PWD': '/root/ros2_ws/build/apriltag', 'LC_ALL': 'C.UTF-8', 'PYTHONPATH': '/opt/ros/jazzy/lib/python3.12/site-packages', 'COLCON': '1', 'CMAKE_PREFIX_PATH': '/opt/ros/jazzy'}), 'shell': False}
+[0.021061] (apriltag_msgs) JobProgress: {'identifier': 'apriltag_msgs', 'progress': 'cmake'}
+[0.022242] (apriltag_msgs) Command: {'cmd': ['/usr/bin/cmake', '/root/ros2_ws/src/ros2-apriltags/submodules/apriltag_msgs', '-DCMAKE_INSTALL_PREFIX=/root/ros2_ws/install/apriltag_msgs'], 'cwd': '/root/ros2_ws/build/apriltag_msgs', 'env': OrderedDict({'HOSTNAME': 'IKIM30', 'SHLVL': '1', 'LD_LIBRARY_PATH': '/opt/ros/jazzy/opt/zenoh_cpp_vendor/lib:/opt/ros/jazzy/lib/x86_64-linux-gnu:/opt/ros/jazzy/lib', 'HOME': '/root', 'ROS_PYTHON_VERSION': '3', 'ROS_DISTRO': 'jazzy', '_': '/usr/bin/colcon', 'ROS_VERSION': '2', 'TERM': 'xterm', 'PATH': '/opt/ros/jazzy/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin', 'DISPLAY': ':1', 'INTERFACE_WS': '/root/ros2_ws', 'LANG': 'C.UTF-8', 'RMW_IMPLEMENTATION': 'rmw_zenoh_cpp', 'LS_COLORS': 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=00:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.avif=01;35:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:*~=00;90:*#=00;90:*.bak=00;90:*.crdownload=00;90:*.dpkg-dist=00;90:*.dpkg-new=00;90:*.dpkg-old=00;90:*.dpkg-tmp=00;90:*.old=00;90:*.orig=00;90:*.part=00;90:*.rej=00;90:*.rpmnew=00;90:*.rpmorig=00;90:*.rpmsave=00;90:*.swp=00;90:*.tmp=00;90:*.ucf-dist=00;90:*.ucf-new=00;90:*.ucf-old=00;90:', 'ROS_DOMAIN_ID': '145', 'AMENT_PREFIX_PATH': '/opt/ros/jazzy', 'ROS_AUTOMATIC_DISCOVERY_RANGE': 'LOCALHOST', 'PWD': '/root/ros2_ws/build/apriltag_msgs', 'LC_ALL': 'C.UTF-8', 'PYTHONPATH': '/opt/ros/jazzy/lib/python3.12/site-packages', 'COLCON': '1', 'CMAKE_PREFIX_PATH': '/opt/ros/jazzy'}), 'shell': False}
+[0.099767] (-) TimerEvent: {}
+[0.197524] (apriltag) StdoutLine: {'line': b'-- The C compiler identification is GNU 13.3.0\n'}
+[0.198249] (apriltag) StdoutLine: {'line': b'-- Detecting C compiler ABI info\n'}
+[0.198378] (apriltag_msgs) StdoutLine: {'line': b'-- The C compiler identification is GNU 13.3.0\n'}
+[0.198630] (apriltag_msgs) StdoutLine: {'line': b'-- The CXX compiler identification is GNU 13.3.0\n'}
+[0.199082] (apriltag_msgs) StdoutLine: {'line': b'-- Detecting C compiler ABI info\n'}
+[0.199837] (-) TimerEvent: {}
+[0.203983] (apriltag) StdoutLine: {'line': b'-- Detecting C compiler ABI info - done\n'}
+[0.210663] (apriltag) StdoutLine: {'line': b'-- Check for working C compiler: /usr/bin/cc - skipped\n'}
+[0.210913] (apriltag) StdoutLine: {'line': b'-- Detecting C compile features\n'}
+[0.211159] (apriltag) StdoutLine: {'line': b'-- Detecting C compile features - done\n'}
+[0.211552] (apriltag) StdoutLine: {'line': b"-- Setting build type to 'Release' as none was specified.\n"}
+[0.212489] (apriltag) StdoutLine: {'line': b'-- Performing Test CMAKE_HAVE_LIBC_PTHREAD\n'}
+[0.242252] (apriltag_msgs) StdoutLine: {'line': b'-- Detecting C compiler ABI info - done\n'}
+[0.250074] (apriltag_msgs) StdoutLine: {'line': b'-- Check for working C compiler: /usr/bin/cc - skipped\n'}
+[0.250281] (apriltag_msgs) StdoutLine: {'line': b'-- Detecting C compile features\n'}
+[0.250630] (apriltag_msgs) StdoutLine: {'line': b'-- Detecting C compile features - done\n'}
+[0.258511] (apriltag_msgs) StdoutLine: {'line': b'-- Detecting CXX compiler ABI info\n'}
+[0.299959] (-) TimerEvent: {}
+[0.305367] (apriltag) StdoutLine: {'line': b'-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success\n'}
+[0.306504] (apriltag) StdoutLine: {'line': b'-- Found Threads: TRUE  \n'}
+[0.368948] (apriltag_msgs) StdoutLine: {'line': b'-- Detecting CXX compiler ABI info - done\n'}
+[0.376677] (apriltag_msgs) StdoutLine: {'line': b'-- Check for working CXX compiler: /usr/bin/c++ - skipped\n'}
+[0.376919] (apriltag_msgs) StdoutLine: {'line': b'-- Detecting CXX compile features\n'}
+[0.377250] (apriltag_msgs) StdoutLine: {'line': b'-- Detecting CXX compile features - done\n'}
+[0.379217] (apriltag_msgs) StdoutLine: {'line': b'-- Found ament_cmake: 2.5.5 (/opt/ros/jazzy/share/ament_cmake/cmake)\n'}
+[0.400050] (-) TimerEvent: {}
+[0.484776] (apriltag_msgs) StdoutLine: {'line': b'-- Found Python3: /usr/bin/python3 (found version "3.12.3") found components: Interpreter \n'}
+[0.500187] (-) TimerEvent: {}
+[0.600658] (-) TimerEvent: {}
+[0.604680] (apriltag_msgs) StdoutLine: {'line': b'-- Found rosidl_default_generators: 1.6.0 (/opt/ros/jazzy/share/rosidl_default_generators/cmake)\n'}
+[0.608117] (apriltag_msgs) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c\n'}
+[0.647964] (apriltag_msgs) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp\n'}
+[0.678385] (apriltag_msgs) StdoutLine: {'line': b'-- Found rosidl_adapter: 4.6.7 (/opt/ros/jazzy/share/rosidl_adapter/cmake)\n'}
+[0.680840] (apriltag_msgs) StdoutLine: {'line': b'-- Found std_msgs: 5.3.6 (/opt/ros/jazzy/share/std_msgs/cmake)\n'}
+[0.700748] (-) TimerEvent: {}
+[0.801044] (-) TimerEvent: {}
+[0.869389] (follower_node) Command: {'cmd': ['/usr/bin/python3', '-W', 'ignore:setup.py install is deprecated', '-W', 'ignore:easy_install command is deprecated', 'setup.py', 'egg_info', '--egg-base', '../../build/follower_node', 'build', '--build-base', '/root/ros2_ws/build/follower_node/build', 'install', '--record', '/root/ros2_ws/build/follower_node/install.log', '--single-version-externally-managed', 'install_data'], 'cwd': '/root/ros2_ws/src/follower_node', 'env': {'HOSTNAME': 'IKIM30', 'SHLVL': '1', 'LD_LIBRARY_PATH': '/opt/ros/jazzy/opt/zenoh_cpp_vendor/lib:/opt/ros/jazzy/lib/x86_64-linux-gnu:/opt/ros/jazzy/lib', 'HOME': '/root', 'ROS_PYTHON_VERSION': '3', 'ROS_DISTRO': 'jazzy', '_': '/usr/bin/colcon', 'ROS_VERSION': '2', 'TERM': 'xterm', 'PATH': '/opt/ros/jazzy/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin', 'DISPLAY': ':1', 'INTERFACE_WS': '/root/ros2_ws', 'LANG': 'C.UTF-8', 'RMW_IMPLEMENTATION': 'rmw_zenoh_cpp', 'LS_COLORS': 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=00:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.avif=01;35:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:*~=00;90:*#=00;90:*.bak=00;90:*.crdownload=00;90:*.dpkg-dist=00;90:*.dpkg-new=00;90:*.dpkg-old=00;90:*.dpkg-tmp=00;90:*.old=00;90:*.orig=00;90:*.part=00;90:*.rej=00;90:*.rpmnew=00;90:*.rpmorig=00;90:*.rpmsave=00;90:*.swp=00;90:*.tmp=00;90:*.ucf-dist=00;90:*.ucf-new=00;90:*.ucf-old=00;90:', 'ROS_DOMAIN_ID': '145', 'AMENT_PREFIX_PATH': '/opt/ros/jazzy', 'ROS_AUTOMATIC_DISCOVERY_RANGE': 'LOCALHOST', 'PWD': '/root/ros2_ws/build/follower_node', 'LC_ALL': 'C.UTF-8', 'PYTHONPATH': '/root/ros2_ws/build/follower_node/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/root/ros2_ws/install/follower_node/lib/python3.12/site-packages:/opt/ros/jazzy/lib/python3.12/site-packages', 'COLCON': '1'}, 'shell': False}
+[0.871679] (apriltag) StdoutLine: {'line': b'-- The CXX compiler identification is GNU 13.3.0\n'}
+[0.886794] (apriltag) StdoutLine: {'line': b'-- Detecting CXX compiler ABI info\n'}
+[0.901198] (-) TimerEvent: {}
+[0.943316] (apriltag_inspector) Command: {'cmd': ['/usr/bin/python3', '-W', 'ignore:setup.py install is deprecated', '-W', 'ignore:easy_install command is deprecated', 'setup.py', 'egg_info', '--egg-base', '../../build/apriltag_inspector', 'build', '--build-base', '/root/ros2_ws/build/apriltag_inspector/build', 'install', '--record', '/root/ros2_ws/build/apriltag_inspector/install.log', '--single-version-externally-managed', 'install_data'], 'cwd': '/root/ros2_ws/src/apriltag_inspector', 'env': {'HOSTNAME': 'IKIM30', 'SHLVL': '1', 'LD_LIBRARY_PATH': '/opt/ros/jazzy/opt/zenoh_cpp_vendor/lib:/opt/ros/jazzy/lib/x86_64-linux-gnu:/opt/ros/jazzy/lib', 'HOME': '/root', 'ROS_PYTHON_VERSION': '3', 'ROS_DISTRO': 'jazzy', '_': '/usr/bin/colcon', 'ROS_VERSION': '2', 'TERM': 'xterm', 'PATH': '/opt/ros/jazzy/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin', 'DISPLAY': ':1', 'INTERFACE_WS': '/root/ros2_ws', 'LANG': 'C.UTF-8', 'RMW_IMPLEMENTATION': 'rmw_zenoh_cpp', 'LS_COLORS': 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=00:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.avif=01;35:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:*~=00;90:*#=00;90:*.bak=00;90:*.crdownload=00;90:*.dpkg-dist=00;90:*.dpkg-new=00;90:*.dpkg-old=00;90:*.dpkg-tmp=00;90:*.old=00;90:*.orig=00;90:*.part=00;90:*.rej=00;90:*.rpmnew=00;90:*.rpmorig=00;90:*.rpmsave=00;90:*.swp=00;90:*.tmp=00;90:*.ucf-dist=00;90:*.ucf-new=00;90:*.ucf-old=00;90:', 'ROS_DOMAIN_ID': '145', 'AMENT_PREFIX_PATH': '/opt/ros/jazzy', 'ROS_AUTOMATIC_DISCOVERY_RANGE': 'LOCALHOST', 'PWD': '/root/ros2_ws/build/apriltag_inspector', 'LC_ALL': 'C.UTF-8', 'PYTHONPATH': '/root/ros2_ws/build/apriltag_inspector/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/root/ros2_ws/install/apriltag_inspector/lib/python3.12/site-packages:/opt/ros/jazzy/lib/python3.12/site-packages', 'COLCON': '1'}, 'shell': False}
+[0.991305] (apriltag) StdoutLine: {'line': b'-- Detecting CXX compiler ABI info - done\n'}
+[0.999848] (apriltag) StdoutLine: {'line': b'-- Check for working CXX compiler: /usr/bin/c++ - skipped\n'}
+[1.000108] (apriltag) StdoutLine: {'line': b'-- Detecting CXX compile features\n'}
+[1.000450] (apriltag) StdoutLine: {'line': b'-- Detecting CXX compile features - done\n'}
+[1.001187] (apriltag) StdoutLine: {'line': b'-- Configuring done (1.0s)\n'}
+[1.001341] (-) TimerEvent: {}
+[1.011791] (apriltag) StdoutLine: {'line': b'-- Generating done (0.0s)\n'}
+[1.014860] (apriltag) StdoutLine: {'line': b'-- Build files have been written to: /root/ros2_ws/build/apriltag\n'}
+[1.019315] (apriltag) CommandEnded: {'returncode': 0}
+[1.020008] (apriltag) JobProgress: {'identifier': 'apriltag', 'progress': 'build'}
+[1.020699] (apriltag) Command: {'cmd': ['/usr/bin/cmake', '--build', '/root/ros2_ws/build/apriltag', '--', '-j16', '-l16'], 'cwd': '/root/ros2_ws/build/apriltag', 'env': OrderedDict({'HOSTNAME': 'IKIM30', 'SHLVL': '1', 'LD_LIBRARY_PATH': '/opt/ros/jazzy/opt/zenoh_cpp_vendor/lib:/opt/ros/jazzy/lib/x86_64-linux-gnu:/opt/ros/jazzy/lib', 'HOME': '/root', 'ROS_PYTHON_VERSION': '3', 'ROS_DISTRO': 'jazzy', '_': '/usr/bin/colcon', 'ROS_VERSION': '2', 'TERM': 'xterm', 'PATH': '/opt/ros/jazzy/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin', 'DISPLAY': ':1', 'INTERFACE_WS': '/root/ros2_ws', 'LANG': 'C.UTF-8', 'RMW_IMPLEMENTATION': 'rmw_zenoh_cpp', 'LS_COLORS': 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=00:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.avif=01;35:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:*~=00;90:*#=00;90:*.bak=00;90:*.crdownload=00;90:*.dpkg-dist=00;90:*.dpkg-new=00;90:*.dpkg-old=00;90:*.dpkg-tmp=00;90:*.old=00;90:*.orig=00;90:*.part=00;90:*.rej=00;90:*.rpmnew=00;90:*.rpmorig=00;90:*.rpmsave=00;90:*.swp=00;90:*.tmp=00;90:*.ucf-dist=00;90:*.ucf-new=00;90:*.ucf-old=00;90:', 'ROS_DOMAIN_ID': '145', 'AMENT_PREFIX_PATH': '/opt/ros/jazzy', 'ROS_AUTOMATIC_DISCOVERY_RANGE': 'LOCALHOST', 'PWD': '/root/ros2_ws/build/apriltag', 'LC_ALL': 'C.UTF-8', 'PYTHONPATH': '/opt/ros/jazzy/lib/python3.12/site-packages', 'COLCON': '1', 'CMAKE_PREFIX_PATH': '/opt/ros/jazzy'}), 'shell': False}
+[1.060475] (follower_node) StdoutLine: {'line': b'running egg_info\n'}
+[1.060833] (follower_node) StdoutLine: {'line': b'creating ../../build/follower_node/follower_node.egg-info\n'}
+[1.070198] (follower_node) StdoutLine: {'line': b'writing ../../build/follower_node/follower_node.egg-info/PKG-INFO\n'}
+[1.070418] (follower_node) StdoutLine: {'line': b'writing dependency_links to ../../build/follower_node/follower_node.egg-info/dependency_links.txt\n'}
+[1.070547] (follower_node) StdoutLine: {'line': b'writing entry points to ../../build/follower_node/follower_node.egg-info/entry_points.txt\n'}
+[1.070683] (follower_node) StdoutLine: {'line': b'writing requirements to ../../build/follower_node/follower_node.egg-info/requires.txt\n'}
+[1.070808] (follower_node) StdoutLine: {'line': b'writing top-level names to ../../build/follower_node/follower_node.egg-info/top_level.txt\n'}
+[1.070895] (follower_node) StdoutLine: {'line': b"writing manifest file '../../build/follower_node/follower_node.egg-info/SOURCES.txt'\n"}
+[1.073011] (apriltag) StdoutLine: {'line': b'[  4%] \x1b[34m\x1b[1mGenerating apriltag_detect_docstring.h, apriltag_detect_docstring.cxx\x1b[0m\n'}
+[1.073227] (apriltag) StdoutLine: {'line': b'[  4%] \x1b[34m\x1b[1mGenerating apriltag_py_type_docstring.h, apriltag_py_type_docstring.cxx\x1b[0m\n'}
+[1.080773] (apriltag) StdoutLine: {'line': b'[  7%] \x1b[32mBuilding C object CMakeFiles/apriltag.dir/apriltag.c.o\x1b[0m\n'}
+[1.081286] (apriltag) StdoutLine: {'line': b'[ 14%] \x1b[32mBuilding C object CMakeFiles/apriltag.dir/apriltag_quad_thresh.c.o\x1b[0m\n'}
+[1.081470] (apriltag) StdoutLine: {'line': b'[ 14%] \x1b[32mBuilding C object CMakeFiles/apriltag.dir/common/g2d.c.o\x1b[0m\n'}
+[1.081582] (apriltag) StdoutLine: {'line': b'[ 14%] \x1b[32mBuilding C object CMakeFiles/apriltag.dir/apriltag_pose.c.o\x1b[0m\n'}
+[1.083222] (apriltag) StdoutLine: {'line': b'[ 17%] \x1b[32mBuilding C object CMakeFiles/apriltag.dir/common/image_u8.c.o\x1b[0m\n'}
+[1.083916] (apriltag) StdoutLine: {'line': b'[ 19%] \x1b[32mBuilding C object CMakeFiles/apriltag.dir/common/homography.c.o\x1b[0m\n'}
+[1.084138] (apriltag) StdoutLine: {'line': b'[ 21%] \x1b[32mBuilding C object CMakeFiles/apriltag.dir/common/getopt.c.o\x1b[0m\n'}
+[1.084300] (apriltag) StdoutLine: {'line': b'[ 24%] \x1b[32mBuilding C object CMakeFiles/apriltag.dir/common/image_u8x4.c.o\x1b[0m\n'}
+[1.085255] (apriltag) StdoutLine: {'line': b'[ 26%] \x1b[32mBuilding C object CMakeFiles/apriltag.dir/common/matd.c.o\x1b[0m\n'}
+[1.090742] (apriltag) StdoutLine: {'line': b'[ 29%] \x1b[32mBuilding C object CMakeFiles/apriltag.dir/common/image_u8x3.c.o\x1b[0m\n'}
+[1.101422] (-) TimerEvent: {}
+[1.107619] (follower_node) StdoutLine: {'line': b"reading manifest file '../../build/follower_node/follower_node.egg-info/SOURCES.txt'\n"}
+[1.108437] (follower_node) StdoutLine: {'line': b"adding license file 'LICENSE'\n"}
+[1.109098] (follower_node) StdoutLine: {'line': b"writing manifest file '../../build/follower_node/follower_node.egg-info/SOURCES.txt'\n"}
+[1.109461] (follower_node) StdoutLine: {'line': b'running build\n'}
+[1.109549] (follower_node) StdoutLine: {'line': b'running build_py\n'}
+[1.110306] (follower_node) StdoutLine: {'line': b'creating /root/ros2_ws/build/follower_node/build\n'}
+[1.113766] (follower_node) StdoutLine: {'line': b'creating /root/ros2_ws/build/follower_node/build/lib\n'}
+[1.114275] (follower_node) StdoutLine: {'line': b'creating /root/ros2_ws/build/follower_node/build/lib/follower_node\n'}
+[1.114381] (follower_node) StdoutLine: {'line': b'copying follower_node/__init__.py -> /root/ros2_ws/build/follower_node/build/lib/follower_node\n'}
+[1.114474] (follower_node) StdoutLine: {'line': b'copying follower_node/apriltag_follower.py -> /root/ros2_ws/build/follower_node/build/lib/follower_node\n'}
+[1.114565] (follower_node) StdoutLine: {'line': b'running install\n'}
+[1.120781] (apriltag) StdoutLine: {'line': b'[ 31%] \x1b[32mBuilding C object CMakeFiles/apriltag.dir/common/pam.c.o\x1b[0m\n'}
+[1.121778] (apriltag) StdoutLine: {'line': b'[ 36%] \x1b[32mBuilding C object CMakeFiles/apriltag.dir/common/pjpeg.c.o\x1b[0m\n'}
+[1.122021] (apriltag) StdoutLine: {'line': b'[ 34%] \x1b[32mBuilding C object CMakeFiles/apriltag.dir/common/pnm.c.o\x1b[0m\n'}
+[1.122161] (apriltag) StdoutLine: {'line': b'[ 39%] \x1b[32mBuilding C object CMakeFiles/apriltag.dir/common/pjpeg-idct.c.o\x1b[0m\n'}
+[1.129516] (follower_node) StdoutLine: {'line': b'running install_lib\n'}
+[1.138775] (apriltag) StdoutLine: {'line': b'[ 41%] \x1b[32mBuilding C object CMakeFiles/apriltag.dir/common/pthreads_cross.c.o\x1b[0m\n'}
+[1.155734] (follower_node) StdoutLine: {'line': b'creating /root/ros2_ws/install/follower_node/lib/python3.12/site-packages/follower_node\n'}
+[1.155992] (follower_node) StdoutLine: {'line': b'copying /root/ros2_ws/build/follower_node/build/lib/follower_node/__init__.py -> /root/ros2_ws/install/follower_node/lib/python3.12/site-packages/follower_node\n'}
+[1.156074] (follower_node) StdoutLine: {'line': b'copying /root/ros2_ws/build/follower_node/build/lib/follower_node/apriltag_follower.py -> /root/ros2_ws/install/follower_node/lib/python3.12/site-packages/follower_node\n'}
+[1.156140] (follower_node) StdoutLine: {'line': b'byte-compiling /root/ros2_ws/install/follower_node/lib/python3.12/site-packages/follower_node/__init__.py to __init__.cpython-312.pyc\n'}
+[1.156202] (follower_node) StdoutLine: {'line': b'byte-compiling /root/ros2_ws/install/follower_node/lib/python3.12/site-packages/follower_node/apriltag_follower.py to apriltag_follower.cpython-312.pyc\n'}
+[1.156905] (apriltag) StdoutLine: {'line': b'[ 41%] Built target apriltag_py_docstrings\n'}
+[1.160851] (follower_node) StdoutLine: {'line': b'running install_data\n'}
+[1.161087] (follower_node) StdoutLine: {'line': b'creating /root/ros2_ws/install/follower_node/share/ament_index\n'}
+[1.161261] (follower_node) StdoutLine: {'line': b'creating /root/ros2_ws/install/follower_node/share/ament_index/resource_index\n'}
+[1.161381] (follower_node) StdoutLine: {'line': b'creating /root/ros2_ws/install/follower_node/share/ament_index/resource_index/packages\n'}
+[1.161461] (follower_node) StdoutLine: {'line': b'copying resource/follower_node -> /root/ros2_ws/install/follower_node/share/ament_index/resource_index/packages\n'}
+[1.161545] (follower_node) StdoutLine: {'line': b'copying package.xml -> /root/ros2_ws/install/follower_node/share/follower_node\n'}
+[1.161857] (follower_node) StdoutLine: {'line': b'running install_egg_info\n'}
+[1.190813] (apriltag) StdoutLine: {'line': b'[ 43%] \x1b[32mBuilding C object CMakeFiles/apriltag.dir/common/string_util.c.o\x1b[0m\n'}
+[1.201526] (-) TimerEvent: {}
+[1.204218] (follower_node) StdoutLine: {'line': b'Copying ../../build/follower_node/follower_node.egg-info to /root/ros2_ws/install/follower_node/lib/python3.12/site-packages/follower_node-0.0.0-py3.12.egg-info\n'}
+[1.206220] (apriltag_inspector) StdoutLine: {'line': b'running egg_info\n'}
+[1.206489] (apriltag_inspector) StdoutLine: {'line': b'creating ../../build/apriltag_inspector/apriltag_inspector.egg-info\n'}
+[1.209765] (follower_node) StdoutLine: {'line': b'running install_scripts\n'}
+[1.226728] (apriltag_inspector) StdoutLine: {'line': b'writing ../../build/apriltag_inspector/apriltag_inspector.egg-info/PKG-INFO\n'}
+[1.240709] (apriltag_inspector) StdoutLine: {'line': b'writing dependency_links to ../../build/apriltag_inspector/apriltag_inspector.egg-info/dependency_links.txt\n'}
+[1.241007] (apriltag_inspector) StdoutLine: {'line': b'writing entry points to ../../build/apriltag_inspector/apriltag_inspector.egg-info/entry_points.txt\n'}
+[1.241112] (apriltag_inspector) StdoutLine: {'line': b'writing requirements to ../../build/apriltag_inspector/apriltag_inspector.egg-info/requires.txt\n'}
+[1.241190] (apriltag_inspector) StdoutLine: {'line': b'writing top-level names to ../../build/apriltag_inspector/apriltag_inspector.egg-info/top_level.txt\n'}
+[1.241254] (apriltag_inspector) StdoutLine: {'line': b"writing manifest file '../../build/apriltag_inspector/apriltag_inspector.egg-info/SOURCES.txt'\n"}
+[1.241741] (apriltag) StdoutLine: {'line': b'[ 46%] \x1b[32mBuilding C object CMakeFiles/apriltag.dir/common/svd22.c.o\x1b[0m\n'}
+[1.249758] (apriltag) StdoutLine: {'line': b'[ 48%] \x1b[32mBuilding C object CMakeFiles/apriltag.dir/common/time_util.c.o\x1b[0m\n'}
+[1.287742] (apriltag_inspector) StdoutLine: {'line': b"reading manifest file '../../build/apriltag_inspector/apriltag_inspector.egg-info/SOURCES.txt'\n"}
+[1.289343] (apriltag_inspector) StdoutLine: {'line': b"adding license file 'LICENSE'\n"}
+[1.289530] (apriltag_inspector) StdoutLine: {'line': b"writing manifest file '../../build/apriltag_inspector/apriltag_inspector.egg-info/SOURCES.txt'\n"}
+[1.290049] (apriltag_inspector) StdoutLine: {'line': b'running build\n'}
+[1.290333] (apriltag_inspector) StdoutLine: {'line': b'running build_py\n'}
+[1.290770] (apriltag_inspector) StdoutLine: {'line': b'creating /root/ros2_ws/build/apriltag_inspector/build\n'}
+[1.291260] (apriltag_inspector) StdoutLine: {'line': b'creating /root/ros2_ws/build/apriltag_inspector/build/lib\n'}
+[1.291671] (apriltag_inspector) StdoutLine: {'line': b'creating /root/ros2_ws/build/apriltag_inspector/build/lib/apriltag_inspector\n'}
+[1.292166] (apriltag_inspector) StdoutLine: {'line': b'copying apriltag_inspector/apriltag_inspector_node.py -> /root/ros2_ws/build/apriltag_inspector/build/lib/apriltag_inspector\n'}
+[1.293545] (apriltag_inspector) StdoutLine: {'line': b'copying apriltag_inspector/__init__.py -> /root/ros2_ws/build/apriltag_inspector/build/lib/apriltag_inspector\n'}
+[1.294443] (apriltag_inspector) StdoutLine: {'line': b'running install\n'}
+[1.301626] (-) TimerEvent: {}
+[1.305837] (apriltag_inspector) StdoutLine: {'line': b'running install_lib\n'}
+[1.324546] (apriltag_inspector) StdoutLine: {'line': b'creating /root/ros2_ws/install/apriltag_inspector/lib/python3.12/site-packages/apriltag_inspector\n'}
+[1.325360] (apriltag_inspector) StdoutLine: {'line': b'copying /root/ros2_ws/build/apriltag_inspector/build/lib/apriltag_inspector/apriltag_inspector_node.py -> /root/ros2_ws/install/apriltag_inspector/lib/python3.12/site-packages/apriltag_inspector\n'}
+[1.325869] (apriltag_inspector) StdoutLine: {'line': b'copying /root/ros2_ws/build/apriltag_inspector/build/lib/apriltag_inspector/__init__.py -> /root/ros2_ws/install/apriltag_inspector/lib/python3.12/site-packages/apriltag_inspector\n'}
+[1.327757] (apriltag_inspector) StdoutLine: {'line': b'byte-compiling /root/ros2_ws/install/apriltag_inspector/lib/python3.12/site-packages/apriltag_inspector/apriltag_inspector_node.py to apriltag_inspector_node.cpython-312.pyc\n'}
+[1.333476] (apriltag_inspector) StdoutLine: {'line': b'byte-compiling /root/ros2_ws/install/apriltag_inspector/lib/python3.12/site-packages/apriltag_inspector/__init__.py to __init__.cpython-312.pyc\n'}
+[1.334084] (apriltag_inspector) StdoutLine: {'line': b'running install_data\n'}
+[1.334312] (apriltag_inspector) StdoutLine: {'line': b'creating /root/ros2_ws/install/apriltag_inspector/share/ament_index\n'}
+[1.334628] (apriltag_inspector) StdoutLine: {'line': b'creating /root/ros2_ws/install/apriltag_inspector/share/ament_index/resource_index\n'}
+[1.334897] (apriltag_inspector) StdoutLine: {'line': b'creating /root/ros2_ws/install/apriltag_inspector/share/ament_index/resource_index/packages\n'}
+[1.335183] (apriltag_inspector) StdoutLine: {'line': b'copying resource/apriltag_inspector -> /root/ros2_ws/install/apriltag_inspector/share/ament_index/resource_index/packages\n'}
+[1.335567] (apriltag_inspector) StdoutLine: {'line': b'copying package.xml -> /root/ros2_ws/install/apriltag_inspector/share/apriltag_inspector\n'}
+[1.335920] (apriltag_inspector) StdoutLine: {'line': b'running install_egg_info\n'}
+[1.336652] (apriltag) StdoutLine: {'line': b'[ 51%] \x1b[32mBuilding C object CMakeFiles/apriltag.dir/common/unionfind.c.o\x1b[0m\n'}
+[1.356313] (follower_node) StdoutLine: {'line': b'Installing apriltag_follower script to /root/ros2_ws/install/follower_node/lib/follower_node\n'}
+[1.357762] (follower_node) StdoutLine: {'line': b"writing list of installed files to '/root/ros2_ws/build/follower_node/install.log'\n"}
+[1.371901] (apriltag) StdoutLine: {'line': b'[ 53%] \x1b[32mBuilding C object CMakeFiles/apriltag.dir/common/workerpool.c.o\x1b[0m\n'}
+[1.372176] (apriltag_inspector) StdoutLine: {'line': b'Copying ../../build/apriltag_inspector/apriltag_inspector.egg-info to /root/ros2_ws/install/apriltag_inspector/lib/python3.12/site-packages/apriltag_inspector-0.0.0-py3.12.egg-info\n'}
+[1.372280] (apriltag_inspector) StdoutLine: {'line': b'running install_scripts\n'}
+[1.401765] (-) TimerEvent: {}
+[1.403432] (apriltag) StdoutLine: {'line': b'[ 56%] \x1b[32mBuilding C object CMakeFiles/apriltag.dir/common/zarray.c.o\x1b[0m\n'}
+[1.412559] (apriltag) StdoutLine: {'line': b'[ 58%] \x1b[32mBuilding C object CMakeFiles/apriltag.dir/common/zmaxheap.c.o\x1b[0m\n'}
+[1.426428] (apriltag) StdoutLine: {'line': b'[ 60%] \x1b[32mBuilding C object CMakeFiles/apriltag.dir/common/zhash.c.o\x1b[0m\n'}
+[1.451407] (follower_node) CommandEnded: {'returncode': 0}
+[1.468239] (follower_node) JobEnded: {'identifier': 'follower_node', 'rc': 0}
+[1.481851] (apriltag) StdoutLine: {'line': b'[ 63%] \x1b[32mBuilding C object CMakeFiles/apriltag.dir/tag16h5.c.o\x1b[0m\n'}
+[1.485312] (apriltag) StdoutLine: {'line': b'[ 65%] \x1b[32mBuilding C object CMakeFiles/apriltag.dir/tag25h9.c.o\x1b[0m\n'}
+[1.501907] (-) TimerEvent: {}
+[1.568114] (apriltag_inspector) StdoutLine: {'line': b'Installing apriltag_inspector_node script to /root/ros2_ws/install/apriltag_inspector/lib/apriltag_inspector\n'}
+[1.568489] (apriltag_inspector) StdoutLine: {'line': b"writing list of installed files to '/root/ros2_ws/build/apriltag_inspector/install.log'\n"}
+[1.580154] (apriltag) StdoutLine: {'line': b'[ 68%] \x1b[32mBuilding C object CMakeFiles/apriltag.dir/tag36h10.c.o\x1b[0m\n'}
+[1.583400] (apriltag) StdoutLine: {'line': b'[ 70%] \x1b[32mBuilding C object CMakeFiles/apriltag.dir/tagCircle21h7.c.o\x1b[0m\n'}
+[1.585377] (apriltag) StdoutLine: {'line': b'[ 73%] \x1b[32mBuilding C object CMakeFiles/apriltag.dir/tag36h11.c.o\x1b[0m\n'}
+[1.592573] (apriltag) StdoutLine: {'line': b'[ 75%] \x1b[32mBuilding C object CMakeFiles/apriltag.dir/tagCircle49h12.c.o\x1b[0m\n'}
+[1.599999] (apriltag) StdoutLine: {'line': b'[ 78%] \x1b[32mBuilding C object CMakeFiles/apriltag.dir/tagCustom48h12.c.o\x1b[0m\n'}
+[1.602026] (-) TimerEvent: {}
+[1.632075] (apriltag) StdoutLine: {'line': b'[ 80%] \x1b[32mBuilding C object CMakeFiles/apriltag.dir/tagStandard41h12.c.o\x1b[0m\n'}
+[1.687139] (apriltag) StdoutLine: {'line': b'[ 82%] \x1b[32mBuilding C object CMakeFiles/apriltag.dir/tagStandard52h13.c.o\x1b[0m\n'}
+[1.702881] (-) TimerEvent: {}
+[1.786578] (apriltag_inspector) CommandEnded: {'returncode': 0}
+[1.807989] (apriltag_msgs) StdoutLine: {'line': b'-- Found ament_cmake_ros: 0.12.0 (/opt/ros/jazzy/share/ament_cmake_ros/cmake)\n'}
+[1.808468] (-) TimerEvent: {}
+[1.811773] (apriltag_inspector) JobEnded: {'identifier': 'apriltag_inspector', 'rc': 0}
+[1.908633] (-) TimerEvent: {}
+[2.009011] (-) TimerEvent: {}
+[2.109324] (-) TimerEvent: {}
+[2.209829] (-) TimerEvent: {}
+[2.286597] (apriltag_msgs) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c\n'}
+[2.309882] (-) TimerEvent: {}
+[2.410113] (-) TimerEvent: {}
+[2.510489] (-) TimerEvent: {}
+[2.559738] (apriltag) StdoutLine: {'line': b'[ 85%] \x1b[32m\x1b[1mLinking C shared library libapriltag.so\x1b[0m\n'}
+[2.610701] (-) TimerEvent: {}
+[2.637819] (apriltag) StdoutLine: {'line': b'[ 85%] Built target apriltag\n'}
+[2.654583] (apriltag) StdoutLine: {'line': b'[ 87%] \x1b[32mBuilding C object CMakeFiles/apriltag_demo.dir/example/apriltag_demo.c.o\x1b[0m\n'}
+[2.655551] (apriltag) StdoutLine: {'line': b'[ 92%] \x1b[32mBuilding CXX object CMakeFiles/opencv_demo.dir/example/opencv_demo.cc.o\x1b[0m\n'}
+[2.655710] (apriltag) StdoutLine: {'line': b'[ 92%] \x1b[32mBuilding C object CMakeFiles/apriltag.cpython-312-x86_64-linux-gnu.dir/apriltag_pywrap.c.o\x1b[0m\n'}
+[2.710794] (-) TimerEvent: {}
+[2.770727] (apriltag) StdoutLine: {'line': b'[ 95%] \x1b[32m\x1b[1mLinking C executable apriltag_demo\x1b[0m\n'}
+[2.793973] (apriltag_msgs) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp\n'}
+[2.796732] (apriltag_msgs) StdoutLine: {'line': b'-- Found python_cmake_module: 0.11.1 (/opt/ros/jazzy/share/python_cmake_module/cmake)\n'}
+[2.808316] (apriltag) StdoutLine: {'line': b'[ 97%] \x1b[32m\x1b[1mLinking C shared module apriltag.cpython-312-x86_64-linux-gnu.so\x1b[0m\n'}
+[2.810954] (-) TimerEvent: {}
+[2.815202] (apriltag) StdoutLine: {'line': b'[ 97%] Built target apriltag_demo\n'}
+[2.859641] (apriltag) StdoutLine: {'line': b'[ 97%] Built target apriltag.cpython-312-x86_64-linux-gnu\n'}
+[2.910424] (apriltag_msgs) StdoutLine: {'line': b'-- Found PythonExtra: /usr/bin/python3  \n'}
+[2.911024] (-) TimerEvent: {}
+[3.011283] (-) TimerEvent: {}
+[3.111555] (-) TimerEvent: {}
+[3.211927] (-) TimerEvent: {}
+[3.312416] (-) TimerEvent: {}
+[3.312931] (apriltag_msgs) StdoutLine: {'line': b'-- Found Python3: /usr/bin/python3 (found version "3.12.3") found components: Interpreter Development NumPy Development.Module Development.Embed \n'}
+[3.346768] (apriltag_msgs) StdoutLine: {'line': b'-- Found ament_lint_auto: 0.17.4 (/opt/ros/jazzy/share/ament_lint_auto/cmake)\n'}
+[3.362516] (apriltag_msgs) StdoutLine: {'line': b"-- Added test 'lint_cmake' to check CMake code style\n"}
+[3.364853] (apriltag_msgs) StdoutLine: {'line': b"-- Added test 'xmllint' to check XML markup files\n"}
+[3.367673] (apriltag_msgs) StdoutLine: {'line': b'-- Configuring done (3.3s)\n'}
+[3.399152] (apriltag_msgs) StdoutLine: {'line': b'-- Generating done (0.0s)\n'}
+[3.412100] (apriltag_msgs) StdoutLine: {'line': b'-- Build files have been written to: /root/ros2_ws/build/apriltag_msgs\n'}
+[3.412478] (-) TimerEvent: {}
+[3.427438] (apriltag_msgs) CommandEnded: {'returncode': 0}
+[3.428002] (apriltag_msgs) JobProgress: {'identifier': 'apriltag_msgs', 'progress': 'build'}
+[3.428221] (apriltag_msgs) Command: {'cmd': ['/usr/bin/cmake', '--build', '/root/ros2_ws/build/apriltag_msgs', '--', '-j16', '-l16'], 'cwd': '/root/ros2_ws/build/apriltag_msgs', 'env': OrderedDict({'HOSTNAME': 'IKIM30', 'SHLVL': '1', 'LD_LIBRARY_PATH': '/opt/ros/jazzy/opt/zenoh_cpp_vendor/lib:/opt/ros/jazzy/lib/x86_64-linux-gnu:/opt/ros/jazzy/lib', 'HOME': '/root', 'ROS_PYTHON_VERSION': '3', 'ROS_DISTRO': 'jazzy', '_': '/usr/bin/colcon', 'ROS_VERSION': '2', 'TERM': 'xterm', 'PATH': '/opt/ros/jazzy/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin', 'DISPLAY': ':1', 'INTERFACE_WS': '/root/ros2_ws', 'LANG': 'C.UTF-8', 'RMW_IMPLEMENTATION': 'rmw_zenoh_cpp', 'LS_COLORS': 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=00:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.avif=01;35:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:*~=00;90:*#=00;90:*.bak=00;90:*.crdownload=00;90:*.dpkg-dist=00;90:*.dpkg-new=00;90:*.dpkg-old=00;90:*.dpkg-tmp=00;90:*.old=00;90:*.orig=00;90:*.part=00;90:*.rej=00;90:*.rpmnew=00;90:*.rpmorig=00;90:*.rpmsave=00;90:*.swp=00;90:*.tmp=00;90:*.ucf-dist=00;90:*.ucf-new=00;90:*.ucf-old=00;90:', 'ROS_DOMAIN_ID': '145', 'AMENT_PREFIX_PATH': '/opt/ros/jazzy', 'ROS_AUTOMATIC_DISCOVERY_RANGE': 'LOCALHOST', 'PWD': '/root/ros2_ws/build/apriltag_msgs', 'LC_ALL': 'C.UTF-8', 'PYTHONPATH': '/opt/ros/jazzy/lib/python3.12/site-packages', 'COLCON': '1', 'CMAKE_PREFIX_PATH': '/opt/ros/jazzy'}), 'shell': False}
+[3.478249] (apriltag_msgs) StdoutLine: {'line': b'[  1%] \x1b[34m\x1b[1mGenerating type hashes for ROS interfaces\x1b[0m\n'}
+[3.491016] (apriltag_msgs) StdoutLine: {'line': b'[  1%] Built target ament_cmake_python_copy_apriltag_msgs\n'}
+[3.512617] (-) TimerEvent: {}
+[3.613922] (-) TimerEvent: {}
+[3.661405] (apriltag_msgs) StdoutLine: {'line': b'running egg_info\n'}
+[3.662117] (apriltag_msgs) StdoutLine: {'line': b'creating apriltag_msgs.egg-info\n'}
+[3.669938] (apriltag_msgs) StdoutLine: {'line': b'writing apriltag_msgs.egg-info/PKG-INFO\n'}
+[3.670137] (apriltag_msgs) StdoutLine: {'line': b'writing dependency_links to apriltag_msgs.egg-info/dependency_links.txt\n'}
+[3.670256] (apriltag_msgs) StdoutLine: {'line': b'writing top-level names to apriltag_msgs.egg-info/top_level.txt\n'}
+[3.670368] (apriltag_msgs) StdoutLine: {'line': b"writing manifest file 'apriltag_msgs.egg-info/SOURCES.txt'\n"}
+[3.696665] (apriltag_msgs) StdoutLine: {'line': b"reading manifest file 'apriltag_msgs.egg-info/SOURCES.txt'\n"}
+[3.697237] (apriltag_msgs) StdoutLine: {'line': b"writing manifest file 'apriltag_msgs.egg-info/SOURCES.txt'\n"}
+[3.714023] (-) TimerEvent: {}
+[3.732813] (apriltag_msgs) StdoutLine: {'line': b'[  1%] Built target apriltag_msgs__rosidl_generator_type_description\n'}
+[3.733843] (apriltag_msgs) StdoutLine: {'line': b'[  1%] Built target ament_cmake_python_build_apriltag_msgs_egg\n'}
+[3.741717] (apriltag_msgs) StdoutLine: {'line': b'[  3%] \x1b[34m\x1b[1mGenerating C code for ROS interfaces\x1b[0m\n'}
+[3.757080] (apriltag_msgs) StdoutLine: {'line': b'[  5%] \x1b[34m\x1b[1mGenerating C++ code for ROS interfaces\x1b[0m\n'}
+[3.814127] (-) TimerEvent: {}
+[3.914408] (-) TimerEvent: {}
+[4.014693] (-) TimerEvent: {}
+[4.056634] (apriltag_msgs) StdoutLine: {'line': b'[  5%] Built target apriltag_msgs__cpp\n'}
+[4.100010] (apriltag_msgs) StdoutLine: {'line': b'[ 11%] \x1b[32mBuilding C object CMakeFiles/apriltag_msgs__rosidl_generator_c.dir/rosidl_generator_c/apriltag_msgs/msg/detail/point__type_support.c.o\x1b[0m\n'}
+[4.100354] (apriltag_msgs) StdoutLine: {'line': b'[ 11%] \x1b[32mBuilding C object CMakeFiles/apriltag_msgs__rosidl_generator_c.dir/rosidl_generator_c/apriltag_msgs/msg/detail/april_tag_detection__description.c.o\x1b[0m\n'}
+[4.100512] (apriltag_msgs) StdoutLine: {'line': b'[ 11%] \x1b[32mBuilding C object CMakeFiles/apriltag_msgs__rosidl_generator_c.dir/rosidl_generator_c/apriltag_msgs/msg/detail/point__description.c.o\x1b[0m\n'}
+[4.102285] (apriltag_msgs) StdoutLine: {'line': b'[ 14%] \x1b[32mBuilding C object CMakeFiles/apriltag_msgs__rosidl_generator_c.dir/rosidl_generator_c/apriltag_msgs/msg/detail/april_tag_detection_array__description.c.o\x1b[0m\n'}
+[4.102589] (apriltag_msgs) StdoutLine: {'line': b'[ 14%] \x1b[32mBuilding C object CMakeFiles/apriltag_msgs__rosidl_generator_c.dir/rosidl_generator_c/apriltag_msgs/msg/detail/april_tag_detection_array__functions.c.o\x1b[0m\n'}
+[4.102898] (apriltag_msgs) StdoutLine: {'line': b'[ 18%] \x1b[32mBuilding C object CMakeFiles/apriltag_msgs__rosidl_generator_c.dir/rosidl_generator_c/apriltag_msgs/msg/detail/april_tag_detection__functions.c.o\x1b[0m\n'}
+[4.103048] (apriltag_msgs) StdoutLine: {'line': b'[ 18%] \x1b[32mBuilding C object CMakeFiles/apriltag_msgs__rosidl_generator_c.dir/rosidl_generator_c/apriltag_msgs/msg/detail/point__functions.c.o\x1b[0m\n'}
+[4.103144] (apriltag_msgs) StdoutLine: {'line': b'[ 20%] \x1b[32mBuilding C object CMakeFiles/apriltag_msgs__rosidl_generator_c.dir/rosidl_generator_c/apriltag_msgs/msg/detail/april_tag_detection__type_support.c.o\x1b[0m\n'}
+[4.107510] (apriltag_msgs) StdoutLine: {'line': b'[ 22%] \x1b[32mBuilding C object CMakeFiles/apriltag_msgs__rosidl_generator_c.dir/rosidl_generator_c/apriltag_msgs/msg/detail/april_tag_detection_array__type_support.c.o\x1b[0m\n'}
+[4.114824] (-) TimerEvent: {}
+[4.164227] (apriltag_msgs) StdoutLine: {'line': b'[ 24%] \x1b[32m\x1b[1mLinking C shared library libapriltag_msgs__rosidl_generator_c.so\x1b[0m\n'}
+[4.199120] (apriltag_msgs) StdoutLine: {'line': b'[ 24%] Built target apriltag_msgs__rosidl_generator_c\n'}
+[4.206622] (apriltag_msgs) StdoutLine: {'line': b'[ 29%] \x1b[34m\x1b[1mGenerating C type support for eProsima Fast-RTPS\x1b[0m\n'}
+[4.206866] (apriltag_msgs) StdoutLine: {'line': b'[ 29%] \x1b[34m\x1b[1mGenerating C++ introspection for ROS interfaces\x1b[0m\n'}
+[4.206975] (apriltag_msgs) StdoutLine: {'line': b'[ 29%] \x1b[34m\x1b[1mGenerating C type support dispatch for ROS interfaces\x1b[0m\n'}
+[4.209332] (apriltag_msgs) StdoutLine: {'line': b'[ 31%] \x1b[34m\x1b[1mGenerating C introspection for ROS interfaces\x1b[0m\n'}
+[4.209589] (apriltag_msgs) StdoutLine: {'line': b'[ 35%] \x1b[34m\x1b[1mGenerating C++ type support for eProsima Fast-RTPS\x1b[0m\n'}
+[4.209724] (apriltag_msgs) StdoutLine: {'line': b'[ 35%] \x1b[34m\x1b[1mGenerating C++ type support dispatch for ROS interfaces\x1b[0m\n'}
+[4.214913] (-) TimerEvent: {}
+[4.284605] (apriltag) StdoutLine: {'line': b'[100%] \x1b[32m\x1b[1mLinking CXX executable opencv_demo\x1b[0m\n'}
+[4.315067] (-) TimerEvent: {}
+[4.415483] (-) TimerEvent: {}
+[4.515719] (-) TimerEvent: {}
+[4.527247] (apriltag_msgs) StdoutLine: {'line': b'[ 38%] \x1b[32mBuilding CXX object CMakeFiles/apriltag_msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/apriltag_msgs/msg/april_tag_detection_array__type_support.cpp.o\x1b[0m\n'}
+[4.527779] (apriltag_msgs) StdoutLine: {'line': b'[ 38%] \x1b[32mBuilding CXX object CMakeFiles/apriltag_msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/apriltag_msgs/msg/april_tag_detection__type_support.cpp.o\x1b[0m\n'}
+[4.531035] (apriltag_msgs) StdoutLine: {'line': b'[ 40%] \x1b[32mBuilding CXX object CMakeFiles/apriltag_msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/apriltag_msgs/msg/point__type_support.cpp.o\x1b[0m\n'}
+[4.571347] (apriltag_msgs) StdoutLine: {'line': b'[ 42%] \x1b[32mBuilding C object CMakeFiles/apriltag_msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/apriltag_msgs/msg/detail/april_tag_detection__type_support.c.o\x1b[0m\n'}
+[4.572953] (apriltag_msgs) StdoutLine: {'line': b'[ 44%] \x1b[32mBuilding C object CMakeFiles/apriltag_msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/apriltag_msgs/msg/detail/point__type_support.c.o\x1b[0m\n'}
+[4.584055] (apriltag_msgs) StdoutLine: {'line': b'[ 46%] \x1b[32mBuilding C object CMakeFiles/apriltag_msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/apriltag_msgs/msg/detail/april_tag_detection_array__type_support.c.o\x1b[0m\n'}
+[4.607154] (apriltag_msgs) StdoutLine: {'line': b'[ 50%] \x1b[32m\x1b[1mLinking CXX shared library libapriltag_msgs__rosidl_typesupport_c.so\x1b[0m\n'}
+[4.608020] (apriltag_msgs) StdoutLine: {'line': b'[ 50%] \x1b[32mBuilding CXX object CMakeFiles/apriltag_msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/apriltag_msgs/msg/april_tag_detection_array__type_support.cpp.o\x1b[0m\n'}
+[4.608160] (apriltag_msgs) StdoutLine: {'line': b'[ 51%] \x1b[32mBuilding CXX object CMakeFiles/apriltag_msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/apriltag_msgs/msg/april_tag_detection__type_support.cpp.o\x1b[0m\n'}
+[4.611278] (apriltag_msgs) StdoutLine: {'line': b'[ 53%] \x1b[32mBuilding CXX object CMakeFiles/apriltag_msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/apriltag_msgs/msg/point__type_support.cpp.o\x1b[0m\n'}
+[4.615839] (apriltag_msgs) StdoutLine: {'line': b'[ 55%] \x1b[32mBuilding CXX object CMakeFiles/apriltag_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/apriltag_msgs/msg/detail/dds_fastrtps/point__type_support.cpp.o\x1b[0m\n'}
+[4.616177] (-) TimerEvent: {}
+[4.616343] (apriltag_msgs) StdoutLine: {'line': b'[ 57%] \x1b[32mBuilding CXX object CMakeFiles/apriltag_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/apriltag_msgs/msg/detail/dds_fastrtps/april_tag_detection_array__type_support.cpp.o\x1b[0m\n'}
+[4.617717] (apriltag_msgs) StdoutLine: {'line': b'[ 59%] \x1b[32mBuilding CXX object CMakeFiles/apriltag_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/apriltag_msgs/msg/detail/dds_fastrtps/april_tag_detection__type_support.cpp.o\x1b[0m\n'}
+[4.641762] (apriltag_msgs) StdoutLine: {'line': b'[ 61%] \x1b[32mBuilding CXX object CMakeFiles/apriltag_msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/apriltag_msgs/msg/detail/point__type_support_c.cpp.o\x1b[0m\n'}
+[4.644296] (apriltag_msgs) StdoutLine: {'line': b'[ 62%] \x1b[32mBuilding CXX object CMakeFiles/apriltag_msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/apriltag_msgs/msg/detail/april_tag_detection_array__type_support_c.cpp.o\x1b[0m\n'}
+[4.648881] (apriltag_msgs) StdoutLine: {'line': b'[ 64%] \x1b[32mBuilding CXX object CMakeFiles/apriltag_msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/apriltag_msgs/msg/detail/april_tag_detection__type_support_c.cpp.o\x1b[0m\n'}
+[4.655985] (apriltag_msgs) StdoutLine: {'line': b'[ 66%] \x1b[32m\x1b[1mLinking C shared library libapriltag_msgs__rosidl_typesupport_introspection_c.so\x1b[0m\n'}
+[4.666190] (apriltag_msgs) StdoutLine: {'line': b'[ 68%] \x1b[32mBuilding CXX object CMakeFiles/apriltag_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/apriltag_msgs/msg/detail/point__type_support.cpp.o\x1b[0m\n'}
+[4.669842] (apriltag_msgs) StdoutLine: {'line': b'[ 70%] \x1b[32mBuilding CXX object CMakeFiles/apriltag_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/apriltag_msgs/msg/detail/april_tag_detection__type_support.cpp.o\x1b[0m\n'}
+[4.670208] (apriltag_msgs) StdoutLine: {'line': b'[ 72%] \x1b[32mBuilding CXX object CMakeFiles/apriltag_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/apriltag_msgs/msg/detail/april_tag_detection_array__type_support.cpp.o\x1b[0m\n'}
+[4.676022] (apriltag_msgs) StdoutLine: {'line': b'[ 72%] Built target apriltag_msgs__rosidl_typesupport_c\n'}
+[4.711859] (apriltag_msgs) StdoutLine: {'line': b'[ 72%] Built target apriltag_msgs__rosidl_typesupport_introspection_c\n'}
+[4.716823] (-) TimerEvent: {}
+[4.818458] (-) TimerEvent: {}
+[4.928145] (-) TimerEvent: {}
+[5.032072] (-) TimerEvent: {}
+[5.136741] (-) TimerEvent: {}
+[5.153533] (apriltag_msgs) StdoutLine: {'line': b'[ 74%] \x1b[32m\x1b[1mLinking CXX shared library libapriltag_msgs__rosidl_typesupport_cpp.so\x1b[0m\n'}
+[5.240975] (-) TimerEvent: {}
+[5.267811] (apriltag) StdoutLine: {'line': b'[100%] Built target opencv_demo\n'}
+[5.275534] (apriltag_msgs) StdoutLine: {'line': b'[ 74%] Built target apriltag_msgs__rosidl_typesupport_cpp\n'}
+[5.284303] (apriltag) CommandEnded: {'returncode': 0}
+[5.285238] (apriltag) JobProgress: {'identifier': 'apriltag', 'progress': 'install'}
+[5.293746] (apriltag) Command: {'cmd': ['/usr/bin/cmake', '--install', '/root/ros2_ws/build/apriltag'], 'cwd': '/root/ros2_ws/build/apriltag', 'env': OrderedDict({'HOSTNAME': 'IKIM30', 'SHLVL': '1', 'LD_LIBRARY_PATH': '/opt/ros/jazzy/opt/zenoh_cpp_vendor/lib:/opt/ros/jazzy/lib/x86_64-linux-gnu:/opt/ros/jazzy/lib', 'HOME': '/root', 'ROS_PYTHON_VERSION': '3', 'ROS_DISTRO': 'jazzy', '_': '/usr/bin/colcon', 'ROS_VERSION': '2', 'TERM': 'xterm', 'PATH': '/opt/ros/jazzy/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin', 'DISPLAY': ':1', 'INTERFACE_WS': '/root/ros2_ws', 'LANG': 'C.UTF-8', 'RMW_IMPLEMENTATION': 'rmw_zenoh_cpp', 'LS_COLORS': 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=00:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.avif=01;35:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:*~=00;90:*#=00;90:*.bak=00;90:*.crdownload=00;90:*.dpkg-dist=00;90:*.dpkg-new=00;90:*.dpkg-old=00;90:*.dpkg-tmp=00;90:*.old=00;90:*.orig=00;90:*.part=00;90:*.rej=00;90:*.rpmnew=00;90:*.rpmorig=00;90:*.rpmsave=00;90:*.swp=00;90:*.tmp=00;90:*.ucf-dist=00;90:*.ucf-new=00;90:*.ucf-old=00;90:', 'ROS_DOMAIN_ID': '145', 'AMENT_PREFIX_PATH': '/opt/ros/jazzy', 'ROS_AUTOMATIC_DISCOVERY_RANGE': 'LOCALHOST', 'PWD': '/root/ros2_ws/build/apriltag', 'LC_ALL': 'C.UTF-8', 'PYTHONPATH': '/opt/ros/jazzy/lib/python3.12/site-packages', 'COLCON': '1', 'CMAKE_PREFIX_PATH': '/opt/ros/jazzy'}), 'shell': False}
+[5.303346] (apriltag) StdoutLine: {'line': b'-- Install configuration: "Release"\n'}
+[5.303663] (apriltag) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag/include/apriltag/apriltag.h\n'}
+[5.303864] (apriltag) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag/include/apriltag/apriltag_math.h\n'}
+[5.303973] (apriltag) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag/include/apriltag/apriltag_pose.h\n'}
+[5.304069] (apriltag) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag/include/apriltag/common/debug_print.h\n'}
+[5.304167] (apriltag) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag/include/apriltag/common/doubles.h\n'}
+[5.304302] (apriltag) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag/include/apriltag/common/doubles_floats_impl.h\n'}
+[5.304430] (apriltag) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag/include/apriltag/common/floats.h\n'}
+[5.304538] (apriltag) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag/include/apriltag/common/g2d.h\n'}
+[5.304626] (apriltag) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag/include/apriltag/common/getopt.h\n'}
+[5.304738] (apriltag) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag/include/apriltag/common/homography.h\n'}
+[5.304829] (apriltag) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag/include/apriltag/common/image_types.h\n'}
+[5.304919] (apriltag) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag/include/apriltag/common/image_u8.h\n'}
+[5.305023] (apriltag) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag/include/apriltag/common/image_u8x3.h\n'}
+[5.305122] (apriltag) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag/include/apriltag/common/image_u8x4.h\n'}
+[5.305421] (apriltag) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag/include/apriltag/common/matd.h\n'}
+[5.305589] (apriltag) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag/include/apriltag/common/math_util.h\n'}
+[5.305788] (apriltag_msgs) StdoutLine: {'line': b'[ 75%] \x1b[32m\x1b[1mLinking CXX shared library libapriltag_msgs__rosidl_typesupport_introspection_cpp.so\x1b[0m\n'}
+[5.305963] (apriltag) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag/include/apriltag/common/pam.h\n'}
+[5.306116] (apriltag) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag/include/apriltag/common/pjpeg.h\n'}
+[5.306224] (apriltag) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag/include/apriltag/common/pnm.h\n'}
+[5.306369] (apriltag) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag/include/apriltag/common/postscript_utils.h\n'}
+[5.306473] (apriltag) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag/include/apriltag/common/pthreads_cross.h\n'}
+[5.306571] (apriltag) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag/include/apriltag/common/string_util.h\n'}
+[5.306736] (apriltag) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag/include/apriltag/common/svd22.h\n'}
+[5.306857] (apriltag) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag/include/apriltag/common/time_util.h\n'}
+[5.306951] (apriltag) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag/include/apriltag/common/timeprofile.h\n'}
+[5.307047] (apriltag) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag/include/apriltag/common/unionfind.h\n'}
+[5.307144] (apriltag) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag/include/apriltag/common/workerpool.h\n'}
+[5.307244] (apriltag) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag/include/apriltag/common/zarray.h\n'}
+[5.307353] (apriltag) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag/include/apriltag/common/zhash.h\n'}
+[5.307454] (apriltag) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag/include/apriltag/common/zmaxheap.h\n'}
+[5.307551] (apriltag) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag/include/apriltag/tag16h5.h\n'}
+[5.307660] (apriltag) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag/include/apriltag/tag25h9.h\n'}
+[5.307802] (apriltag) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag/include/apriltag/tag36h10.h\n'}
+[5.307900] (apriltag) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag/include/apriltag/tag36h11.h\n'}
+[5.307995] (apriltag) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag/include/apriltag/tagCircle21h7.h\n'}
+[5.308089] (apriltag) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag/include/apriltag/tagCircle49h12.h\n'}
+[5.308184] (apriltag) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag/include/apriltag/tagCustom48h12.h\n'}
+[5.308288] (apriltag) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag/include/apriltag/tagStandard41h12.h\n'}
+[5.308392] (apriltag) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag/include/apriltag/tagStandard52h13.h\n'}
+[5.308497] (apriltag) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag/lib/libapriltag.so.3.4.2\n'}
+[5.308677] (apriltag) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag/lib/libapriltag.so.3\n'}
+[5.308891] (apriltag) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag/lib/libapriltag.so\n'}
+[5.308990] (apriltag) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag/share/apriltag/cmake/apriltagTargets.cmake\n'}
+[5.309097] (apriltag) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag/share/apriltag/cmake/apriltagTargets-release.cmake\n'}
+[5.309189] (apriltag) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag/share/apriltag/cmake/apriltagConfig.cmake\n'}
+[5.309316] (apriltag) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag/share/apriltag/cmake/apriltagConfigVersion.cmake\n'}
+[5.309426] (apriltag) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag/lib/pkgconfig/apriltag.pc\n'}
+[5.309514] (apriltag) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag/lib/python3.12/site-packages/apriltag.cpython-312-x86_64-linux-gnu.so\n'}
+[5.309835] (apriltag) StdoutLine: {'line': b'-- Set non-toolchain portion of runtime path of "/root/ros2_ws/install/apriltag/lib/python3.12/site-packages/apriltag.cpython-312-x86_64-linux-gnu.so" to ""\n'}
+[5.309943] (apriltag) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag/bin/opencv_demo\n'}
+[5.310057] (apriltag) StdoutLine: {'line': b'-- Set non-toolchain portion of runtime path of "/root/ros2_ws/install/apriltag/bin/opencv_demo" to ""\n'}
+[5.310151] (apriltag) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag/bin/apriltag_demo\n'}
+[5.310321] (apriltag) StdoutLine: {'line': b'-- Set non-toolchain portion of runtime path of "/root/ros2_ws/install/apriltag/bin/apriltag_demo" to ""\n'}
+[5.311828] (apriltag) CommandEnded: {'returncode': 0}
+[5.333917] (apriltag) JobEnded: {'identifier': 'apriltag', 'rc': 0}
+[5.341141] (-) TimerEvent: {}
+[5.435250] (apriltag_msgs) StdoutLine: {'line': b'[ 75%] Built target apriltag_msgs__rosidl_typesupport_introspection_cpp\n'}
+[5.441352] (-) TimerEvent: {}
+[5.471065] (apriltag_msgs) StdoutLine: {'line': b'[ 77%] \x1b[32m\x1b[1mLinking CXX shared library libapriltag_msgs__rosidl_typesupport_fastrtps_cpp.so\x1b[0m\n'}
+[5.486024] (apriltag_msgs) StdoutLine: {'line': b'[ 79%] \x1b[32m\x1b[1mLinking CXX shared library libapriltag_msgs__rosidl_typesupport_fastrtps_c.so\x1b[0m\n'}
+[5.541438] (-) TimerEvent: {}
+[5.555386] (apriltag_msgs) StdoutLine: {'line': b'[ 79%] Built target apriltag_msgs__rosidl_typesupport_fastrtps_cpp\n'}
+[5.562940] (apriltag_msgs) StdoutLine: {'line': b'[ 79%] Built target apriltag_msgs__rosidl_typesupport_fastrtps_c\n'}
+[5.583879] (apriltag_msgs) StdoutLine: {'line': b'[ 79%] Built target apriltag_msgs\n'}
+[5.601279] (apriltag_msgs) StdoutLine: {'line': b'[ 81%] \x1b[34m\x1b[1mGenerating Python code for ROS interfaces\x1b[0m\n'}
+[5.641571] (-) TimerEvent: {}
+[5.742038] (-) TimerEvent: {}
+[5.842343] (-) TimerEvent: {}
+[5.940731] (apriltag_msgs) StdoutLine: {'line': b'[ 81%] Built target apriltag_msgs__py\n'}
+[5.942459] (-) TimerEvent: {}
+[5.958191] (apriltag_msgs) StdoutLine: {'line': b'[ 85%] \x1b[32mBuilding C object CMakeFiles/apriltag_msgs__rosidl_generator_py.dir/rosidl_generator_py/apriltag_msgs/msg/_point_s.c.o\x1b[0m\n'}
+[5.958523] (apriltag_msgs) StdoutLine: {'line': b'[ 85%] \x1b[32mBuilding C object CMakeFiles/apriltag_msgs__rosidl_generator_py.dir/rosidl_generator_py/apriltag_msgs/msg/_april_tag_detection_s.c.o\x1b[0m\n'}
+[5.960071] (apriltag_msgs) StdoutLine: {'line': b'[ 87%] \x1b[32mBuilding C object CMakeFiles/apriltag_msgs__rosidl_generator_py.dir/rosidl_generator_py/apriltag_msgs/msg/_april_tag_detection_array_s.c.o\x1b[0m\n'}
+[6.042563] (-) TimerEvent: {}
+[6.088675] (apriltag_msgs) StdoutLine: {'line': b'[ 88%] \x1b[32m\x1b[1mLinking C shared library libapriltag_msgs__rosidl_generator_py.so\x1b[0m\n'}
+[6.136571] (apriltag_msgs) StdoutLine: {'line': b'[ 88%] Built target apriltag_msgs__rosidl_generator_py\n'}
+[6.142692] (-) TimerEvent: {}
+[6.157942] (apriltag_msgs) StdoutLine: {'line': b'[ 94%] \x1b[32mBuilding C object CMakeFiles/apriltag_msgs_s__rosidl_typesupport_fastrtps_c.dir/rosidl_generator_py/apriltag_msgs/_apriltag_msgs_s.ep.rosidl_typesupport_fastrtps_c.c.o\x1b[0m\n'}
+[6.158226] (apriltag_msgs) StdoutLine: {'line': b'[ 94%] \x1b[32mBuilding C object CMakeFiles/apriltag_msgs_s__rosidl_typesupport_c.dir/rosidl_generator_py/apriltag_msgs/_apriltag_msgs_s.ep.rosidl_typesupport_c.c.o\x1b[0m\n'}
+[6.158323] (apriltag_msgs) StdoutLine: {'line': b'[ 94%] \x1b[32mBuilding C object CMakeFiles/apriltag_msgs_s__rosidl_typesupport_introspection_c.dir/rosidl_generator_py/apriltag_msgs/_apriltag_msgs_s.ep.rosidl_typesupport_introspection_c.c.o\x1b[0m\n'}
+[6.236307] (apriltag_msgs) StdoutLine: {'line': b'[ 96%] \x1b[32m\x1b[1mLinking C shared module rosidl_generator_py/apriltag_msgs/apriltag_msgs_s__rosidl_typesupport_c.so\x1b[0m\n'}
+[6.236896] (apriltag_msgs) StdoutLine: {'line': b'[ 98%] \x1b[32m\x1b[1mLinking C shared module rosidl_generator_py/apriltag_msgs/apriltag_msgs_s__rosidl_typesupport_fastrtps_c.so\x1b[0m\n'}
+[6.242093] (apriltag_msgs) StdoutLine: {'line': b'[100%] \x1b[32m\x1b[1mLinking C shared module rosidl_generator_py/apriltag_msgs/apriltag_msgs_s__rosidl_typesupport_introspection_c.so\x1b[0m\n'}
+[6.242764] (-) TimerEvent: {}
+[6.259822] (apriltag_msgs) StdoutLine: {'line': b'[100%] Built target apriltag_msgs_s__rosidl_typesupport_fastrtps_c\n'}
+[6.263272] (apriltag_msgs) StdoutLine: {'line': b'[100%] Built target apriltag_msgs_s__rosidl_typesupport_c\n'}
+[6.269440] (apriltag_msgs) StdoutLine: {'line': b'[100%] Built target apriltag_msgs_s__rosidl_typesupport_introspection_c\n'}
+[6.279843] (apriltag_msgs) CommandEnded: {'returncode': 0}
+[6.280434] (apriltag_msgs) JobProgress: {'identifier': 'apriltag_msgs', 'progress': 'install'}
+[6.280669] (apriltag_msgs) Command: {'cmd': ['/usr/bin/cmake', '--install', '/root/ros2_ws/build/apriltag_msgs'], 'cwd': '/root/ros2_ws/build/apriltag_msgs', 'env': OrderedDict({'HOSTNAME': 'IKIM30', 'SHLVL': '1', 'LD_LIBRARY_PATH': '/opt/ros/jazzy/opt/zenoh_cpp_vendor/lib:/opt/ros/jazzy/lib/x86_64-linux-gnu:/opt/ros/jazzy/lib', 'HOME': '/root', 'ROS_PYTHON_VERSION': '3', 'ROS_DISTRO': 'jazzy', '_': '/usr/bin/colcon', 'ROS_VERSION': '2', 'TERM': 'xterm', 'PATH': '/opt/ros/jazzy/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin', 'DISPLAY': ':1', 'INTERFACE_WS': '/root/ros2_ws', 'LANG': 'C.UTF-8', 'RMW_IMPLEMENTATION': 'rmw_zenoh_cpp', 'LS_COLORS': 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=00:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.avif=01;35:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:*~=00;90:*#=00;90:*.bak=00;90:*.crdownload=00;90:*.dpkg-dist=00;90:*.dpkg-new=00;90:*.dpkg-old=00;90:*.dpkg-tmp=00;90:*.old=00;90:*.orig=00;90:*.part=00;90:*.rej=00;90:*.rpmnew=00;90:*.rpmorig=00;90:*.rpmsave=00;90:*.swp=00;90:*.tmp=00;90:*.ucf-dist=00;90:*.ucf-new=00;90:*.ucf-old=00;90:', 'ROS_DOMAIN_ID': '145', 'AMENT_PREFIX_PATH': '/opt/ros/jazzy', 'ROS_AUTOMATIC_DISCOVERY_RANGE': 'LOCALHOST', 'PWD': '/root/ros2_ws/build/apriltag_msgs', 'LC_ALL': 'C.UTF-8', 'PYTHONPATH': '/opt/ros/jazzy/lib/python3.12/site-packages', 'COLCON': '1', 'CMAKE_PREFIX_PATH': '/opt/ros/jazzy'}), 'shell': False}
+[6.287030] (apriltag_msgs) StdoutLine: {'line': b'-- Install configuration: ""\n'}
+[6.287229] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/share/ament_index/resource_index/rosidl_interfaces/apriltag_msgs\n'}
+[6.287352] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/share/apriltag_msgs/msg/Point.json\n'}
+[6.287467] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/share/apriltag_msgs/msg/AprilTagDetection.json\n'}
+[6.287581] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/share/apriltag_msgs/msg/AprilTagDetectionArray.json\n'}
+[6.287729] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs\n'}
+[6.287979] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg\n'}
+[6.288037] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/april_tag_detection_array.h\n'}
+[6.288081] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/point.h\n'}
+[6.288123] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/detail\n'}
+[6.288162] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/detail/point__functions.c\n'}
+[6.288202] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/detail/april_tag_detection__type_support.c\n'}
+[6.288242] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/detail/point__type_support.c\n'}
+[6.288330] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/detail/april_tag_detection__type_support.h\n'}
+[6.288371] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/detail/april_tag_detection__description.c\n'}
+[6.288410] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/detail/april_tag_detection_array__description.c\n'}
+[6.288447] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/detail/point__functions.h\n'}
+[6.288486] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/detail/point__type_support.h\n'}
+[6.288524] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/detail/april_tag_detection_array__functions.h\n'}
+[6.288562] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/detail/april_tag_detection_array__struct.h\n'}
+[6.288599] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/detail/april_tag_detection_array__type_support.c\n'}
+[6.288637] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/detail/point__struct.h\n'}
+[6.288686] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/detail/april_tag_detection_array__type_support.h\n'}
+[6.288726] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/detail/april_tag_detection__struct.h\n'}
+[6.288766] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/detail/april_tag_detection__functions.h\n'}
+[6.288803] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/detail/point__description.c\n'}
+[6.288941] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/detail/april_tag_detection_array__functions.c\n'}
+[6.289038] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/detail/april_tag_detection__functions.c\n'}
+[6.289110] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/rosidl_generator_c__visibility_control.h\n'}
+[6.289154] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/april_tag_detection.h\n'}
+[6.289195] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/share/apriltag_msgs/environment/library_path.sh\n'}
+[6.289235] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/share/apriltag_msgs/environment/library_path.dsv\n'}
+[6.289272] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/lib/libapriltag_msgs__rosidl_generator_c.so\n'}
+[6.289312] (apriltag_msgs) StdoutLine: {'line': b'-- Set non-toolchain portion of runtime path of "/root/ros2_ws/install/apriltag_msgs/lib/libapriltag_msgs__rosidl_generator_c.so" to ""\n'}
+[6.289350] (apriltag_msgs) StdoutLine: {'line': b'-- Up-to-date: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs\n'}
+[6.289388] (apriltag_msgs) StdoutLine: {'line': b'-- Up-to-date: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg\n'}
+[6.289426] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/rosidl_typesupport_fastrtps_c__visibility_control.h\n'}
+[6.289465] (apriltag_msgs) StdoutLine: {'line': b'-- Up-to-date: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/detail\n'}
+[6.290667] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/detail/point__rosidl_typesupport_fastrtps_c.h\n'}
+[6.290915] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/detail/april_tag_detection_array__rosidl_typesupport_fastrtps_c.h\n'}
+[6.291039] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/detail/april_tag_detection__rosidl_typesupport_fastrtps_c.h\n'}
+[6.291094] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/lib/libapriltag_msgs__rosidl_typesupport_fastrtps_c.so\n'}
+[6.291136] (apriltag_msgs) StdoutLine: {'line': b'-- Set non-toolchain portion of runtime path of "/root/ros2_ws/install/apriltag_msgs/lib/libapriltag_msgs__rosidl_typesupport_fastrtps_c.so" to ""\n'}
+[6.291177] (apriltag_msgs) StdoutLine: {'line': b'-- Up-to-date: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs\n'}
+[6.291217] (apriltag_msgs) StdoutLine: {'line': b'-- Up-to-date: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg\n'}
+[6.291255] (apriltag_msgs) StdoutLine: {'line': b'-- Up-to-date: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/detail\n'}
+[6.291294] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/detail/april_tag_detection__rosidl_typesupport_introspection_c.h\n'}
+[6.291361] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/detail/april_tag_detection_array__rosidl_typesupport_introspection_c.h\n'}
+[6.291400] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/detail/april_tag_detection__type_support.c\n'}
+[6.291439] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/detail/point__type_support.c\n'}
+[6.291477] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/detail/april_tag_detection_array__type_support.c\n'}
+[6.291584] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/detail/point__rosidl_typesupport_introspection_c.h\n'}
+[6.291636] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/rosidl_typesupport_introspection_c__visibility_control.h\n'}
+[6.291692] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/lib/libapriltag_msgs__rosidl_typesupport_introspection_c.so\n'}
+[6.291731] (apriltag_msgs) StdoutLine: {'line': b'-- Set non-toolchain portion of runtime path of "/root/ros2_ws/install/apriltag_msgs/lib/libapriltag_msgs__rosidl_typesupport_introspection_c.so" to ""\n'}
+[6.291771] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/lib/libapriltag_msgs__rosidl_typesupport_c.so\n'}
+[6.291812] (apriltag_msgs) StdoutLine: {'line': b'-- Set non-toolchain portion of runtime path of "/root/ros2_ws/install/apriltag_msgs/lib/libapriltag_msgs__rosidl_typesupport_c.so" to ""\n'}
+[6.291862] (apriltag_msgs) StdoutLine: {'line': b'-- Up-to-date: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs\n'}
+[6.291902] (apriltag_msgs) StdoutLine: {'line': b'-- Up-to-date: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg\n'}
+[6.291962] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/point.hpp\n'}
+[6.292009] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/april_tag_detection_array.hpp\n'}
+[6.292054] (apriltag_msgs) StdoutLine: {'line': b'-- Up-to-date: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/detail\n'}
+[6.292088] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/detail/april_tag_detection_array__type_support.hpp\n'}
+[6.292124] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/detail/april_tag_detection__builder.hpp\n'}
+[6.292160] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/detail/point__type_support.hpp\n'}
+[6.292203] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/detail/point__struct.hpp\n'}
+[6.292242] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/detail/april_tag_detection_array__struct.hpp\n'}
+[6.292279] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/detail/april_tag_detection__struct.hpp\n'}
+[6.292324] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/detail/april_tag_detection_array__builder.hpp\n'}
+[6.292360] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/detail/point__builder.hpp\n'}
+[6.292397] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/detail/april_tag_detection_array__traits.hpp\n'}
+[6.292443] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/detail/april_tag_detection__traits.hpp\n'}
+[6.292479] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/detail/point__traits.hpp\n'}
+[6.292525] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/detail/april_tag_detection__type_support.hpp\n'}
+[6.292591] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/rosidl_generator_cpp__visibility_control.hpp\n'}
+[6.292624] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/april_tag_detection.hpp\n'}
+[6.292685] (apriltag_msgs) StdoutLine: {'line': b'-- Up-to-date: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs\n'}
+[6.292731] (apriltag_msgs) StdoutLine: {'line': b'-- Up-to-date: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg\n'}
+[6.292767] (apriltag_msgs) StdoutLine: {'line': b'-- Up-to-date: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/detail\n'}
+[6.292813] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/detail/point__rosidl_typesupport_fastrtps_cpp.hpp\n'}
+[6.292882] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/detail/dds_fastrtps\n'}
+[6.292922] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/detail/april_tag_detection_array__rosidl_typesupport_fastrtps_cpp.hpp\n'}
+[6.292958] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/detail/april_tag_detection__rosidl_typesupport_fastrtps_cpp.hpp\n'}
+[6.293000] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/rosidl_typesupport_fastrtps_cpp__visibility_control.h\n'}
+[6.293052] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/lib/libapriltag_msgs__rosidl_typesupport_fastrtps_cpp.so\n'}
+[6.293088] (apriltag_msgs) StdoutLine: {'line': b'-- Set non-toolchain portion of runtime path of "/root/ros2_ws/install/apriltag_msgs/lib/libapriltag_msgs__rosidl_typesupport_fastrtps_cpp.so" to ""\n'}
+[6.293127] (apriltag_msgs) StdoutLine: {'line': b'-- Up-to-date: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs\n'}
+[6.293168] (apriltag_msgs) StdoutLine: {'line': b'-- Up-to-date: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg\n'}
+[6.293214] (apriltag_msgs) StdoutLine: {'line': b'-- Up-to-date: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/detail\n'}
+[6.293251] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/detail/april_tag_detection_array__rosidl_typesupport_introspection_cpp.hpp\n'}
+[6.293288] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/detail/april_tag_detection_array__type_support.cpp\n'}
+[6.293325] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/detail/point__type_support.cpp\n'}
+[6.293364] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/detail/april_tag_detection__type_support.cpp\n'}
+[6.293409] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/detail/april_tag_detection__rosidl_typesupport_introspection_cpp.hpp\n'}
+[6.293445] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/include/apriltag_msgs/apriltag_msgs/msg/detail/point__rosidl_typesupport_introspection_cpp.hpp\n'}
+[6.293490] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/lib/libapriltag_msgs__rosidl_typesupport_introspection_cpp.so\n'}
+[6.293529] (apriltag_msgs) StdoutLine: {'line': b'-- Set non-toolchain portion of runtime path of "/root/ros2_ws/install/apriltag_msgs/lib/libapriltag_msgs__rosidl_typesupport_introspection_cpp.so" to ""\n'}
+[6.293585] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/lib/libapriltag_msgs__rosidl_typesupport_cpp.so\n'}
+[6.293655] (apriltag_msgs) StdoutLine: {'line': b'-- Set non-toolchain portion of runtime path of "/root/ros2_ws/install/apriltag_msgs/lib/libapriltag_msgs__rosidl_typesupport_cpp.so" to ""\n'}
+[6.293710] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/share/apriltag_msgs/environment/pythonpath.sh\n'}
+[6.293766] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/share/apriltag_msgs/environment/pythonpath.dsv\n'}
+[6.293821] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/lib/python3.12/site-packages/apriltag_msgs-2.0.1-py3.12.egg-info\n'}
+[6.293888] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/lib/python3.12/site-packages/apriltag_msgs-2.0.1-py3.12.egg-info/SOURCES.txt\n'}
+[6.301543] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/lib/python3.12/site-packages/apriltag_msgs-2.0.1-py3.12.egg-info/PKG-INFO\n'}
+[6.301753] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/lib/python3.12/site-packages/apriltag_msgs-2.0.1-py3.12.egg-info/top_level.txt\n'}
+[6.301838] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/lib/python3.12/site-packages/apriltag_msgs-2.0.1-py3.12.egg-info/dependency_links.txt\n'}
+[6.301944] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/lib/python3.12/site-packages/apriltag_msgs\n'}
+[6.302026] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/lib/python3.12/site-packages/apriltag_msgs/msg\n'}
+[6.302091] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/lib/python3.12/site-packages/apriltag_msgs/msg/_april_tag_detection.py\n'}
+[6.302208] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/lib/python3.12/site-packages/apriltag_msgs/msg/_april_tag_detection_array_s.c\n'}
+[6.302308] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/lib/python3.12/site-packages/apriltag_msgs/msg/_april_tag_detection_array.py\n'}
+[6.302413] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/lib/python3.12/site-packages/apriltag_msgs/msg/_point_s.c\n'}
+[6.302509] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/lib/python3.12/site-packages/apriltag_msgs/msg/__init__.py\n'}
+[6.302601] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/lib/python3.12/site-packages/apriltag_msgs/msg/_point.py\n'}
+[6.302721] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/lib/python3.12/site-packages/apriltag_msgs/msg/_april_tag_detection_s.c\n'}
+[6.302824] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/lib/python3.12/site-packages/apriltag_msgs/_apriltag_msgs_s.ep.rosidl_typesupport_introspection_c.c\n'}
+[6.302928] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/lib/python3.12/site-packages/apriltag_msgs/_apriltag_msgs_s.ep.rosidl_typesupport_fastrtps_c.c\n'}
+[6.303026] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/lib/python3.12/site-packages/apriltag_msgs/apriltag_msgs_s__rosidl_typesupport_c.so\n'}
+[6.303135] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/lib/python3.12/site-packages/apriltag_msgs/__init__.py\n'}
+[6.303218] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/lib/python3.12/site-packages/apriltag_msgs/_apriltag_msgs_s.ep.rosidl_typesupport_c.c\n'}
+[6.303321] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/lib/python3.12/site-packages/apriltag_msgs/apriltag_msgs_s__rosidl_typesupport_fastrtps_c.so\n'}
+[6.303426] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/lib/python3.12/site-packages/apriltag_msgs/apriltag_msgs_s__rosidl_typesupport_introspection_c.so\n'}
+[6.342878] (-) TimerEvent: {}
+[6.344455] (apriltag_msgs) StdoutLine: {'line': b"Listing '/root/ros2_ws/install/apriltag_msgs/lib/python3.12/site-packages/apriltag_msgs'...\n"}
+[6.344569] (apriltag_msgs) StdoutLine: {'line': b"Compiling '/root/ros2_ws/install/apriltag_msgs/lib/python3.12/site-packages/apriltag_msgs/__init__.py'...\n"}
+[6.344615] (apriltag_msgs) StdoutLine: {'line': b"Listing '/root/ros2_ws/install/apriltag_msgs/lib/python3.12/site-packages/apriltag_msgs/msg'...\n"}
+[6.344671] (apriltag_msgs) StdoutLine: {'line': b"Compiling '/root/ros2_ws/install/apriltag_msgs/lib/python3.12/site-packages/apriltag_msgs/msg/__init__.py'...\n"}
+[6.344724] (apriltag_msgs) StdoutLine: {'line': b"Compiling '/root/ros2_ws/install/apriltag_msgs/lib/python3.12/site-packages/apriltag_msgs/msg/_april_tag_detection.py'...\n"}
+[6.344762] (apriltag_msgs) StdoutLine: {'line': b"Compiling '/root/ros2_ws/install/apriltag_msgs/lib/python3.12/site-packages/apriltag_msgs/msg/_april_tag_detection_array.py'...\n"}
+[6.344799] (apriltag_msgs) StdoutLine: {'line': b"Compiling '/root/ros2_ws/install/apriltag_msgs/lib/python3.12/site-packages/apriltag_msgs/msg/_point.py'...\n"}
+[6.349129] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/lib/python3.12/site-packages/apriltag_msgs/apriltag_msgs_s__rosidl_typesupport_fastrtps_c.so\n'}
+[6.349320] (apriltag_msgs) StdoutLine: {'line': b'-- Set non-toolchain portion of runtime path of "/root/ros2_ws/install/apriltag_msgs/lib/python3.12/site-packages/apriltag_msgs/apriltag_msgs_s__rosidl_typesupport_fastrtps_c.so" to ""\n'}
+[6.349438] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/lib/python3.12/site-packages/apriltag_msgs/apriltag_msgs_s__rosidl_typesupport_introspection_c.so\n'}
+[6.349551] (apriltag_msgs) StdoutLine: {'line': b'-- Set non-toolchain portion of runtime path of "/root/ros2_ws/install/apriltag_msgs/lib/python3.12/site-packages/apriltag_msgs/apriltag_msgs_s__rosidl_typesupport_introspection_c.so" to ""\n'}
+[6.349688] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/lib/python3.12/site-packages/apriltag_msgs/apriltag_msgs_s__rosidl_typesupport_c.so\n'}
+[6.349853] (apriltag_msgs) StdoutLine: {'line': b'-- Set non-toolchain portion of runtime path of "/root/ros2_ws/install/apriltag_msgs/lib/python3.12/site-packages/apriltag_msgs/apriltag_msgs_s__rosidl_typesupport_c.so" to ""\n'}
+[6.349967] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/lib/libapriltag_msgs__rosidl_generator_py.so\n'}
+[6.350078] (apriltag_msgs) StdoutLine: {'line': b'-- Set non-toolchain portion of runtime path of "/root/ros2_ws/install/apriltag_msgs/lib/libapriltag_msgs__rosidl_generator_py.so" to ""\n'}
+[6.350200] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/share/apriltag_msgs/msg/Point.idl\n'}
+[6.350306] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/share/apriltag_msgs/msg/AprilTagDetection.idl\n'}
+[6.350410] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/share/apriltag_msgs/msg/AprilTagDetectionArray.idl\n'}
+[6.350492] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/share/apriltag_msgs/msg/Point.msg\n'}
+[6.350592] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/share/apriltag_msgs/msg/AprilTagDetection.msg\n'}
+[6.350703] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/share/apriltag_msgs/msg/AprilTagDetectionArray.msg\n'}
+[6.350838] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/share/ament_index/resource_index/package_run_dependencies/apriltag_msgs\n'}
+[6.350889] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/share/ament_index/resource_index/parent_prefix_path/apriltag_msgs\n'}
+[6.350931] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/share/apriltag_msgs/environment/ament_prefix_path.sh\n'}
+[6.350988] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/share/apriltag_msgs/environment/ament_prefix_path.dsv\n'}
+[6.351027] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/share/apriltag_msgs/environment/path.sh\n'}
+[6.351067] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/share/apriltag_msgs/environment/path.dsv\n'}
+[6.351105] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/share/apriltag_msgs/local_setup.bash\n'}
+[6.351141] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/share/apriltag_msgs/local_setup.sh\n'}
+[6.351191] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/share/apriltag_msgs/local_setup.zsh\n'}
+[6.351244] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/share/apriltag_msgs/local_setup.dsv\n'}
+[6.351283] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/share/apriltag_msgs/package.dsv\n'}
+[6.351329] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/share/ament_index/resource_index/packages/apriltag_msgs\n'}
+[6.351365] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/share/apriltag_msgs/cmake/export_apriltag_msgs__rosidl_generator_cExport.cmake\n'}
+[6.351413] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/share/apriltag_msgs/cmake/export_apriltag_msgs__rosidl_generator_cExport-noconfig.cmake\n'}
+[6.351463] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/share/apriltag_msgs/cmake/export_apriltag_msgs__rosidl_typesupport_fastrtps_cExport.cmake\n'}
+[6.351513] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/share/apriltag_msgs/cmake/export_apriltag_msgs__rosidl_typesupport_fastrtps_cExport-noconfig.cmake\n'}
+[6.351560] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/share/apriltag_msgs/cmake/apriltag_msgs__rosidl_typesupport_introspection_cExport.cmake\n'}
+[6.351670] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/share/apriltag_msgs/cmake/apriltag_msgs__rosidl_typesupport_introspection_cExport-noconfig.cmake\n'}
+[6.351734] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/share/apriltag_msgs/cmake/apriltag_msgs__rosidl_typesupport_cExport.cmake\n'}
+[6.351790] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/share/apriltag_msgs/cmake/apriltag_msgs__rosidl_typesupport_cExport-noconfig.cmake\n'}
+[6.351845] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/share/apriltag_msgs/cmake/export_apriltag_msgs__rosidl_generator_cppExport.cmake\n'}
+[6.351899] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/share/apriltag_msgs/cmake/export_apriltag_msgs__rosidl_typesupport_fastrtps_cppExport.cmake\n'}
+[6.351953] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/share/apriltag_msgs/cmake/export_apriltag_msgs__rosidl_typesupport_fastrtps_cppExport-noconfig.cmake\n'}
+[6.352008] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/share/apriltag_msgs/cmake/apriltag_msgs__rosidl_typesupport_introspection_cppExport.cmake\n'}
+[6.352057] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/share/apriltag_msgs/cmake/apriltag_msgs__rosidl_typesupport_introspection_cppExport-noconfig.cmake\n'}
+[6.352106] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/share/apriltag_msgs/cmake/apriltag_msgs__rosidl_typesupport_cppExport.cmake\n'}
+[6.352156] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/share/apriltag_msgs/cmake/apriltag_msgs__rosidl_typesupport_cppExport-noconfig.cmake\n'}
+[6.352214] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/share/apriltag_msgs/cmake/export_apriltag_msgs__rosidl_generator_pyExport.cmake\n'}
+[6.352266] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/share/apriltag_msgs/cmake/export_apriltag_msgs__rosidl_generator_pyExport-noconfig.cmake\n'}
+[6.352324] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/share/apriltag_msgs/cmake/rosidl_cmake-extras.cmake\n'}
+[6.352384] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/share/apriltag_msgs/cmake/ament_cmake_export_dependencies-extras.cmake\n'}
+[6.352438] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/share/apriltag_msgs/cmake/ament_cmake_export_include_directories-extras.cmake\n'}
+[6.352492] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/share/apriltag_msgs/cmake/ament_cmake_export_libraries-extras.cmake\n'}
+[6.352549] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/share/apriltag_msgs/cmake/ament_cmake_export_targets-extras.cmake\n'}
+[6.352607] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/share/apriltag_msgs/cmake/rosidl_cmake_export_typesupport_targets-extras.cmake\n'}
+[6.352663] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/share/apriltag_msgs/cmake/rosidl_cmake_export_typesupport_libraries-extras.cmake\n'}
+[6.352733] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/share/apriltag_msgs/cmake/apriltag_msgsConfig.cmake\n'}
+[6.352790] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/share/apriltag_msgs/cmake/apriltag_msgsConfig-version.cmake\n'}
+[6.352843] (apriltag_msgs) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_msgs/share/apriltag_msgs/package.xml\n'}
+[6.354436] (apriltag_msgs) CommandEnded: {'returncode': 0}
+[6.368444] (apriltag_msgs) JobEnded: {'identifier': 'apriltag_msgs', 'rc': 0}
+[6.369197] (apriltag_ros) JobStarted: {'identifier': 'apriltag_ros'}
+[6.378258] (apriltag_ros) JobProgress: {'identifier': 'apriltag_ros', 'progress': 'cmake'}
+[6.378537] (apriltag_ros) Command: {'cmd': ['/usr/bin/cmake', '/root/ros2_ws/src/ros2-apriltags/submodules/apriltag_ros', '-DCMAKE_INSTALL_PREFIX=/root/ros2_ws/install/apriltag_ros'], 'cwd': '/root/ros2_ws/build/apriltag_ros', 'env': OrderedDict({'HOSTNAME': 'IKIM30', 'SHLVL': '1', 'LD_LIBRARY_PATH': '/root/ros2_ws/install/apriltag_msgs/lib:/root/ros2_ws/install/apriltag/lib:/opt/ros/jazzy/opt/zenoh_cpp_vendor/lib:/opt/ros/jazzy/lib/x86_64-linux-gnu:/opt/ros/jazzy/lib', 'HOME': '/root', 'ROS_PYTHON_VERSION': '3', 'ROS_DISTRO': 'jazzy', '_': '/usr/bin/colcon', 'ROS_VERSION': '2', 'PKG_CONFIG_PATH': '/root/ros2_ws/install/apriltag/lib/x86_64-linux-gnu/pkgconfig:/root/ros2_ws/install/apriltag/lib/pkgconfig', 'TERM': 'xterm', 'PATH': '/root/ros2_ws/install/apriltag/bin:/opt/ros/jazzy/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin', 'DISPLAY': ':1', 'INTERFACE_WS': '/root/ros2_ws', 'LANG': 'C.UTF-8', 'RMW_IMPLEMENTATION': 'rmw_zenoh_cpp', 'LS_COLORS': 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=00:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.avif=01;35:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:*~=00;90:*#=00;90:*.bak=00;90:*.crdownload=00;90:*.dpkg-dist=00;90:*.dpkg-new=00;90:*.dpkg-old=00;90:*.dpkg-tmp=00;90:*.old=00;90:*.orig=00;90:*.part=00;90:*.rej=00;90:*.rpmnew=00;90:*.rpmorig=00;90:*.rpmsave=00;90:*.swp=00;90:*.tmp=00;90:*.ucf-dist=00;90:*.ucf-new=00;90:*.ucf-old=00;90:', 'ROS_DOMAIN_ID': '145', 'AMENT_PREFIX_PATH': '/root/ros2_ws/install/apriltag_msgs:/opt/ros/jazzy', 'ROS_AUTOMATIC_DISCOVERY_RANGE': 'LOCALHOST', 'PWD': '/root/ros2_ws/build/apriltag_ros', 'LC_ALL': 'C.UTF-8', 'PYTHONPATH': '/root/ros2_ws/install/apriltag_msgs/lib/python3.12/site-packages:/root/ros2_ws/install/apriltag/lib/python3.12/site-packages:/opt/ros/jazzy/lib/python3.12/site-packages', 'COLCON': '1', 'CMAKE_PREFIX_PATH': '/root/ros2_ws/install/apriltag_msgs:/root/ros2_ws/install/apriltag:/opt/ros/jazzy'}), 'shell': False}
+[6.428084] (apriltag_ros) StdoutLine: {'line': b'-- The C compiler identification is GNU 13.3.0\n'}
+[6.442967] (-) TimerEvent: {}
+[6.480801] (apriltag_ros) StdoutLine: {'line': b'-- The CXX compiler identification is GNU 13.3.0\n'}
+[6.504416] (apriltag_ros) StdoutLine: {'line': b'-- Detecting C compiler ABI info\n'}
+[6.543119] (-) TimerEvent: {}
+[6.609603] (apriltag_ros) StdoutLine: {'line': b'-- Detecting C compiler ABI info - done\n'}
+[6.617450] (apriltag_ros) StdoutLine: {'line': b'-- Check for working C compiler: /usr/bin/cc - skipped\n'}
+[6.617639] (apriltag_ros) StdoutLine: {'line': b'-- Detecting C compile features\n'}
+[6.617989] (apriltag_ros) StdoutLine: {'line': b'-- Detecting C compile features - done\n'}
+[6.633107] (apriltag_ros) StdoutLine: {'line': b'-- Detecting CXX compiler ABI info\n'}
+[6.643200] (-) TimerEvent: {}
+[6.722815] (apriltag_ros) StdoutLine: {'line': b'-- Detecting CXX compiler ABI info - done\n'}
+[6.736393] (apriltag_ros) StdoutLine: {'line': b'-- Check for working CXX compiler: /usr/bin/c++ - skipped\n'}
+[6.736634] (apriltag_ros) StdoutLine: {'line': b'-- Detecting CXX compile features\n'}
+[6.737100] (apriltag_ros) StdoutLine: {'line': b'-- Detecting CXX compile features - done\n'}
+[6.743316] (-) TimerEvent: {}
+[6.746520] (apriltag_ros) StdoutLine: {'line': b'-- Found rclcpp: 28.1.16 (/opt/ros/jazzy/share/rclcpp/cmake)\n'}
+[6.840128] (apriltag_ros) StdoutLine: {'line': b'-- Found Python3: /usr/bin/python3 (found version "3.12.3") found components: Interpreter \n'}
+[6.843383] (-) TimerEvent: {}
+[6.943622] (-) TimerEvent: {}
+[6.977181] (apriltag_ros) StdoutLine: {'line': b'-- Found rosidl_generator_c: 4.6.7 (/opt/ros/jazzy/share/rosidl_generator_c/cmake)\n'}
+[6.987321] (apriltag_ros) StdoutLine: {'line': b'-- Found rosidl_generator_cpp: 4.6.7 (/opt/ros/jazzy/share/rosidl_generator_cpp/cmake)\n'}
+[7.000207] (apriltag_ros) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c\n'}
+[7.014660] (apriltag_ros) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp\n'}
+[7.043694] (-) TimerEvent: {}
+[7.082667] (apriltag_ros) StdoutLine: {'line': b'-- Found rmw_implementation_cmake: 7.3.3 (/opt/ros/jazzy/share/rmw_implementation_cmake/cmake)\n'}
+[7.086425] (apriltag_ros) StdoutLine: {'line': b'-- Found rmw_zenoh_cpp: 0.2.9 (/opt/ros/jazzy/share/rmw_zenoh_cpp/cmake)\n'}
+[7.087607] (apriltag_ros) StdoutLine: {'line': b"-- Using RMW implementation 'rmw_zenoh_cpp' as default\n"}
+[7.143794] (-) TimerEvent: {}
+[7.156546] (apriltag_ros) StdoutLine: {'line': b'-- Found rclcpp_components: 28.1.16 (/opt/ros/jazzy/share/rclcpp_components/cmake)\n'}
+[7.186390] (apriltag_ros) StdoutLine: {'line': b'-- Found sensor_msgs: 5.3.6 (/opt/ros/jazzy/share/sensor_msgs/cmake)\n'}
+[7.241860] (apriltag_ros) StdoutLine: {'line': b'-- Found apriltag_msgs: 2.0.1 (/root/ros2_ws/install/apriltag_msgs/share/apriltag_msgs/cmake)\n'}
+[7.243857] (-) TimerEvent: {}
+[7.261764] (apriltag_ros) StdoutLine: {'line': b'-- Found tf2_ros: 0.36.19 (/opt/ros/jazzy/share/tf2_ros/cmake)\n'}
+[7.343969] (-) TimerEvent: {}
+[7.354606] (apriltag_ros) StdoutLine: {'line': b'-- Found image_transport: 5.1.7 (/opt/ros/jazzy/share/image_transport/cmake)\n'}
+[7.362944] (apriltag_ros) StdoutLine: {'line': b'-- Found TinyXML2 via Config file: /usr/lib/x86_64-linux-gnu/cmake/tinyxml2\n'}
+[7.364931] (apriltag_ros) StdoutLine: {'line': b'-- Found cv_bridge: 4.1.0 (/opt/ros/jazzy/share/cv_bridge/cmake)\n'}
+[7.378617] (apriltag_ros) StdoutLine: {'line': b'-- Performing Test CMAKE_HAVE_LIBC_PTHREAD\n'}
+[7.444097] (-) TimerEvent: {}
+[7.463782] (apriltag_ros) StdoutLine: {'line': b'-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success\n'}
+[7.464606] (apriltag_ros) StdoutLine: {'line': b'-- Found Threads: TRUE  \n'}
+[7.466205] (apriltag_ros) StdoutLine: {'line': b'-- Found OpenCV: /usr (found version "4.6.0") found components: core calib3d \n'}
+[7.486630] (apriltag_ros) StdoutLine: {'line': b'-- Found ament_lint_auto: 0.17.4 (/opt/ros/jazzy/share/ament_lint_auto/cmake)\n'}
+[7.544218] (-) TimerEvent: {}
+[7.598535] (apriltag_ros) StdoutLine: {'line': b"-- Added test 'cppcheck' to perform static code analysis on C / C++ code\n"}
+[7.598725] (apriltag_ros) StdoutLine: {'line': b'-- Configured cppcheck include dirs: \n'}
+[7.598797] (apriltag_ros) StdoutLine: {'line': b'-- Configured cppcheck exclude dirs and/or files: \n'}
+[7.599453] (apriltag_ros) StdoutLine: {'line': b'-- Configuring done (1.2s)\n'}
+[7.618858] (apriltag_ros) StdoutLine: {'line': b'-- Generating done (0.0s)\n'}
+[7.624790] (apriltag_ros) StdoutLine: {'line': b'-- Build files have been written to: /root/ros2_ws/build/apriltag_ros\n'}
+[7.631655] (apriltag_ros) CommandEnded: {'returncode': 0}
+[7.631998] (apriltag_ros) JobProgress: {'identifier': 'apriltag_ros', 'progress': 'build'}
+[7.632157] (apriltag_ros) Command: {'cmd': ['/usr/bin/cmake', '--build', '/root/ros2_ws/build/apriltag_ros', '--', '-j16', '-l16'], 'cwd': '/root/ros2_ws/build/apriltag_ros', 'env': OrderedDict({'HOSTNAME': 'IKIM30', 'SHLVL': '1', 'LD_LIBRARY_PATH': '/root/ros2_ws/install/apriltag_msgs/lib:/root/ros2_ws/install/apriltag/lib:/opt/ros/jazzy/opt/zenoh_cpp_vendor/lib:/opt/ros/jazzy/lib/x86_64-linux-gnu:/opt/ros/jazzy/lib', 'HOME': '/root', 'ROS_PYTHON_VERSION': '3', 'ROS_DISTRO': 'jazzy', '_': '/usr/bin/colcon', 'ROS_VERSION': '2', 'PKG_CONFIG_PATH': '/root/ros2_ws/install/apriltag/lib/x86_64-linux-gnu/pkgconfig:/root/ros2_ws/install/apriltag/lib/pkgconfig', 'TERM': 'xterm', 'PATH': '/root/ros2_ws/install/apriltag/bin:/opt/ros/jazzy/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin', 'DISPLAY': ':1', 'INTERFACE_WS': '/root/ros2_ws', 'LANG': 'C.UTF-8', 'RMW_IMPLEMENTATION': 'rmw_zenoh_cpp', 'LS_COLORS': 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=00:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.avif=01;35:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:*~=00;90:*#=00;90:*.bak=00;90:*.crdownload=00;90:*.dpkg-dist=00;90:*.dpkg-new=00;90:*.dpkg-old=00;90:*.dpkg-tmp=00;90:*.old=00;90:*.orig=00;90:*.part=00;90:*.rej=00;90:*.rpmnew=00;90:*.rpmorig=00;90:*.rpmsave=00;90:*.swp=00;90:*.tmp=00;90:*.ucf-dist=00;90:*.ucf-new=00;90:*.ucf-old=00;90:', 'ROS_DOMAIN_ID': '145', 'AMENT_PREFIX_PATH': '/root/ros2_ws/install/apriltag_msgs:/opt/ros/jazzy', 'ROS_AUTOMATIC_DISCOVERY_RANGE': 'LOCALHOST', 'PWD': '/root/ros2_ws/build/apriltag_ros', 'LC_ALL': 'C.UTF-8', 'PYTHONPATH': '/root/ros2_ws/install/apriltag_msgs/lib/python3.12/site-packages:/root/ros2_ws/install/apriltag/lib/python3.12/site-packages:/opt/ros/jazzy/lib/python3.12/site-packages', 'COLCON': '1', 'CMAKE_PREFIX_PATH': '/root/ros2_ws/install/apriltag_msgs:/root/ros2_ws/install/apriltag:/opt/ros/jazzy'}), 'shell': False}
+[7.644318] (-) TimerEvent: {}
+[7.677740] (apriltag_ros) StdoutLine: {'line': b'[ 10%] \x1b[32mBuilding CXX object CMakeFiles/tags.dir/src/tag_functions.cpp.o\x1b[0m\n'}
+[7.678291] (apriltag_ros) StdoutLine: {'line': b'[ 20%] \x1b[32mBuilding CXX object CMakeFiles/apriltag_node.dir/rclcpp_components/node_main_apriltag_node.cpp.o\x1b[0m\n'}
+[7.679740] (apriltag_ros) StdoutLine: {'line': b'[ 30%] \x1b[32mBuilding CXX object CMakeFiles/conversion.dir/src/conversion.cpp.o\x1b[0m\n'}
+[7.744454] (-) TimerEvent: {}
+[7.844690] (-) TimerEvent: {}
+[7.892930] (apriltag_ros) StdoutLine: {'line': b'[ 40%] \x1b[32m\x1b[1mLinking CXX static library libtags.a\x1b[0m\n'}
+[7.931221] (apriltag_ros) StdoutLine: {'line': b'[ 40%] Built target tags\n'}
+[7.944905] (-) TimerEvent: {}
+[8.045159] (-) TimerEvent: {}
+[8.145436] (-) TimerEvent: {}
+[8.245740] (-) TimerEvent: {}
+[8.346031] (-) TimerEvent: {}
+[8.446376] (-) TimerEvent: {}
+[8.546696] (-) TimerEvent: {}
+[8.647131] (-) TimerEvent: {}
+[8.747463] (-) TimerEvent: {}
+[8.847842] (-) TimerEvent: {}
+[8.948144] (-) TimerEvent: {}
+[9.048503] (-) TimerEvent: {}
+[9.050832] (apriltag_ros) StdoutLine: {'line': b'[ 50%] \x1b[32m\x1b[1mLinking CXX static library libconversion.a\x1b[0m\n'}
+[9.088762] (apriltag_ros) StdoutLine: {'line': b'[ 50%] Built target conversion\n'}
+[9.112265] (apriltag_ros) StdoutLine: {'line': b'[ 60%] \x1b[32mBuilding CXX object CMakeFiles/pose_estimation.dir/src/pose_estimation.cpp.o\x1b[0m\n'}
+[9.148684] (-) TimerEvent: {}
+[9.249086] (-) TimerEvent: {}
+[9.349364] (-) TimerEvent: {}
+[9.449656] (-) TimerEvent: {}
+[9.550031] (-) TimerEvent: {}
+[9.650309] (-) TimerEvent: {}
+[9.750637] (-) TimerEvent: {}
+[9.850931] (-) TimerEvent: {}
+[9.951308] (-) TimerEvent: {}
+[10.051712] (-) TimerEvent: {}
+[10.151997] (-) TimerEvent: {}
+[10.252363] (-) TimerEvent: {}
+[10.352915] (-) TimerEvent: {}
+[10.453660] (-) TimerEvent: {}
+[10.464107] (apriltag_ros) StdoutLine: {'line': b'[ 70%] \x1b[32m\x1b[1mLinking CXX executable apriltag_node\x1b[0m\n'}
+[10.517332] (apriltag_ros) StdoutLine: {'line': b'[ 80%] \x1b[32m\x1b[1mLinking CXX static library libpose_estimation.a\x1b[0m\n'}
+[10.553995] (-) TimerEvent: {}
+[10.557763] (apriltag_ros) StdoutLine: {'line': b'[ 80%] Built target pose_estimation\n'}
+[10.583025] (apriltag_ros) StdoutLine: {'line': b'[ 90%] \x1b[32mBuilding CXX object CMakeFiles/AprilTagNode.dir/src/AprilTagNode.cpp.o\x1b[0m\n'}
+[10.605854] (apriltag_ros) StdoutLine: {'line': b'[ 90%] Built target apriltag_node\n'}
+[10.654078] (-) TimerEvent: {}
+[10.754388] (-) TimerEvent: {}
+[10.854785] (-) TimerEvent: {}
+[10.955051] (-) TimerEvent: {}
+[11.055368] (-) TimerEvent: {}
+[11.155684] (-) TimerEvent: {}
+[11.256057] (-) TimerEvent: {}
+[11.356414] (-) TimerEvent: {}
+[11.456878] (-) TimerEvent: {}
+[11.557165] (-) TimerEvent: {}
+[11.657546] (-) TimerEvent: {}
+[11.757837] (-) TimerEvent: {}
+[11.858207] (-) TimerEvent: {}
+[11.958617] (-) TimerEvent: {}
+[12.058912] (-) TimerEvent: {}
+[12.159204] (-) TimerEvent: {}
+[12.259554] (-) TimerEvent: {}
+[12.359874] (-) TimerEvent: {}
+[12.460238] (-) TimerEvent: {}
+[12.560607] (-) TimerEvent: {}
+[12.660884] (-) TimerEvent: {}
+[12.761177] (-) TimerEvent: {}
+[12.861448] (-) TimerEvent: {}
+[12.961712] (-) TimerEvent: {}
+[13.061979] (-) TimerEvent: {}
+[13.162260] (-) TimerEvent: {}
+[13.262559] (-) TimerEvent: {}
+[13.362838] (-) TimerEvent: {}
+[13.463108] (-) TimerEvent: {}
+[13.563396] (-) TimerEvent: {}
+[13.663688] (-) TimerEvent: {}
+[13.764017] (-) TimerEvent: {}
+[13.864335] (-) TimerEvent: {}
+[13.964630] (-) TimerEvent: {}
+[14.065091] (-) TimerEvent: {}
+[14.165435] (-) TimerEvent: {}
+[14.265779] (-) TimerEvent: {}
+[14.366055] (-) TimerEvent: {}
+[14.466402] (-) TimerEvent: {}
+[14.566732] (-) TimerEvent: {}
+[14.666998] (-) TimerEvent: {}
+[14.767221] (-) TimerEvent: {}
+[14.867485] (-) TimerEvent: {}
+[14.967760] (-) TimerEvent: {}
+[15.067998] (-) TimerEvent: {}
+[15.168238] (-) TimerEvent: {}
+[15.268502] (-) TimerEvent: {}
+[15.368780] (-) TimerEvent: {}
+[15.469031] (-) TimerEvent: {}
+[15.569256] (-) TimerEvent: {}
+[15.669524] (-) TimerEvent: {}
+[15.769864] (-) TimerEvent: {}
+[15.870102] (-) TimerEvent: {}
+[15.970403] (-) TimerEvent: {}
+[16.070808] (-) TimerEvent: {}
+[16.171169] (-) TimerEvent: {}
+[16.271410] (-) TimerEvent: {}
+[16.371659] (-) TimerEvent: {}
+[16.472047] (-) TimerEvent: {}
+[16.572367] (-) TimerEvent: {}
+[16.672668] (-) TimerEvent: {}
+[16.773021] (-) TimerEvent: {}
+[16.873303] (-) TimerEvent: {}
+[16.973602] (-) TimerEvent: {}
+[17.073994] (-) TimerEvent: {}
+[17.084703] (apriltag_ros) StdoutLine: {'line': b'[100%] \x1b[32m\x1b[1mLinking CXX shared library libAprilTagNode.so\x1b[0m\n'}
+[17.174133] (-) TimerEvent: {}
+[17.274454] (-) TimerEvent: {}
+[17.374725] (-) TimerEvent: {}
+[17.435684] (apriltag_ros) StdoutLine: {'line': b'[100%] Built target AprilTagNode\n'}
+[17.447868] (apriltag_ros) CommandEnded: {'returncode': 0}
+[17.448324] (apriltag_ros) JobProgress: {'identifier': 'apriltag_ros', 'progress': 'install'}
+[17.448485] (apriltag_ros) Command: {'cmd': ['/usr/bin/cmake', '--install', '/root/ros2_ws/build/apriltag_ros'], 'cwd': '/root/ros2_ws/build/apriltag_ros', 'env': OrderedDict({'HOSTNAME': 'IKIM30', 'SHLVL': '1', 'LD_LIBRARY_PATH': '/root/ros2_ws/install/apriltag_msgs/lib:/root/ros2_ws/install/apriltag/lib:/opt/ros/jazzy/opt/zenoh_cpp_vendor/lib:/opt/ros/jazzy/lib/x86_64-linux-gnu:/opt/ros/jazzy/lib', 'HOME': '/root', 'ROS_PYTHON_VERSION': '3', 'ROS_DISTRO': 'jazzy', '_': '/usr/bin/colcon', 'ROS_VERSION': '2', 'PKG_CONFIG_PATH': '/root/ros2_ws/install/apriltag/lib/x86_64-linux-gnu/pkgconfig:/root/ros2_ws/install/apriltag/lib/pkgconfig', 'TERM': 'xterm', 'PATH': '/root/ros2_ws/install/apriltag/bin:/opt/ros/jazzy/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin', 'DISPLAY': ':1', 'INTERFACE_WS': '/root/ros2_ws', 'LANG': 'C.UTF-8', 'RMW_IMPLEMENTATION': 'rmw_zenoh_cpp', 'LS_COLORS': 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=00:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.avif=01;35:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:*~=00;90:*#=00;90:*.bak=00;90:*.crdownload=00;90:*.dpkg-dist=00;90:*.dpkg-new=00;90:*.dpkg-old=00;90:*.dpkg-tmp=00;90:*.old=00;90:*.orig=00;90:*.part=00;90:*.rej=00;90:*.rpmnew=00;90:*.rpmorig=00;90:*.rpmsave=00;90:*.swp=00;90:*.tmp=00;90:*.ucf-dist=00;90:*.ucf-new=00;90:*.ucf-old=00;90:', 'ROS_DOMAIN_ID': '145', 'AMENT_PREFIX_PATH': '/root/ros2_ws/install/apriltag_msgs:/opt/ros/jazzy', 'ROS_AUTOMATIC_DISCOVERY_RANGE': 'LOCALHOST', 'PWD': '/root/ros2_ws/build/apriltag_ros', 'LC_ALL': 'C.UTF-8', 'PYTHONPATH': '/root/ros2_ws/install/apriltag_msgs/lib/python3.12/site-packages:/root/ros2_ws/install/apriltag/lib/python3.12/site-packages:/opt/ros/jazzy/lib/python3.12/site-packages', 'COLCON': '1', 'CMAKE_PREFIX_PATH': '/root/ros2_ws/install/apriltag_msgs:/root/ros2_ws/install/apriltag:/opt/ros/jazzy'}), 'shell': False}
+[17.455168] (apriltag_ros) StdoutLine: {'line': b'-- Install configuration: ""\n'}
+[17.455336] (apriltag_ros) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_ros/lib/apriltag_ros/apriltag_node\n'}
+[17.455602] (apriltag_ros) StdoutLine: {'line': b'-- Set non-toolchain portion of runtime path of "/root/ros2_ws/install/apriltag_ros/lib/apriltag_ros/apriltag_node" to ""\n'}
+[17.455756] (apriltag_ros) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_ros/share/apriltag_ros/environment/library_path.sh\n'}
+[17.455828] (apriltag_ros) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_ros/share/apriltag_ros/environment/library_path.dsv\n'}
+[17.455885] (apriltag_ros) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_ros/lib/libAprilTagNode.so\n'}
+[17.457812] (apriltag_ros) StdoutLine: {'line': b'-- Set non-toolchain portion of runtime path of "/root/ros2_ws/install/apriltag_ros/lib/libAprilTagNode.so" to ""\n'}
+[17.457907] (apriltag_ros) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_ros/share/apriltag_ros/cfg\n'}
+[17.457957] (apriltag_ros) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_ros/share/apriltag_ros/cfg/tags_36h11.yaml\n'}
+[17.458013] (apriltag_ros) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_ros/share/apriltag_ros/launch\n'}
+[17.458074] (apriltag_ros) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_ros/share/apriltag_ros/launch/v4l2_36h11.launch.yml\n'}
+[17.458112] (apriltag_ros) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_ros/share/ament_index/resource_index/package_run_dependencies/apriltag_ros\n'}
+[17.458176] (apriltag_ros) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_ros/share/ament_index/resource_index/parent_prefix_path/apriltag_ros\n'}
+[17.458217] (apriltag_ros) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_ros/share/apriltag_ros/environment/ament_prefix_path.sh\n'}
+[17.458271] (apriltag_ros) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_ros/share/apriltag_ros/environment/ament_prefix_path.dsv\n'}
+[17.458334] (apriltag_ros) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_ros/share/apriltag_ros/environment/path.sh\n'}
+[17.458373] (apriltag_ros) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_ros/share/apriltag_ros/environment/path.dsv\n'}
+[17.458426] (apriltag_ros) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_ros/share/apriltag_ros/local_setup.bash\n'}
+[17.458482] (apriltag_ros) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_ros/share/apriltag_ros/local_setup.sh\n'}
+[17.458536] (apriltag_ros) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_ros/share/apriltag_ros/local_setup.zsh\n'}
+[17.458594] (apriltag_ros) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_ros/share/apriltag_ros/local_setup.dsv\n'}
+[17.458645] (apriltag_ros) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_ros/share/apriltag_ros/package.dsv\n'}
+[17.458709] (apriltag_ros) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_ros/share/ament_index/resource_index/packages/apriltag_ros\n'}
+[17.458765] (apriltag_ros) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_ros/share/ament_index/resource_index/rclcpp_components/apriltag_ros\n'}
+[17.458804] (apriltag_ros) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_ros/share/apriltag_ros/cmake/apriltag_rosConfig.cmake\n'}
+[17.458851] (apriltag_ros) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_ros/share/apriltag_ros/cmake/apriltag_rosConfig-version.cmake\n'}
+[17.458905] (apriltag_ros) StdoutLine: {'line': b'-- Installing: /root/ros2_ws/install/apriltag_ros/share/apriltag_ros/package.xml\n'}
+[17.459929] (apriltag_ros) CommandEnded: {'returncode': 0}
+[17.472083] (apriltag_ros) JobEnded: {'identifier': 'apriltag_ros', 'rc': 0}
+[17.472728] (-) EventReactorShutdown: {}

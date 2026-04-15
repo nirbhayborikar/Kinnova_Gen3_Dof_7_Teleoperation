@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "apriltag_msgs__py",
+		"source" : "/root/ros2_ws/build/apriltag_msgs/apriltag_msgs__py"
+	}
+}

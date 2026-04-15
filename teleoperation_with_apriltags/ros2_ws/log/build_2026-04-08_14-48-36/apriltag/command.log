@@ -1,0 +1,6 @@
+Invoking command in '/root/ros2_ws/build/apriltag': CMAKE_PREFIX_PATH=/opt/ros/jazzy /usr/bin/cmake /root/ros2_ws/src/ros2-apriltags/submodules/apriltag -DCMAKE_INSTALL_PREFIX=/root/ros2_ws/install/apriltag
+Invoked command in '/root/ros2_ws/build/apriltag' returned '0': CMAKE_PREFIX_PATH=/opt/ros/jazzy /usr/bin/cmake /root/ros2_ws/src/ros2-apriltags/submodules/apriltag -DCMAKE_INSTALL_PREFIX=/root/ros2_ws/install/apriltag
+Invoking command in '/root/ros2_ws/build/apriltag': CMAKE_PREFIX_PATH=/opt/ros/jazzy /usr/bin/cmake --build /root/ros2_ws/build/apriltag -- -j16 -l16
+Invoked command in '/root/ros2_ws/build/apriltag' returned '0': CMAKE_PREFIX_PATH=/opt/ros/jazzy /usr/bin/cmake --build /root/ros2_ws/build/apriltag -- -j16 -l16
+Invoking command in '/root/ros2_ws/build/apriltag': CMAKE_PREFIX_PATH=/opt/ros/jazzy /usr/bin/cmake --install /root/ros2_ws/build/apriltag
+Invoked command in '/root/ros2_ws/build/apriltag' returned '0': CMAKE_PREFIX_PATH=/opt/ros/jazzy /usr/bin/cmake --install /root/ros2_ws/build/apriltag

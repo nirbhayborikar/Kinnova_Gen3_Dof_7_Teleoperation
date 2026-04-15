@@ -1,0 +1,17 @@
+LICENSE
+package.xml
+setup.cfg
+setup.py
+../../build/follower_node/follower_node.egg-info/PKG-INFO
+../../build/follower_node/follower_node.egg-info/SOURCES.txt
+../../build/follower_node/follower_node.egg-info/dependency_links.txt
+../../build/follower_node/follower_node.egg-info/entry_points.txt
+../../build/follower_node/follower_node.egg-info/requires.txt
+../../build/follower_node/follower_node.egg-info/top_level.txt
+../../build/follower_node/follower_node.egg-info/zip-safe
+follower_node/__init__.py
+follower_node/apriltag_follower.py
+resource/follower_node
+test/test_copyright.py
+test/test_flake8.py
+test/test_pep257.py
