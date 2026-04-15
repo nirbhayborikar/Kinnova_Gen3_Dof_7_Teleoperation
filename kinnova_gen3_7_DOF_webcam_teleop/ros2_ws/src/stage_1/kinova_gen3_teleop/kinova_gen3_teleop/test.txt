@@ -1095,3 +1095,18 @@ effort nan
 
 Having the phone send data twice as fast as the robot 
 reads it is the perfect setup for minimizing latency
+
+rotation.sensor.rotation_vector
+
+"type":"android.sensor.rotation_vector"}{"timestamp":1079185177367330,"values":[0.016176637,0.0050351284,0.14927568,0.98865044,-1.0],"type":"android.sensor.rotation_vector"}
+
+
+
+
+android.sensor.gyroscope
+
+"type":"android.sensor.gyroscope"}{"timestamp":1079253825463035,"values":[2.663159E-4,9.321057E-4,-5.326318E-4],"type":"android.sensor.gyroscope"}{"timestamp":1079253835490275,"values":[0.0013315795,0.0041278964,-0.0015978955],"type":"android.sensor.gyroscope"}{"t
+
+
+android.sensor.accelerometer
+"type":"android.sensor.accelerometer"}{"timestamp":1079220169782723,"values":[-0.037387855,0.37567315,9.759426],"type":"android.sensor.accelerometer"}{"timestamp":1079220179785379,"values":[-0.085244305,0.3469593,9.78814],"type":"android.sensor.accelerometer"}{"timestamp":1079220189811421,"values":[-0.09720842,0.30149564,9.94158],"type":"andr

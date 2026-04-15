@@ -7,6 +7,7 @@ services:
     container_name: kinova_gen3_teleop
     stdin_open: true
     tty: true
+    network_mode: "host"
     environment:
       - DISPLAY=${DISPLAY}
       - RMW_IMPLEMENTATION=rmw_cyclonedds_cpp  # cyclonedds # zenoh
