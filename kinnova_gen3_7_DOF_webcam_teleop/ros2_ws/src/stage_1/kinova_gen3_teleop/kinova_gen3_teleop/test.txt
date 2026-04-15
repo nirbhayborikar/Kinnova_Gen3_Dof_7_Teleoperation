@@ -1118,3 +1118,7 @@ Twist Linear Control (Translation Mode): This mode allows the end effector to be
 Twist Angular Control (Rotation Mode): This mode is used to change the orientation (pitch, yaw, roll) of the gripper (end effector) without altering its position.
 Combined/Other Modes: A "Twist combined" mapping exists, which brings both Twist linear and Angular maps together. In this mode, you can toggle or switch to rotate the gripper by using specific buttons (often by holding a trigger or button) to switch the joystick controls from translation to orientation.
 Gamepad Controls: The robot typically starts in Twist Linear mode. Switching between translation and rotation is done using the gamepad’s View or Menu buttons to cycle through control maps
+
+
+
+https://github.com/baqwas/FtcRobotController/wiki/TeleOpPreviewEvent 
