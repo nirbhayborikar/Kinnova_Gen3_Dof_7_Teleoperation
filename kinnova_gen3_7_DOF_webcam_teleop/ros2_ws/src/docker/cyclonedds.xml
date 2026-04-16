@@ -1,0 +1,13 @@
+<CycloneDDS>
+ <Domain>
+     <General>
+         <Interfaces>
+             <NetworkInterface name="usb0"/>
+             <!-- For less traffic, force multicast usage on loopback even if not configured.         -->
+             <!-- All ROS Nodes and bridges must have this same config, otherwise they won't discover -->
+             <NetworkInterface address="192.168.7.200" multicast="true"/> 
+         </Interfaces>
+         <DontRoute>true</DontRoute>
+     </General>
+ </Domain>
+</CycloneDDS>

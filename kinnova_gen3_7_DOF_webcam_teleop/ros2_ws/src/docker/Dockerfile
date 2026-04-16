@@ -11,8 +11,7 @@ SHELL ["/bin/bash", "-c"]
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential cmake git wget python3-pip \
     python3-colcon-common-extensions python3-rosdep python3-vcstool \
-    ros-${ROS_DISTRO}-moveit \
-    ros-${ROS_DISTRO}-moveit-servo \
+
     ros-${ROS_DISTRO}-joint-state-publisher \
     ros-${ROS_DISTRO}-joint-state-publisher-gui \
     ros-${ROS_DISTRO}-robot-state-publisher \

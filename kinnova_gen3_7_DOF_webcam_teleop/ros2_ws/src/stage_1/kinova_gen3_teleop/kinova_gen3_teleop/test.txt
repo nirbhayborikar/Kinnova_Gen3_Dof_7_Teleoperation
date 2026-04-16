@@ -1145,3 +1145,43 @@ rmw-cyclonedds-cpp to zenoh cpp
 This bridge acts as a translator, allowing DDS-based nodes to appear as native Zenoh nodes and vice versa
 
 2.
+
+# 1. Check zenohd is up
+curl http://localhost:8000/router/local
+
+# 2. Check bridge is bridging correct domain
+docker logs zenoh_bridge_dds | grep "domain"
+
+
+"listen": { "endpoints": ["tcp/[::]:7448"] }
+
+
+
+# 2. Force your PC to download the correct 1.0.2 versions from the internet
+docker pull eclipse/zenoh:1.0.2
+docker pull eclipse/zenoh-bridge-ros2dds:1.0.2
+
+
+
+#3. delete cache
+docker builder prune -f
+
+
+
+
+
+
+
+
+
+
+########################
+
+
+1.
+
+docker pull eclipse/zenoh-bridge-ros2dds:nightly
+
+
+2. 
+

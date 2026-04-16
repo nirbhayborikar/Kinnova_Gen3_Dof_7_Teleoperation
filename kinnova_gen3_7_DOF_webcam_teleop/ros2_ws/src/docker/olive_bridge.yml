@@ -1,8 +1,7 @@
 services:
-
   # ─── Zenoh Router (required for rmw_zenoh_cpp) ────────────────────────────
   zenohd:
-    image: eclipse/zenoh:latest
+    image: eclipse/zenoh:1.0.2
     container_name: zenohd_router
     network_mode: host
     restart: always
@@ -10,19 +9,26 @@ services:
 
   # ─── Zenoh <-> CycloneDDS Bridge (talks to Olive Sense X1) ────────────────
   zenoh_bridge:
-    image: eclipse/zenoh-bridge-ros2dds:latest
+    image: eclipse/zenoh-bridge-ros2dds:1.0.2
     container_name: zenoh_bridge_dds
     network_mode: host
     restart: always
     depends_on:
       - zenohd
+    environment:
+      - ROS_DISTRO=jazzy
+
+
+    volumes:
+      - ./cyclonedds.xml:/cyclonedds.xml:ro
     command:
-      - "-d"
-      - "145"                        # ← DDS domain ID (must match ROS_DOMAIN_ID)
+      - "-d"                   # ← run as client, don't open a listener on 7447
+      - "140"                        # ← DDS domain ID (must match ROS_DOMAIN_ID)
       - "-e"
       - "tcp/localhost:7447"         # ← connect to local zenohd router
       - "--rest-http-port"
       - "8001"
+      - "client"
 
   # ─── Kinova Teleop ────────────────────────────────────────────────────────
   kinova_teleop:
@@ -33,6 +39,8 @@ services:
     container_name: kinova_gen3_teleop
     stdin_open: true
     tty: true
+    network_mode: host
+    privileged: true
     depends_on:
       - zenohd
     environment:
@@ -46,17 +54,15 @@ services:
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
       - ../stage_1:/ros2_ws/src/stage_1:rw
-      - ./zenoh_config.json5:/zenoh_config.json5:ro   # ← mount config
+      - ./zenoh_config.json5:/zenoh_config.json5:rw
     devices:
       - /dev/video0:/dev/video0
-    network_mode: host
-    privileged: true
     command:
       - bash
       - -c
       - |
         source /opt/ros/jazzy/setup.bash &&
-        source install/setup.bash &&
+        cd /ros2_ws &&
         colcon build --packages-select gesture_control &&
         source install/setup.bash &&
         tail -f /dev/null

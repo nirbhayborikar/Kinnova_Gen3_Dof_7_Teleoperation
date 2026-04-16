@@ -7,7 +7,7 @@ if [ -f "/ros2_ws/install/setup.bash" ]; then
   source /ros2_ws/install/setup.bash
 fi
 
-# Zenoh router config for rmw_zenoh_cpp
-export ZENOH_RUNTIME_CONFIG=/zenoh_config.json5
+# Zenoh client session config for rmw_zenoh_cpp
+export ZENOH_SESSION_CONFIG_URI=/zenoh_config.json5
 
 exec "$@"
