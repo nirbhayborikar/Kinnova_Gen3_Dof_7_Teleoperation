@@ -1122,3 +1122,26 @@ Gamepad Controls: The robot typically starts in Twist Linear mode. Switching bet
 
 
 https://github.com/baqwas/FtcRobotController/wiki/TeleOpPreviewEvent 
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+-------------cross conection............................
+
+rmw-cyclonedds-cpp to zenoh cpp
+
+
+1. To connect your Olive Sense X1 (using rmw_cyclonedds_cpp) to your Kinova Gen3 (using rmw_zenoh_cpp), you must use the zenoh-bridge-ros2dds. 
+This bridge acts as a translator, allowing DDS-based nodes to appear as native Zenoh nodes and vice versa
+
+2.

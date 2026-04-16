@@ -1,0 +1,62 @@
+services:
+
+  # ─── Zenoh Router (required for rmw_zenoh_cpp) ────────────────────────────
+  zenohd:
+    image: eclipse/zenoh:latest
+    container_name: zenohd_router
+    network_mode: host
+    restart: always
+    command: ["--rest-http-port", "8000"]
+
+  # ─── Zenoh <-> CycloneDDS Bridge (talks to Olive Sense X1) ────────────────
+  zenoh_bridge:
+    image: eclipse/zenoh-bridge-ros2dds:latest
+    container_name: zenoh_bridge_dds
+    network_mode: host
+    restart: always
+    depends_on:
+      - zenohd
+    command:
+      - "-d"
+      - "145"                        # ← DDS domain ID (must match ROS_DOMAIN_ID)
+      - "-e"
+      - "tcp/localhost:7447"         # ← connect to local zenohd router
+      - "--rest-http-port"
+      - "8001"
+
+  # ─── Kinova Teleop ────────────────────────────────────────────────────────
+  kinova_teleop:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: kinova_gen3_teleop
+    container_name: kinova_gen3_teleop
+    stdin_open: true
+    tty: true
+    depends_on:
+      - zenohd
+    environment:
+      - DISPLAY=${DISPLAY}
+      - RMW_IMPLEMENTATION=rmw_zenoh_cpp
+      - QT_X11_NO_MITSHM=1
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - ROS_DOMAIN_ID=145
+      - ZENOH_ROUTER_CHECK_TIMEOUT=30   # ← wait for router to be ready
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - ../stage_1:/ros2_ws/src/stage_1:rw
+      - ./zenoh_config.json5:/zenoh_config.json5:ro   # ← mount config
+    devices:
+      - /dev/video0:/dev/video0
+    network_mode: host
+    privileged: true
+    command:
+      - bash
+      - -c
+      - |
+        source /opt/ros/jazzy/setup.bash &&
+        source install/setup.bash &&
+        colcon build --packages-select gesture_control &&
+        source install/setup.bash &&
+        tail -f /dev/null
