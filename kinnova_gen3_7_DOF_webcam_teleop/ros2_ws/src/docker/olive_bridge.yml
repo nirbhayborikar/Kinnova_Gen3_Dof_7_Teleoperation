@@ -19,11 +19,11 @@ services:
       - ROS_DISTRO=jazzy
 
 
-    volumes:
-      - ./cyclonedds.xml:/cyclonedds.xml:ro
+    # volumes:
+    #   - ./cyclonedds.xml:/cyclonedds.xml:ro
     command:
       - "-d"                   # ← run as client, don't open a listener on 7447
-      - "140"                        # ← DDS domain ID (must match ROS_DOMAIN_ID)
+      - "145"                        # ← DDS domain ID (must match ROS_DOMAIN_ID)
       - "-e"
       - "tcp/localhost:7447"         # ← connect to local zenohd router
       - "--rest-http-port"
