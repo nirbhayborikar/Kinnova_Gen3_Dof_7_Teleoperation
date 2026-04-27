@@ -72,3 +72,10 @@ volumes:
 #         sleep 5
         
 #        ros2 launch apriltag_ros apriltag.launch.py image_rect_topic:=/image_raw camera_info_topic:=/camera_info &
+
+
+
+# for astra use this 
+# ros2 launch apriltag_ros apriltag.launch.py \
+#   image_rect_topic:=/camera/color/image_raw \
+#   camera_info_topic:=/camera/color/camera_info
