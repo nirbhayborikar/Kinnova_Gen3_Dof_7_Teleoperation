@@ -1,0 +1,74 @@
+services:
+  kinova_teleop:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: kinova_gen3_teleop
+    container_name: kinova_gen3_teleop
+    stdin_open: true
+    tty: true
+    environment:
+      - DISPLAY=${DISPLAY}
+      - RMW_IMPLEMENTATION=rmw_zenoh_cpp  # cyclonedds # zenoh
+      - QT_X11_NO_MITSHM=1
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - ROS_DOMAIN_ID=145
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      
+      # - ../stage_1/kinova_gen3_teleop:/ros2_ws/src/stage_1/kinova_gen3_teleop:rw
+      - ../stage_1:/root/ros2_ws/src/stage_1:rw  
+      - /home/nirbhayborikar/Documents/My_Resume_Porfolio_Website/GITHUB_LOCAL/apriltag:/root/ros2_ws/src/stage_1/apriltag:rw  
+      - apriltag_shared_install:/root/ros2_ws/install:rw
+
+    devices:
+      - /dev/video0:/dev/video0 # webcam
+    network_mode: host
+    privileged: true
+    command:
+      - bash
+      - -c
+      - |
+        source /opt/ros/jazzy/setup.bash &&
+        colcon build --symlink-install --packages-select apriltag apriltag_msgs apriltag_ros webcam_tag_detection &&
+        source /root/ros2_ws/install/setup.bash &&
+        ros2 run rmw_zenoh_cpp rmw_zenohd &
+
+        tail -f /dev/null
+
+# ========== EXTERNAL VOLUME DEFINITION ==========
+volumes:
+  apriltag_shared_install:
+    external: true
+    name: apriltag_shared_install
+    
+# ros2 run usb_cam usb_cam_node_exe (webcam)
+#ros2 launch kinova_gen3_teleop teleop.launch.py &&
+#colcon build --packages-select kinova_gen3_teleop &&source install/setup.bash && # the package colcon build
+
+#ros2 launch kinova_gen3_7dof_robotiq_2f_85_moveit_config robot.launch.py robot_ip:=192.168.1.10 use_fake_hardware:=true use_sim_time:=false &&
+
+#colcon build --packages-select kortex_description kinova_gen3_teleop &&     
+
+
+# sleep 8 &&
+# source install/setup.bash &&
+# sleep 3 &&
+# ros2 run kinova_gen3_teleop arm_controller &
+# ros2 launch kinova_gen3_teleop teleop.launch.py # to start the package 
+
+# Terminal 1: Start camera
+# ros2 run usb_cam usb_cam_node_exe
+
+# # Terminal 2: Start AprilTag detection
+# ros2 run apriltag_ros apriltag_node --ros-args \
+#   -r image_rect:=/camera/image_raw \
+#   -r camera_info:=/camera/camera_info \
+#   --params-file `ros2 pkg prefix apriltag_ros`/share/apriltag_ros/cfg/tags_36h11.yaml
+
+# # Terminal 3: Echo detections
+# ros2 topic echo /detections
+#         sleep 5
+        
+#        ros2 launch apriltag_ros apriltag.launch.py image_rect_topic:=/image_raw camera_info_topic:=/camera_info &

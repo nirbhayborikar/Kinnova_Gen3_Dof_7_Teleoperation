@@ -1184,4 +1184,187 @@ docker pull eclipse/zenoh-bridge-ros2dds:nightly
 
 
 2. 
+#################################################apriltag#######################################
+
+
+ros2 run rmw_zenoh_cpp rmw_zenohd  (start zenoh router before launching camera)
+Then in another terminal:
+
+ros2 run usb_cam usb_cam_node_exe
+
+The webcam topic 
+will now available
+
+/camera_info
+/image_raw
+/image_raw/compressed
+/image_raw/compressedDepth
+/image_raw/theora
+/image_raw/zstd
+
+
+Then in another terminal:
+
+ros2 launch apriltag_ros apriltag.launch.py \
+  image_rect_topic:=/image_raw \
+  camera_info_topic:=/camera_info
+
+
+If you want accurate pose estimation: for rectified image
+
+step 1
+ros2 run image_proc image_proc
+
+
+ros2 launch apriltag_ros apriltag.launch.py \
+  image_rect_topic:=/image_rect \
+  camera_info_topic:=/camera_info
+
+
+  basically here images is rectified
+camera → /image_raw
+      → image_proc → /image_rect
+      → apriltag_ros
+
+
+      ##############################
+  
+ros2 interface show apriltag_msgs/msg/AprilTagDetectionArray
+std_msgs/Header header
+	builtin_interfaces/Time stamp
+		int32 sec
+		uint32 nanosec
+	string frame_id
+AprilTagDetection[] detections
+	string family
+	int32 id
+	int32 hamming
+	float32 goodness
+	float32 decision_margin
+	Point centre                    #
+		float64 x
+		float64 y
+	Point[4] corners                #
+		float64 x
+		float64 y
+	float64[9] homography           #
+
+
+
+      y: 55.368625640869105
+  - x: 203.92504882812503
+    y: 71.31938934326172
+  homography:
+  - 107.14228487747778
+  - -5.771979152037241
+  - 315.5826811891242
+  - -9.832667000861639
+  - 110.04062748721498
+  - 175.1251709792919
+  - -0.02627759286356062
+  - -0.02416901335120172
+  - 1.0
+---
+header:
+  stamp:
+    sec: 1777208425
+    nanosec: 407133000
+  frame_id: default_cam
+detections:
+- family: tag36h11
+  id: 0
+  hamming: 0
+  goodness: 0.0
+  decision_margin: 139.41064453125
+  centre:
+    x: 315.223687869059
+    y: 175.34339992116614
+  corners:
+  - x: 201.96479797363276
+    y: 294.50170898437506
+  - x: 438.7496643066406
+    y: 290.37499999999994
+  - x: 429.0671691894532
+    y: 55.57004928588866
+  - x: 203.71539306640625
+    y: 71.50307464599615
+  homography:
+  - 106.9155019267534
+  - -5.8235039691854045
+  - 315.223687869059
+  - -9.86606880072363
+  - 110.05032646294615
+  - 175.34339992116614
+  - -0.026852872878931358
+  - -0.024278741125756745
+  - 1.0
+---
+header:
+  stamp:
+    sec: 1777208425
+    nanosec: 439149000
+  frame_id: default_cam
+detections:
+- family: tag36h11
+  id: 0
+  hamming: 0
+  goodness: 0.0
+  decision_margin: 139.4303436279297
+  centre:
+    x: 315.2269168707415
+    y: 175.5916015181093
+  corners:
+  - x: 201.943359375
+    y: 294.95654296875006
+  - x: 438.7682800292969
+    y: 290.34252929687494
+  - x: 428.83453369140625
+    y: 55.88520431518555
+  - x: 203.56210327148438
+    y: 71.8721618652344
+  homography:
+  - 107.19061828471621
+  - -5.804511823274405
+  - 315.2269168707415
+  - -9.847951980755587
+  - 109.9382637591304
+  - 175.5916015181093
+  - -0.0259612333066392
+  - -0.024532974468896213
+  - 1.0
+---
+header:
+  stamp:
+    sec: 1777208425
+    nanosec: 475153000
+  frame_id: default_cam
+detections:
+- family: tag36h11
+  id: 0
+  hamming: 0
+  goodness: 0.0
+  decision_margin: 139.71481323242188
+  centre:
+    x: 314.9031707659331
+    y: 175.51631473083114
+  corners:
+  - x: 201.68399047851565
+    y: 294.857666015625
+  - x: 438.5057067871094
+    y: 290.1308898925781
+  - x: 428.49139404296875
+    y: 55.78596496582029
+  - x: 203.23785400390628
+    y: 71.97092437744146
+  homography:
+  - 107.1221393927907
+  - -5.768876726991133
+  - 314.9031707659331
+  - -9.9637257612681
+  - 109.85739449432717
+  - 175.51631473083114
+  - -0.026182983084806467
+  - -0.024555862524285127
+  - 1.0
+---
 

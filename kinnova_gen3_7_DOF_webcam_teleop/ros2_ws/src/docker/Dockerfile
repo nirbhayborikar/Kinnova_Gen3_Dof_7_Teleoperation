@@ -11,21 +11,11 @@ SHELL ["/bin/bash", "-c"]
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential cmake git wget python3-pip \
     python3-colcon-common-extensions python3-rosdep python3-vcstool \
-
-    ros-${ROS_DISTRO}-joint-state-publisher \
-    ros-${ROS_DISTRO}-joint-state-publisher-gui \
-    ros-${ROS_DISTRO}-robot-state-publisher \
-    ros-${ROS_DISTRO}-xacro \
-    ros-${ROS_DISTRO}-ros2-control \
-    ros-${ROS_DISTRO}-ros2-controllers \
-    ros-${ROS_DISTRO}-controller-manager \
-    ros-${ROS_DISTRO}-joint-trajectory-controller \
-    ros-${ROS_DISTRO}-joint-state-broadcaster \
-    ros-${ROS_DISTRO}-gripper-controllers \
     ros-${ROS_DISTRO}-rviz2 \
     ros-${ROS_DISTRO}-tf2-tools \
     ros-${ROS_DISTRO}-tf-transformations \
     ros-${ROS_DISTRO}-generate-parameter-library \
+    ros-jazzy-usb-cam \
     ros-jazzy-rmw-zenoh-cpp \
     ros-jazzy-rmw-cyclonedds-cpp \
     # Camera & GUI
@@ -45,8 +35,9 @@ RUN pip3 install --no-cache-dir --break-system-packages \
     scipy \
     transforms3d
 
+
 # ---- Create Workspace ----
-ENV WS=/ros2_ws
+ENV WS=/root/ros2_ws
 RUN mkdir -p ${WS}/src
 WORKDIR ${WS}/src
 
@@ -69,7 +60,7 @@ RUN source /opt/ros/${ROS_DISTRO}/setup.bash && \
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 RUN echo 'source /opt/ros/${ROS_DISTRO}/setup.bash' >> /root/.bashrc && \
-    echo 'if [ -f "/ros2_ws/install/setup.bash" ]; then source /ros2_ws/install/setup.bash; fi' >> /root/.bashrc
+    echo 'if [ -f "/root/ros2_ws/install/setup.bash" ]; then source /root/ros2_ws/install/setup.bash; fi' >> /root/.bashrc
 
 WORKDIR ${WS}
 ENTRYPOINT ["/entrypoint.sh"]
