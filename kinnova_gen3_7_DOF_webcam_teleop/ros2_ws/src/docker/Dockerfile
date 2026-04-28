@@ -18,7 +18,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-jazzy-usb-cam \
     ros-jazzy-rmw-zenoh-cpp \
     ros-jazzy-rmw-cyclonedds-cpp \
-    # Camera & GUI
+    ros-${ROS_DISTRO}-cv-bridge \
+    ros-jazzy-control-msgs \
     libv4l-dev \
     v4l-utils \
     mesa-utils \
@@ -31,7 +32,7 @@ RUN pip3 install --no-cache-dir --break-system-packages \
     "numpy<2" \
     matplotlib==3.9.0 \
     mediapipe==0.10.14 \
-    opencv-python-headless \
+    opencv-python \
     scipy \
     transforms3d
 

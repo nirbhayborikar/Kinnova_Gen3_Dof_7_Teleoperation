@@ -10,6 +10,16 @@ from geometry_msgs.msg import Twist
 from tf2_ros import Buffer, TransformListener, TransformException
 import math
 
+# Do action client
+from rclpy.action import ActionClient
+from control_msgs.action import GripperCommand
+
+import cv2
+import mediapipe as mp
+from cv_bridge import CvBridge
+from sensor_msgs.msg import Image
+
+
 class AprilTagTeleop(Node):
     def __init__(self):
         super().__init__('apriltag_teleop')
@@ -19,7 +29,7 @@ class AprilTagTeleop(Node):
         self.declare_parameter('speed_scale', 2.0)     # Sensitivity multiplier
         self.declare_parameter('max_speed', 0.05)       # Safety speed limit (m/s)
         self.declare_parameter('camera_frame', 'camera_link') 
-        self.declare_parameter('tag_frame', 'tag36h11_0')    # Default AprilTag ID 0
+        self.declare_parameter('tag_frame', 'tag36h11_12')    # Default AprilTag ID 0
 
         self.rate = self.get_parameter('rate').value
         self.scale = self.get_parameter('speed_scale').value
@@ -46,6 +56,40 @@ class AprilTagTeleop(Node):
         self.dead_zone = self.get_parameter('dead_zone').value
         self.timeout = self.get_parameter('tag_timeout').value
 
+
+
+        # ==========================================
+        # GRIPPER ACTION CLIENT SETUP
+        # ==========================================
+        self.gripper_client = ActionClient(
+            self, 
+            GripperCommand, 
+            '/robotiq_gripper_controller/gripper_cmd'
+        )
+        self.last_gripper_state = None # Tracks if it is currently open or closed
+
+
+
+
+        # ==========================================
+        # MEDIAPIPE & CAMERA SUBSCRIPTION SETUP
+        # ==========================================
+        self.bridge = CvBridge()
+        
+        # Initialize the MediaPipe AI
+        self.mp_hands = mp.solutions.hands.Hands(
+            min_detection_confidence=0.7,
+            min_tracking_confidence=0.7,
+            max_num_hands=1 # Only track 1 hand so it doesn't get confused!
+        )
+        
+        # Subscribe to the camera so _image_cb actually runs!
+        self.image_sub = self.create_subscription(
+            Image, 
+            '/camera/color/image_raw', # Make sure this matches your camera topic!
+            self._image_cb, 
+            10
+        )
 
 
 
@@ -85,6 +129,78 @@ class AprilTagTeleop(Node):
         if abs(value) <= deadzone: # 0.05
             return 0.0
         return (abs(value) - deadzone) * math.copysign(1.0, value)
+
+
+
+
+    def _send_gripper_command(self, close=True):
+        """Sends the exact motor positions to the Robotiq Gripper."""
+        if not self.gripper_client.wait_for_server(timeout_sec=0.1):
+            self.get_logger().warn('Gripper action server not ready')
+            return
+
+        goal = GripperCommand.Goal()
+        # 0.4867 = Closed | 0.0713 = Open (From your physical testing!)
+        goal.command.position = 0.4867 if close else 0.0713
+        
+        self.get_logger().info(f'Sending Gripper Goal: {"CLOSE" if close else "OPEN"}')
+        self.gripper_client.send_goal_async(goal)
+
+
+
+
+    def _image_cb(self, msg):
+            """Processes the raw camera image using MediaPipe to detect finger pinches."""
+            try:
+                # 1. Convert ROS Image to OpenCV format
+                cv_image = self.bridge.imgmsg_to_cv2(msg, desired_encoding='bgr8')
+                
+                # 2. MediaPipe requires RGB color space
+                rgb_image = cv2.cvtColor(cv_image, cv2.COLOR_BGR2RGB)
+                
+                # 3. Run the AI model
+                results = self.mp_hands.process(rgb_image)
+                
+                # 4. If a hand is found...
+                if results.multi_hand_landmarks:
+                    hand = results.multi_hand_landmarks[0]
+                    
+                    # Get coordinates of Thumb Tip (4) and Index Tip (8)
+                    thumb = hand.landmark[mp.solutions.hands.HandLandmark.THUMB_TIP]
+                    index = hand.landmark[mp.solutions.hands.HandLandmark.INDEX_FINGER_TIP]
+                    
+                    # 5. Calculate 2D distance between fingers
+                    # MediaPipe coordinates are normalized from 0.0 to 1.0
+                    
+                    # 5. Calculate 2D distance between Thumb (4) and Index (8)
+                    pinch_dist = math.hypot(thumb.x - index.x, thumb.y - index.y)
+                    
+                    # 6. TRIGGER YOUR GRIPPER ACTION CLIENT
+                    # Distance < 0.05 (Fingers Closed together)
+                    if pinch_dist < 0.05 and self.last_gripper_state != True:
+                        self.last_gripper_state = True
+                        self._send_gripper_command(close=True)
+                        
+                    # Distance > 0.10 (Fingers Open wide)
+                    elif pinch_dist > 0.10 and self.last_gripper_state != False:
+                        self.last_gripper_state = False
+                        self._send_gripper_command(close=False)
+
+            except Exception as e:
+                self.get_logger().error(f"MediaPipe Error: {e}")
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
