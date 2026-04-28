@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+ #!/usr/bin/env python3
 """
 AprilTag 3D Linear Teleop Node for Kinova Gen3.
 Tracks absolute position via TF2 and uses derivatives to calculate Twist velocities.
@@ -20,6 +20,13 @@ class AprilTagTeleop(Node):
         self.declare_parameter('max_speed', 0.1)       # Safety speed limit (m/s)
         self.declare_parameter('camera_frame', 'camera_link') 
         self.declare_parameter('tag_frame', 'tag36h11_0')    # Default AprilTag ID 0
+
+        # --- Angular Parameters (Radians) ---
+        self.declare_parameter('max_angular_speed', 1.0) # Rad/s (~57 deg/s)
+        self.declare_parameter('angular_dead_zone', 0.1) # Rad/s (~5.7 deg/s)
+
+
+
 
         self.rate = self.get_parameter('rate').value
         self.scale = self.get_parameter('speed_scale').value
@@ -46,6 +53,10 @@ class AprilTagTeleop(Node):
         self.dead_zone = self.get_parameter('dead_zone').value
         self.timeout = self.get_parameter('tag_timeout').value
 
+        # angular parameter 
+        self.max_angular = self.get_parameter('max_angular_speed').value
+        self.angular_dead_zone = self.get_parameter('angular_dead_zone').value
+
 
 
 
@@ -70,6 +81,23 @@ class AprilTagTeleop(Node):
         self.current_vx = 0.0
         self.current_vy = 0.0
         self.current_vz = 0.0
+
+
+
+
+        # the robot current angular memory
+
+        # Angular memory
+        self.prev_roll = None
+        self.prev_pitch = None
+        self.prev_yaw = None
+        
+        # Filtered angular states
+        self.current_wx = 0.0
+        self.current_wy = 0.0
+        self.current_wz = 0.0
+
+
 
         self.timer = self.create_timer(1.0 / self.rate, self._timer_cb)
 
@@ -144,6 +172,7 @@ class AprilTagTeleop(Node):
             if self.prev_x is None:
                 # Set the new Anchor Point
                 self.prev_x, self.prev_y, self.prev_z = curr_x, curr_y, curr_z
+                self.prev_roll, self.prev_pitch, self.prev_yaw = roll, pitch, yaw
                 self.prev_time = current_time
                 self.get_logger().info("--- TAG ACQUIRED! ---")
                 return
@@ -155,6 +184,61 @@ class AprilTagTeleop(Node):
             raw_vx = (curr_x - self.prev_x) / dt
             raw_vy = (curr_y - self.prev_y) / dt
             raw_vz = (curr_z - self.prev_z) / dt
+
+
+ ########################### roll pitch ya
+ # If this is the first frame, save angles and skip math
+            if self.prev_roll is None:
+                self.prev_roll, self.prev_pitch, self.prev_yaw = roll, pitch, yaw
+                # ... (save position memory as well) ...
+                return
+
+            # 1. Find the change in angle (and fix the 360-degree snap problem)
+            d_roll = roll - self.prev_roll
+            d_pitch = pitch - self.prev_pitch
+            d_yaw = yaw - self.prev_yaw
+
+            # Fix angle wrapping (so math doesn't freak out if you cross from 180 to -180)
+            if d_roll > 180: d_roll -= 360
+            elif d_roll < -180: d_roll += 360
+            if d_pitch > 180: d_pitch -= 360
+            elif d_pitch < -180: d_pitch += 360
+            if d_yaw > 180: d_yaw -= 360
+            elif d_yaw < -180: d_yaw += 360
+
+            # 2. Derivative Calculus for Angular Velocity (Degrees per second)
+            # We convert to Radians because ROS Twist messages require Radians!
+            raw_wx = math.radians(d_roll) / dt
+            raw_wy = math.radians(d_pitch) / dt
+            raw_wz = math.radians(d_yaw) / dt
+
+
+
+            # Filter the Angular Noise!
+            active_wx = self.apply_smooth_deadzone(raw_wx, self.angular_dead_zone)
+            active_wy = self.apply_smooth_deadzone(raw_wy, self.angular_dead_zone)
+            active_wz = self.apply_smooth_deadzone(raw_wz, self.angular_dead_zone)
+
+
+
+            # Angular EMA (Assuming Aligned Camera/Robot Frames)
+            self.current_wx = (self.alpha * (active_wx * self.scale)) + ((1 - self.alpha) * self.current_wx)
+            self.current_wy = (self.alpha * (active_wy * self.scale)) + ((1 - self.alpha) * self.current_wy)
+            self.current_wz = (self.alpha * (active_wz * self.scale)) + ((1 - self.alpha) * self.current_wz)
+
+
+
+            # ==========================================
+            # MAPPING & ALPHA FILTERING (EMA)
+            # ==========================================
+
+
+
+
+
+
+
+
 
 
 
@@ -188,6 +272,14 @@ class AprilTagTeleop(Node):
 
             # 3. MAPPING: Translate Camera Frame to Robot Frame
             twist = Twist()
+
+
+            # oreintation
+            # Clamp Angular
+            twist.angular.x = max(min(self.current_wx, self.max_angular), -self.max_angular)
+            twist.angular.y = max(min(self.current_wy, self.max_angular), -self.max_angular)
+            twist.angular.z = max(min(self.current_wz, self.max_angular), -self.max_angular)
+
             
             # Robot Up/down (z) <- camera Z (Because both point UP!)
             # Moving tag up makes it positive. Robot up is positive
@@ -206,7 +298,10 @@ class AprilTagTeleop(Node):
             self.twist_pub.publish(twist)
 
             # 6. Save memory for the next loop
+
             self.prev_x, self.prev_y, self.prev_z = curr_x, curr_y, curr_z
+            self.prev_roll, self.prev_pitch, self.prev_yaw = roll, pitch, yaw  # update the angle
+
             self.prev_time = current_time
 
         except TransformException:
@@ -227,7 +322,9 @@ class AprilTagTeleop(Node):
                 
                 # 2. Erase memory so the calculus doesn't jump when the tag returns
                 self.prev_x = None 
+                self.prev_roll = None #  for angle
                 self.current_vx, self.current_vy, self.current_vz = 0.0, 0.0, 0.0
+                self.current_wx, self.current_wy, self.current_wz = 0.0, 0.0, 0.0
                 
                 self.get_logger().warning("TAG LOST! Brakes applied.", throttle_duration_sec=2.0)
 
