@@ -17,7 +17,7 @@ class AprilTagTeleop(Node):
         # --- Parameters ---
         self.declare_parameter('rate', 30.0)           # Loop rate (Hz)
         self.declare_parameter('speed_scale', 2.0)     # Sensitivity multiplier
-        self.declare_parameter('max_speed', 0.05)       # Safety speed limit (m/s)
+        self.declare_parameter('max_speed', 0.2)       # Safety speed limit (m/s)
         self.declare_parameter('camera_frame', 'camera_link') 
         self.declare_parameter('tag_frame', 'tag36h11_0')    # Default AprilTag ID 0
 

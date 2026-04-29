@@ -154,46 +154,6 @@ class AprilTagTeleop(Node):
 
 
 
-    # def _image_cb(self, msg):
-    #         """Processes the raw camera image using MediaPipe to detect finger pinches."""
-    #         try:
-    #             # 1. Convert ROS Image to OpenCV format
-    #             cv_image = self.bridge.imgmsg_to_cv2(msg, desired_encoding='bgr8')
-                
-    #             # 2. MediaPipe requires RGB color space
-    #             rgb_image = cv2.cvtColor(cv_image, cv2.COLOR_BGR2RGB)
-                
-    #             # 3. Run the AI model
-    #             results = self.mp_hands.process(rgb_image)
-                
-    #             # 4. If a hand is found...
-    #             if results.multi_hand_landmarks:
-    #                 hand = results.multi_hand_landmarks[0]
-                    
-    #                 # Get coordinates of Thumb Tip (4) and Index Tip (8)
-    #                 thumb = hand.landmark[mp.solutions.hands.HandLandmark.THUMB_TIP]
-    #                 index = hand.landmark[mp.solutions.hands.HandLandmark.INDEX_FINGER_TIP]
-                    
-    #                 # 5. Calculate 2D distance between fingers
-    #                 # MediaPipe coordinates are normalized from 0.0 to 1.0
-                    
-    #                 # 5. Calculate 2D distance between Thumb (4) and Index (8)
-    #                 pinch_dist = math.hypot(thumb.x - index.x, thumb.y - index.y)
-                    
-    #                 # 6. TRIGGER YOUR GRIPPER ACTION CLIENT
-    #                 # Distance < 0.05 (Fingers Closed together)
-    #                 if pinch_dist < 0.05 and self.last_gripper_state != True:
-    #                     self.last_gripper_state = True
-    #                     self._send_gripper_command(close=True)
-                        
-    #                 # Distance > 0.10 (Fingers Open wide)
-    #                 elif pinch_dist > 0.10 and self.last_gripper_state != False:
-    #                     self.last_gripper_state = False
-    #                     self._send_gripper_command(close=False)
-
-    #         except Exception as e:
-    #             self.get_logger().error(f"MediaPipe Error: {e}")
-
 
     def _image_cb(self, msg):
             """Processes the raw camera image using MediaPipe to detect finger pinches."""
