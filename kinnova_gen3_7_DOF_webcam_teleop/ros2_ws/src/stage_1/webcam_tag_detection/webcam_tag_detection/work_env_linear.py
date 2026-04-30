@@ -66,17 +66,18 @@ class AprilTagTeleop(Node):
         # ==========================================
         # WORKSPACE ENVELOPE (Virtual Walls in Meters)
         # ==========================================
+        # 84  longest, 27 y axis  64 total smallest
         # Z: Prevent smashing the table (min 10cm) or hitting the ceiling
-        self.declare_parameter('z_min', 0.10) # in cm 
-        self.declare_parameter('z_max', 0.80)
+        self.declare_parameter('z_min', 0.20) # in m 
+        self.declare_parameter('z_max', 1.0)
         
         # X: Forward/Backward limits relative to robot base
-        self.declare_parameter('x_min', 0.15) # Don't crash into its own base
-        self.declare_parameter('x_max', 0.70) # Max reach
+        self.declare_parameter('x_min', 0.35) # Don't crash into its own base
+        self.declare_parameter('x_max', 0.90) # Max reach
         
         # Y: Left/Right limits
-        self.declare_parameter('y_min', -0.50)
-        self.declare_parameter('y_max', 0.50)
+        self.declare_parameter('y_min', -0.40)
+        self.declare_parameter('y_max', 0.40)
 
         # Load values into memory
         self.z_min = self.get_parameter('z_min').value
