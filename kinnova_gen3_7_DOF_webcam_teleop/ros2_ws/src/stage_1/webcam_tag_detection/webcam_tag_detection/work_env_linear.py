@@ -32,9 +32,9 @@ class AprilTagTeleop(Node):
         # --- Parameters ---
         self.declare_parameter('rate', 30.0)           # Loop rate (Hz)
         self.declare_parameter('speed_scale', 2.0)     # Sensitivity multiplier
-        self.declare_parameter('max_speed', 0.2)       # Safety speed limit (m/s)
+        self.declare_parameter('max_speed', 0.05)       # Safety speed limit (m/s)
         self.declare_parameter('camera_frame', 'camera_link') 
-        self.declare_parameter('tag_frame', 'tag36h11_12')    # Default AprilTag ID 0
+        self.declare_parameter('tag_frame', 'tag36h11_0')    # Default AprilTag ID 0
 
         self.rate = self.get_parameter('rate').value
         self.scale = self.get_parameter('speed_scale').value
@@ -48,7 +48,7 @@ class AprilTagTeleop(Node):
         # 1. Alpha: 0.01 (Heavy lag, very smooth) to 1.0 (Zero lag, very jittery)
         self.declare_parameter('alpha', 0.15) 
         # 2. Deadzone: Ignore velocities smaller than this (m/s)
-        self.declare_parameter('dead_zone', 0.15) 
+        self.declare_parameter('dead_zone', 0.35) 
         # 3. Watchdog Timeout: Seconds before brakes apply when tag is hidden
         self.declare_parameter('tag_timeout', 0.25) 
 
@@ -68,12 +68,12 @@ class AprilTagTeleop(Node):
         # ==========================================
         # 84  longest, 27 y axis  64 total smallest
         # Z: Prevent smashing the table (min 10cm) or hitting the ceiling
-        self.declare_parameter('z_min', 0.20) # in m 
-        self.declare_parameter('z_max', 1.0)
+        self.declare_parameter('z_min', 0.30) # in m 
+        self.declare_parameter('z_max', 0.50)
         
         # X: Forward/Backward limits relative to robot base
-        self.declare_parameter('x_min', 0.35) # Don't crash into its own base
-        self.declare_parameter('x_max', 0.90) # Max reach
+        self.declare_parameter('x_min', 0.60) # Don't crash into its own base
+        self.declare_parameter('x_max', 1.0) # Max reach
         
         # Y: Left/Right limits
         self.declare_parameter('y_min', -0.40)
@@ -228,11 +228,11 @@ class AprilTagTeleop(Node):
                     # 6. TRIGGER YOUR GRIPPER ACTION CLIENT
                     if pinch_dist < 0.05 and self.last_gripper_state != True:
                         self.last_gripper_state = True
-                        self._send_gripper_command(close=True)
+                        #self._send_gripper_command(close=True)
                         
                     elif pinch_dist > 0.10 and self.last_gripper_state != False:
                         self.last_gripper_state = False
-                        self._send_gripper_command(close=False)
+                        #self._send_gripper_command(close=False)
 
                     # --- NEW: Visual Status Text ---
                     state_text = "CLOSED (Pinching)" if self.last_gripper_state else "OPEN"
@@ -395,42 +395,50 @@ class AprilTagTeleop(Node):
 
 
             # 3. 
-            twist.linear.x = max(min(-(self.current_vy), self.max_speed), -self.max_speed)     
+            #twist.linear.x = max(min(-(self.current_vy), self.max_speed), -self.max_speed)     
             # the above is confirm camera  - y , is robot x (lateral axis )
             # the position is inverse thats why -y of camera is +x of robot end effector.
 
 
-
             # ==========================================
-            # WORKSPACE ENVELOPE (SAFETY GEOFENCE)
+            # CORRECTED WORKSPACE ENVELOPE (SAFETY GEOFENCE)
             # ==========================================
-            # Z-Axis (Up/Down) Boundaries
-            if self.end_effector_z < self.z_min and twist.linear.z < 0:
-                twist.linear.z = 0.0 # Hit the floor limit, stop moving down
-                self.get_logger().warning("⚠️ Z-MIN Boundary Reached!", throttle_duration_sec=1.0)
-            elif self.end_effector_z > self.z_max and twist.linear.z > 0:
-                twist.linear.z = 0.0 # Hit the ceiling limit, stop moving up
-                self.get_logger().warning("⚠️ Z-MAX Boundary Reached!", throttle_duration_sec=1.0)
-
-            # X-Axis (Forward/Backward) Boundaries
-            if self.end_effector_x < self.x_min and twist.linear.x < 0:
-                twist.linear.x = 0.0 
-                self.get_logger().warning("⚠️ X-MIN Boundary Reached!", throttle_duration_sec=1.0)
-            elif self.end_effector_x > self.x_max and twist.linear.x > 0:
-                twist.linear.x = 0.0 
-                self.get_logger().warning("⚠️ X-MAX Boundary Reached!", throttle_duration_sec=1.0)
-
-            # Y-Axis (Left/Right) Boundaries
-            if self.end_effector_y < self.y_min and twist.linear.y < 0:
+            
+            # 1. HEIGHT BOUNDARY (Floor/Ceiling)
+            # Physical Height is TF2 Z. But your Up/Down motor is Twist Y!
+            if self.end_effector_z < self.z_min and twist.linear.y < 0:
+                twist.linear.y = 0.0 #  is up down in robot
+                self.current_vz = 0.0 # Kill the memory so it doesn't rubber-band
+                self.get_logger().warning("⚠️ Z-MIN (Floor) Boundary Reached!", throttle_duration_sec=1.0)
+            elif self.end_effector_z > self.z_max and twist.linear.y > 0:
                 twist.linear.y = 0.0 
-                self.get_logger().warning("⚠️ Y-MIN Boundary Reached!", throttle_duration_sec=1.0)
-            elif self.end_effector_y > self.y_max and twist.linear.y > 0:
-                twist.linear.y = 0.0 
-                self.get_logger().warning("⚠️ Y-MAX Boundary Reached!", throttle_duration_sec=1.0)
+                self.current_vz = 0.0 
+                self.get_logger().warning("⚠️ Z-MAX (Ceiling) Boundary Reached!", throttle_duration_sec=1.0)
 
-            # 5. Publish to Robot
+            # 2. FORWARD/BACKWARD BOUNDARY (Robot Base)
+            # Physical Forward/Back is TF2 X. But your Forward/Back motor is Twist Z!
+            if self.end_effector_x < self.x_min and twist.linear.z < 0:
+                twist.linear.z = 0.0  # z forward backward
+                self.current_vx = 0.0 
+                self.get_logger().warning("⚠️ X-MIN (Base Crash) Boundary Reached!", throttle_duration_sec=1.0)
+            elif self.end_effector_x > self.x_max and twist.linear.z > 0:
+                twist.linear.z = 0.0 
+                self.current_vx = 0.0 
+                self.get_logger().warning("⚠️ X-MAX (Max Reach) Boundary Reached!", throttle_duration_sec=1.0)
+
+            # 3. LEFT/RIGHT BOUNDARY
+            # Physical Left/Right is TF2 Y. But your Left/Right motor is Twist X!
+            if self.end_effector_y < self.y_min and twist.linear.x < 0:
+                twist.linear.x = 0.0 
+                self.current_vy = 0.0 
+                self.get_logger().warning("⚠️ Y-MIN (Left) Boundary Reached!", throttle_duration_sec=1.0)
+            elif self.end_effector_y > self.y_max and twist.linear.x > 0:
+                twist.linear.x = 0.0 
+                self.current_vy = 0.0 
+                self.get_logger().warning("⚠️ Y-MAX (Right) Boundary Reached!", throttle_duration_sec=1.0)
+
+            # 5. Publish to Robot (MUST BE BELOW THE GEOFENCE!)
             self.twist_pub.publish(twist)
-
 
             # 6. Save memory for the next loop
             self.prev_x, self.prev_y, self.prev_z = curr_x, curr_y, curr_z
