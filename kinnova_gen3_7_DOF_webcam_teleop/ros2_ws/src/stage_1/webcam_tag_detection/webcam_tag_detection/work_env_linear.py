@@ -46,9 +46,9 @@ class AprilTagTeleop(Node):
 
         # --- SAFEGUARD PARAMETERS ---
         # 1. Alpha: 0.01 (Heavy lag, very smooth) to 1.0 (Zero lag, very jittery)
-        self.declare_parameter('alpha', 0.15) 
+        self.declare_parameter('alpha', 0.10) 
         # 2. Deadzone: Ignore velocities smaller than this (m/s)
-        self.declare_parameter('dead_zone', 0.35) 
+        self.declare_parameter('dead_zone', 0.20) 
         # 3. Watchdog Timeout: Seconds before brakes apply when tag is hidden
         self.declare_parameter('tag_timeout', 0.25) 
 
@@ -154,6 +154,10 @@ class AprilTagTeleop(Node):
         self.end_effector_x = 0.0
         self.end_effector_y = 0.0
         self.end_effector_z = 0.0
+
+
+        # Timestamp memory to detect hidden tags
+        self.last_tf_time = 0.0
 
 
         self.timer = self.create_timer(1.0 / self.rate, self._timer_cb)
@@ -276,7 +280,24 @@ class AprilTagTeleop(Node):
                 rclpy.time.Time() # Get the newest available frame
             )
 
+            # ==========================================
+            # NEW: THE GHOST FRAME FIX
+            # ==========================================
+            # Calculate the exact timestamp of the camera frame
 
+            tf_time = t.header.stamp.sec + (t.header.stamp.nanosec / 1e9)
+            
+            if tf_time == self.last_tf_time:
+                # The tag is hidden! TF2 is just repeating the last known position.
+                # We raise an error to force the script down to the Watchdog block!
+                raise TransformException("Stale Frame - Tag is Hidden!")
+                
+            self.last_tf_time = tf_time
+
+            # ==========================================
+
+            # FEED THE WATCHDOG: We saw the tag, update the clock!
+            self.last_seen_time = current_time
 
 
             # ==========================================
@@ -295,8 +316,7 @@ class AprilTagTeleop(Node):
 
 
 
-            # FEED THE WATCHDOG: We saw the tag, update the clock!
-            self.last_seen_time = current_time
+
 
             # Extract absolute Cartesian Position (in meters)
             curr_x = t.transform.translation.x
@@ -352,6 +372,16 @@ class AprilTagTeleop(Node):
             raw_vy = (curr_y - self.prev_y) / dt
             raw_vz = (curr_z - self.prev_z) / dt
 
+            # ==========================================
+            # NEW: THE TELEPORT CATCHER
+            # ==========================================
+            # If the calculated speed is physically impossible for a human hand (> 3.0 m/s),
+            # it means the camera glitched. We erase the memory and reset the anchor!
+            if abs(raw_vx) > 2.0 or abs(raw_vy) > 2.0 or abs(raw_vz) > 2.0:
+                self.prev_x = None 
+                self.current_vx, self.current_vy, self.current_vz = 0.0, 0.0, 0.0
+                return
+            # ==========================================
 
 
             # 3. Apply the Ghost Filter (Deadzone)
