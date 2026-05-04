@@ -24,7 +24,6 @@ mp_hands = mp.solutions.hands
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 
-
 class AprilTagTeleop(Node):
     def __init__(self):
         super().__init__('apriltag_teleop')
@@ -34,13 +33,15 @@ class AprilTagTeleop(Node):
         self.declare_parameter('speed_scale', 2.0)     # Sensitivity multiplier
         self.declare_parameter('max_speed', 0.2)       # Safety speed limit (m/s)
         self.declare_parameter('camera_frame', 'camera_link') 
-        self.declare_parameter('tag_frame', 'tag36h11_12')    # Default AprilTag ID 0
+        self.declare_parameter('tag_frame', 'tag36h11_0')    # Default AprilTag ID 0
 
 
 
         # --- Angular Parameters (Radians) ---
-        self.declare_parameter('max_angular_speed', 1.0) # Rad/s (~57 deg/s)
-        self.declare_parameter('angular_dead_zone', 0.1) # Rad/s (~5.7 deg/s)
+        self.declare_parameter('max_angular_speed', 16.0) # Rad/s (~57 deg/s)
+        self.declare_parameter('angular_dead_zone', 0.02) # Rad/s (~5.7 deg/s)
+        self.declare_parameter('angular_scale', 4.0)      # Multiply wrist twists by 4x
+        self.declare_parameter('alpha_angular', 0.50)     # Snappy EMA for instant wrist response
 
 
 
@@ -73,8 +74,11 @@ class AprilTagTeleop(Node):
 
 
         # angular parameter 
+        # Load Angular values into memory
         self.max_angular = self.get_parameter('max_angular_speed').value
         self.angular_dead_zone = self.get_parameter('angular_dead_zone').value
+        self.angular_scale = self.get_parameter('angular_scale').value
+        self.alpha_angular = self.get_parameter('alpha_angular').value
 
 
 
@@ -151,6 +155,8 @@ class AprilTagTeleop(Node):
         self.current_wy = 0.0
         self.current_wz = 0.0
 
+        self.last_tf_time = 0.0
+
 
 
 
@@ -226,11 +232,11 @@ class AprilTagTeleop(Node):
                     # 6. TRIGGER YOUR GRIPPER ACTION CLIENT
                     if pinch_dist < 0.05 and self.last_gripper_state != True:
                         self.last_gripper_state = True
-                        self._send_gripper_command(close=True)
+                        #self._send_gripper_command(close=True)
                         
                     elif pinch_dist > 0.10 and self.last_gripper_state != False:
                         self.last_gripper_state = False
-                        self._send_gripper_command(close=False)
+                        #self._send_gripper_command(close=False)
 
                     # --- NEW: Visual Status Text ---
                     state_text = "CLOSED (Pinching)" if self.last_gripper_state else "OPEN"
@@ -291,6 +297,22 @@ class AprilTagTeleop(Node):
 
 
 
+            # ==========================================
+            # BUG FIX: THE GHOST FRAME CATCHER
+            # ==========================================
+            # Calculate the exact timestamp of the camera frame
+            tf_time = t.header.stamp.sec + (t.header.stamp.nanosec / 1e9)
+            
+            if tf_time == self.last_tf_time:
+                # The frame hasn't updated! It's a duplicate.
+                # Throw an exception to force the script down to the Watchdog timer!
+                raise TransformException("Stale Frame - Waiting for camera to update.")
+                
+            self.last_tf_time = tf_time
+            # ==========================================
+
+            # FEED THE WATCHDOG: We saw a FRESH tag, update the clock!
+            self.last_seen_time = current_time
 
 
         # 2. Convert to human-readable Euler Angles (Roll, Pitch, Yaw)
@@ -393,13 +415,19 @@ class AprilTagTeleop(Node):
 
 
 
-            # Angular EMA (Assuming Aligned Camera/Robot Frames)
-            self.current_wx = (self.alpha * (active_wx * self.scale)) + ((1 - self.alpha) * self.current_wx)
-            self.current_wy = (self.alpha * (active_wy * self.scale)) + ((1 - self.alpha) * self.current_wy)
-            self.current_wz = (self.alpha * (active_wz * self.scale)) + ((1 - self.alpha) * self.current_wz)
+            # # Angular EMA (Assuming Aligned Camera/Robot Frames)
+            # self.current_wx = (self.alpha * (active_wx * self.scale)) + ((1 - self.alpha) * self.current_wx)
+            # self.current_wy = (self.alpha * (active_wy * self.scale)) + ((1 - self.alpha) * self.current_wy)
+            # self.current_wz = (self.alpha * (active_wz * self.scale)) + ((1 - self.alpha) * self.current_wz)
 
 
-
+            # ==========================================
+            # ANGULAR EMA FILTER
+            # ==========================================
+            # Uses alpha_angular and angular_scale to keep it 100% separated from linear movement
+            self.current_wx = (self.alpha_angular * (active_wx * self.angular_scale)) + ((1 - self.alpha_angular) * self.current_wx)
+            self.current_wy = (self.alpha_angular * (active_wy * self.angular_scale)) + ((1 - self.alpha_angular) * self.current_wy)
+            self.current_wz = (self.alpha_angular * (active_wz * self.angular_scale)) + ((1 - self.alpha_angular) * self.current_wz)
 
             # 3. MAPPING: Translate Camera Frame to Robot Frame
             twist = Twist()
@@ -407,19 +435,19 @@ class AprilTagTeleop(Node):
 
            
             # 1. 
-            twist.linear.z = max(min(-(self.current_vx), self.max_speed), -self.max_speed)
+            #twist.linear.z = max(min(-(self.current_vx), self.max_speed), -self.max_speed)
 
             # the above is confirm camera -x , is robot z (towards us when seeing from front)(pointing outwards as it is end effector.)
             # the position is inverse
 
             # 2. 
       
-            twist.linear.y = max(min(self.current_vz, self.max_speed), -self.max_speed)
+            #twist.linear.y = max(min(self.current_vz, self.max_speed), -self.max_speed)
             # the above is confirm camera z , is robot y (towards up  going in the ceiling)
 
 
             # 3. 
-            twist.linear.x = max(min(-(self.current_vy), self.max_speed), -self.max_speed)     
+            #twist.linear.x = max(min(-(self.current_vy), self.max_speed), -self.max_speed)     
             # the above is confirm camera  - y , is robot x (lateral axis )
             # the position is inverse thats why -y of camera is +x of robot end effector.
 
@@ -427,25 +455,43 @@ class AprilTagTeleop(Node):
             ######### Angular #############
 
             # Clamp Angular
-            twist.angular.x = max(min(-(self.current_wy), self.max_angular), -self.max_angular)
+            twist.angular.x = max(min((self.current_wy), self.max_angular), -self.max_angular)
+ 
             twist.angular.y = max(min(self.current_wz, self.max_angular), -self.max_angular)
             twist.angular.z = max(min(-(self.current_wx), self.max_angular), -self.max_angular)
 
+
+            # ==========================================
+            # ANGULAR DEBUG LOGS
+            # ==========================================
+            # This shows you: The raw math -> The filtered memory -> The exact command sent
+            self.get_logger().info(
+                f"ANGULAR DEBUG: \n"
+                f"  Raw WX: {raw_wx:+.2f} | EMA WX: {self.current_wx:+.2f} | Robot Twist Z: {twist.angular.z:+.2f}\n"
+                f"  Raw WY: {raw_wy:+.2f} | EMA WY: {self.current_wy:+.2f} | Robot Twist X: {twist.angular.x:+.2f}\n"
+                f"  Raw WZ: {raw_wz:+.2f} | EMA WZ: {self.current_wz:+.2f} | Robot Twist Y: {twist.angular.y:+.2f}",
+                throttle_duration_sec=0.5 
+            )
 
             # 5. Publish to Robot
             self.twist_pub.publish(twist)
 
             # 6. Save memory for the next loop
             self.prev_x, self.prev_y, self.prev_z = curr_x, curr_y, curr_z
-            self.prev_roll, self.prev_pitch, self.prev_yaw = roll, pitch, yaw  # update the angle
+            self.prev_roll, self.prev_pitch, self.prev_yaw = roll, pitch, yaw  # update the angle9
+
             self.prev_time = current_time
 
-        except TransformException:
+        except TransformException as e:
             # SAFETY CATCH: If the camera loses sight of the tag (e.g., your hand covers it),
             # stop the robot instantly and reset memory.
             # ==========================================
             # SAFEGUARD: THE WATCHDOG TIMEOUT
             # ==========================================
+            # If we have never seen the tag, print the exact reason WHY it is failing!
+            if self.prev_x is None:
+                self.get_logger().warning(f"Searching for Tag... (Reason: {e})", throttle_duration_sec=2.0)
+            
             """ If the tag goes out of frame, the robot needs to stop immediately so it doesn't
             keep flying off into the wall based on your last known speed. We solve this using the Watchdog Timer."""
 

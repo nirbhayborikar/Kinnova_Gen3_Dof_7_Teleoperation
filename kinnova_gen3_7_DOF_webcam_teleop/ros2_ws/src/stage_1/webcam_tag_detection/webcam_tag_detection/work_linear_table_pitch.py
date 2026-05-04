@@ -32,9 +32,23 @@ class AprilTagTeleop(Node):
         # --- Parameters ---
         self.declare_parameter('rate', 30.0)           # Loop rate (Hz)
         self.declare_parameter('speed_scale', 2.0)     # Sensitivity multiplier
-        self.declare_parameter('max_speed', 0.08)       # Safety speed limit (m/s)
+        self.declare_parameter('max_speed', 0.05)       # Safety speed limit (m/s)
         self.declare_parameter('camera_frame', 'camera_link') 
         self.declare_parameter('tag_frame', 'tag36h11_0')    # Default AprilTag ID 0
+
+
+
+
+        # --- Angular Parameters (Radians) ---
+        self.declare_parameter('max_angular_speed', 4.0) # Rad/s (~57 deg/s)
+        self.declare_parameter('angular_dead_zone', 0.45) # Rad/s (~5.7 deg/s)
+        self.declare_parameter('angular_scale', 1.0)      # Multiply wrist twists by 4x
+        self.declare_parameter('alpha_angular', 0.15)     # Snappy EMA for instant wrist response
+
+
+
+
+
 
         self.rate = self.get_parameter('rate').value
         self.scale = self.get_parameter('speed_scale').value
@@ -46,9 +60,9 @@ class AprilTagTeleop(Node):
 
         # --- SAFEGUARD PARAMETERS ---
         # 1. Alpha: 0.01 (Heavy lag, very smooth) to 1.0 (Zero lag, very jittery)
-        self.declare_parameter('alpha', 0.10)
+        self.declare_parameter('alpha', 0.10) 
         # 2. Deadzone: Ignore velocities smaller than this (m/s)
-        self.declare_parameter('dead_zone', 0.15) 
+        self.declare_parameter('dead_zone', 0.20) 
         # 3. Watchdog Timeout: Seconds before brakes apply when tag is hidden
         self.declare_parameter('tag_timeout', 0.25) 
 
@@ -68,7 +82,7 @@ class AprilTagTeleop(Node):
         # ==========================================
         # 84  longest, 27 y axis  64 total smallest
         # Z: Prevent smashing the table (min 10cm) or hitting the ceiling
-        self.declare_parameter('z_min', 0.10) # in m 
+        self.declare_parameter('z_min', 0.15) # in m 
         self.declare_parameter('z_max', 0.65)
         
         # X: Forward/Backward limits relative to robot base
@@ -78,6 +92,19 @@ class AprilTagTeleop(Node):
         # Y: Left/Right limits
         self.declare_parameter('y_min', -0.296)
         self.declare_parameter('y_max', 0.189)
+
+
+
+
+
+        # angular parameter 
+        # Load Angular values into memory
+        self.max_angular = self.get_parameter('max_angular_speed').value
+        self.angular_dead_zone = self.get_parameter('angular_dead_zone').value
+        self.angular_scale = self.get_parameter('angular_scale').value
+        self.alpha_angular = self.get_parameter('alpha_angular').value
+
+
 
         # Load values into memory
         self.z_min = self.get_parameter('z_min').value
@@ -148,6 +175,23 @@ class AprilTagTeleop(Node):
         self.current_vz = 0.0
 
 
+
+        # the robot current angular memory
+
+        # Angular memory
+        self.prev_roll = None
+        self.prev_pitch = None
+        self.prev_yaw = None
+        
+        # Filtered angular states
+        self.current_wx = 0.0
+        self.current_wy = 0.0
+        self.current_wz = 0.0
+
+        self.last_tf_time = 0.0
+
+
+
         # ==========================================
         # NEW: Robot physical position (For the Virtual Wall)
         # ==========================================
@@ -186,7 +230,7 @@ class AprilTagTeleop(Node):
 
         goal = GripperCommand.Goal()
         # 0.4867 = Closed | 0.0713 = Open (From your physical testing!)
-        goal.command.position = 0.5867 if close else 0.0713
+        goal.command.position = 0.4867 if close else 0.0713
         
         self.get_logger().info(f'Sending Gripper Goal: {"CLOSE" if close else "OPEN"}')
         self.gripper_client.send_goal_async(goal)
@@ -360,6 +404,7 @@ class AprilTagTeleop(Node):
             if self.prev_x is None:
                 # Set the new Anchor Point
                 self.prev_x, self.prev_y, self.prev_z = curr_x, curr_y, curr_z
+                self.prev_roll, self.prev_pitch, self.prev_yaw = roll, pitch, yaw
                 self.prev_time = current_time
                 self.get_logger().info("--- TAG ACQUIRED! ---")
                 return
@@ -407,6 +452,94 @@ class AprilTagTeleop(Node):
 
 
 
+
+
+            """
+            Before this code, if you twisted your wrist and stopped, the math equation was forced to keep outputting speeds
+             like 0.8, 0.6, 0.4, 0.2 until it finally reached zero.
+
+            With the new Instant Braking block at the bottom, the very millisecond your hand stops moving, 
+            it forces self.current_wy = 0.0 bypassing the math entirely. 
+            You can twist your hand to a crazy pitch angle, stop moving, and the robot will immediately freeze right there!
+            """
+
+
+        ########################### roll pitch yaw ####################
+        # If this is the first frame, save angles and skip math
+            if self.prev_roll is None:
+                self.prev_roll, self.prev_pitch, self.prev_yaw = roll, pitch, yaw
+                # ... (save position memory as well) ...
+                return
+
+            # 1. Find the change in angle (and fix the 360-degree snap problem)
+            d_roll = roll - self.prev_roll
+            d_pitch = pitch - self.prev_pitch
+            d_yaw = yaw - self.prev_yaw
+
+            # Fix angle wrapping (so math doesn't freak out if you cross from 180 to -180)
+            if d_roll > 180: d_roll -= 360
+            elif d_roll < -180: d_roll += 360
+            if d_pitch > 180: d_pitch -= 360
+            elif d_pitch < -180: d_pitch += 360
+            if d_yaw > 180: d_yaw -= 360
+            elif d_yaw < -180: d_yaw += 360
+
+            # ==========================================
+            # NEW: GIMBAL LOCK & GLITCH CATCHER
+            # ==========================================
+            # If the angle jumps by more than 20 degrees in 1/30th of a second,
+            # it is a camera glitch! Ignore it completely so it doesn't spin the robot!
+            if abs(d_roll) > 20 or abs(d_pitch) > 20 or abs(d_yaw) > 20:
+                self.prev_roll, self.prev_pitch, self.prev_yaw = roll, pitch, yaw
+                self.current_wx, self.current_wy, self.current_wz = 0.0, 0.0, 0.0
+                return # Skip this loop to protect the robot
+            # ==========================================
+
+            # 2. Derivative Calculus for Angular Velocity (Degrees per second)
+            # We convert to Radians because ROS Twist messages require Radians!
+            raw_wx = math.radians(d_roll) / dt
+            raw_wy = math.radians(d_pitch) / dt
+            raw_wz = math.radians(d_yaw) / dt
+
+
+
+            # Filter the Angular Noise!
+            active_wx = self.apply_smooth_deadzone(raw_wx, self.angular_dead_zone)
+            active_wy = self.apply_smooth_deadzone(raw_wy, self.angular_dead_zone)
+            active_wz = self.apply_smooth_deadzone(raw_wz, self.angular_dead_zone)
+
+            # ==========================================
+            # NEW: INSTANT BRAKING (ANTI-WINDUP)
+            # ==========================================
+            # If your hand stops moving (active = 0), kill the EMA memory instantly!
+            # Otherwise, use the smooth EMA filter.
+            
+            if active_wx == 0.0: 
+                self.current_wx = 0.0
+            else: 
+                self.current_wx = (self.alpha_angular * (active_wx * self.angular_scale)) + ((1 - self.alpha_angular) * self.current_wx)
+
+            if active_wy == 0.0: 
+                self.current_wy = 0.0
+            else: 
+                self.current_wy = (self.alpha_angular * (active_wy * self.angular_scale)) + ((1 - self.alpha_angular) * self.current_wy)
+
+            if active_wz == 0.0: 
+                self.current_wz = 0.0
+            else: 
+                self.current_wz = (self.alpha_angular * (active_wz * self.angular_scale)) + ((1 - self.alpha_angular) * self.current_wz)
+
+            # ==========================================
+            # ANGULAR EMA FILTER
+            # ==========================================
+            # Uses alpha_angular and angular_scale to keep it 100% separated from linear movement
+            self.current_wx = (self.alpha_angular * (active_wx * self.angular_scale)) + ((1 - self.alpha_angular) * self.current_wx)
+            self.current_wy = (self.alpha_angular * (active_wy * self.angular_scale)) + ((1 - self.alpha_angular) * self.current_wy)
+            self.current_wz = (self.alpha_angular * (active_wz * self.angular_scale)) + ((1 - self.alpha_angular) * self.current_wz)
+
+
+
+
             # 3. MAPPING: Translate Camera Frame to Robot Frame
             twist = Twist()
             
@@ -429,6 +562,26 @@ class AprilTagTeleop(Node):
             # the above is confirm camera  - y , is robot x (lateral axis )
             # the position is inverse thats why -y of camera is +x of robot end effector.
 
+            ######### Angular #############
+
+            # Clamp Angular
+            twist.angular.x = max(min(-(self.current_wy), self.max_angular), -self.max_angular)
+ 
+            #twist.angular.y = max(min(self.current_wz, self.max_angular), -self.max_angular)
+            #twist.angular.z = max(min(-(self.current_wx), self.max_angular), -self.max_angular)
+
+
+            # ==========================================
+            # ANGULAR DEBUG LOGS
+            # ==========================================
+            # This shows you: The raw math -> The filtered memory -> The exact command sent
+            self.get_logger().info(
+                f"ANGULAR DEBUG: \n"
+                f"  Raw WX: {raw_wx:+.2f} | EMA WX: {self.current_wx:+.2f} | Robot Twist Z: {twist.angular.z:+.2f}\n"
+                f"  Raw WY: {raw_wy:+.2f} | EMA WY: {self.current_wy:+.2f} | Robot Twist X: {twist.angular.x:+.2f}\n"
+                f"  Raw WZ: {raw_wz:+.2f} | EMA WZ: {self.current_wz:+.2f} | Robot Twist Y: {twist.angular.y:+.2f}",
+                throttle_duration_sec=0.5 
+            )
 
             # ==========================================
             # CORRECTED WORKSPACE ENVELOPE (SAFETY GEOFENCE)
@@ -474,9 +627,13 @@ class AprilTagTeleop(Node):
             self.prev_x, self.prev_y, self.prev_z = curr_x, curr_y, curr_z
             self.prev_time = current_time
 
-        except TransformException:
+        except TransformException as e:
             # SAFETY CATCH: If the camera loses sight of the tag (e.g., your hand covers it),
             # stop the robot instantly and reset memory.
+            
+            # If we have never seen the tag, print the exact reason WHY it is failing!
+            if self.prev_x is None:
+                self.get_logger().warning(f"Searching for Tag... (Reason: {e})", throttle_duration_sec=2.0)
             # ==========================================
             # SAFEGUARD: THE WATCHDOG TIMEOUT
             # ==========================================
@@ -490,12 +647,14 @@ class AprilTagTeleop(Node):
                 # 1. Slam the brakes to 0,0,0
                 self.twist_pub.publish(Twist()) 
                 
-                # 2. Erase memory so the calculus doesn't jump when the tag returns
-                self.prev_x = None 
-                self.current_vx, self.current_vy, self.current_vz = 0.0, 0.0, 0.0
-                
-                self.get_logger().warning("TAG LOST! Brakes applied.", throttle_duration_sec=2.0)
 
+                # 2. Erase memory so the calculus doesn't jump when the tag returns
+                if self.prev_x is not None:
+                    self.prev_x, self.prev_y, self.prev_z = None, None, None
+                    self.prev_roll, self.prev_pitch, self.prev_yaw = None, None, None
+                    self.current_vx, self.current_vy, self.current_vz = 0.0, 0.0, 0.0
+                    self.current_wx, self.current_wy, self.current_wz = 0.0, 0.0, 0.0
+                    self.get_logger().warning("TAG LOST! Brakes applied.", throttle_duration_sec=2.0)
 def main(args=None):
     rclpy.init(args=args)
     node = AprilTagTeleop()

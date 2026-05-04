@@ -43,7 +43,8 @@ volumes:
     external: true
     name: apriltag_shared_install
     
-# ros2 run usb_cam usb_cam_node_exe (webcam)
+
+#ros2 run usb_cam usb_cam_node_exe (webcam) 
 #ros2 launch kinova_gen3_teleop teleop.launch.py &&
 #colcon build --packages-select kinova_gen3_teleop &&source install/setup.bash && # the package colcon build
 
