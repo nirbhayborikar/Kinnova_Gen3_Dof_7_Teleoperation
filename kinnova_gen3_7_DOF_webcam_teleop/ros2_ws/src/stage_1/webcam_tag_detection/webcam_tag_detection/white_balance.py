@@ -32,7 +32,7 @@ class AprilTagTeleop(Node):
         # --- Parameters ---
         self.declare_parameter('rate', 30.0)           # Loop rate (Hz)
         self.declare_parameter('speed_scale', 2.0)     # Sensitivity multiplier# dead
-        self.declare_parameter('max_speed', 0.15)       # Safety speed limit (m/s)
+        self.declare_parameter('max_speed', 0.08)       # Safety speed limit (m/s)
         self.declare_parameter('camera_frame', 'camera_link') 
         self.declare_parameter('tag_frame', 'tag36h11_12')    # Default AprilTag ID 0
 
@@ -46,9 +46,9 @@ class AprilTagTeleop(Node):
 
         # --- SAFEGUARD PARAMETERS ---
         # 1. Alpha: 0.01 (Heavy lag, very smooth) to 1.0 (Zero lag, very jittery)
-        self.declare_parameter('alpha', 0.40)
+        self.declare_parameter('alpha', 0.20)
         # 2. Deadzone: Ignore velocities smaller than this (m/s)
-        self.declare_parameter('dead_zone', 0.15) 
+        self.declare_parameter('dead_zone', 0.24) 
         # 3. Watchdog Timeout: Seconds before brakes apply when tag is hidden
         self.declare_parameter('tag_timeout', 0.25) 
 
@@ -68,12 +68,12 @@ class AprilTagTeleop(Node):
         # ==========================================
         # 84  longest, 27 y axis  64 total smallest
         # Z: Prevent smashing the table (min 10cm) or hitting the ceiling
-        self.declare_parameter('z_min', 0.13) # in m 
+        self.declare_parameter('z_min', 0.15) # in m 
         self.declare_parameter('z_max', 0.65)
         
         # X: Forward/Backward limits relative to robot base
         self.declare_parameter('x_min', 0.58) # Don't crash into its own base #55
-        self.declare_parameter('x_max', 0.78) # Max reach 74
+        self.declare_parameter('x_max', 0.68) # Max reach 74
         
         # Y: Left/Right limits
         self.declare_parameter('y_min', -0.296)
@@ -133,6 +133,10 @@ class AprilTagTeleop(Node):
         # --- Publishers ---
         self.twist_pub = self.create_publisher(Twist, '/twist_controller/commands', 10)
 
+
+        # NEW: Publisher for the cleaned-up AprilTag image
+        self.enhanced_pub = self.create_publisher(Image, '/camera/color/image_enhanced', 10)
+
         # --- Memory for Calculus (Derivatives) ---
         self.prev_time = self.get_clock().now()
         self.last_seen_time = self.get_clock().now()
@@ -186,8 +190,8 @@ class AprilTagTeleop(Node):
 
         goal = GripperCommand.Goal()
         # 0.4867 = Closed | 0.0713 = Open (From your physical testing!)
-        goal.command.position = 0.5867 if close else 0.0713
-        
+        goal.command.position = 0.5867 if close else 0.0713 # 0.5867
+         
         self.get_logger().info(f'Sending Gripper Goal: {"CLOSE" if close else "OPEN"}')
         self.gripper_client.send_goal_async(goal)
 
@@ -201,6 +205,30 @@ class AprilTagTeleop(Node):
             try:
                 # 1. Convert ROS Image to OpenCV format
                 cv_image = self.bridge.imgmsg_to_cv2(msg, desired_encoding='bgr8')
+
+                # ==========================================
+                # NEW: APRILTAG IMAGE ENHANCEMENT (CLAHE)
+                # ==========================================
+
+                """ AprilTags are just black and white squares. Color data is completely useless 
+                to the detector and just slows down your CPU. By stripping the color first, we make the math much faster."""
+                # 1. Convert to Grayscale (AprilTags only care about black and white contrast)
+                gray_image = cv2.cvtColor(cv_image, cv2.COLOR_BGR2GRAY)
+                
+                # 2. Apply CLAHE (Auto-balances the lighting and boosts contrast locally)
+                # (Contrast Limited Adaptive Histogram Equalization)
+                clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(16,16)) # below 2.0 more dark # if light chnage sharp increas from 8,8 to 16,16
+                enhanced_gray = clahe.apply(gray_image)
+                
+                # 3. Publish the pristine grayscale image back to ROS 2
+                enhanced_msg = self.bridge.cv2_to_imgmsg(enhanced_gray, encoding="mono8")
+                enhanced_msg.header = msg.header # CRITICAL: Keep the exact same timestamp for TF2 syncing!
+                self.enhanced_pub.publish(enhanced_msg)
+                
+                # Optional: Show the enhanced image on your screen so you can see how good it looks!
+                cv2.imshow("Enhanced For AprilTag", enhanced_gray)
+
+
                 
                 # 2. MediaPipe requires RGB color space
                 rgb_image = cv2.cvtColor(cv_image, cv2.COLOR_BGR2RGB)
@@ -232,17 +260,21 @@ class AprilTagTeleop(Node):
                     # 6. TRIGGER YOUR GRIPPER ACTION CLIENT
                     if pinch_dist < 0.05 and self.last_gripper_state != True:
                         self.last_gripper_state = True
-                        #self._send_gripper_command(close=True)
+                        self._send_gripper_command(close=True)
                         
                     elif pinch_dist > 0.10 and self.last_gripper_state != False:
                         self.last_gripper_state = False
-                        #self._send_gripper_command(close=False)
+                        self._send_gripper_command(close=False)
 
                     # --- NEW: Visual Status Text ---
                     state_text = "CLOSED (Pinching)" if self.last_gripper_state else "OPEN"
                     color = (0, 0, 255) if self.last_gripper_state else (0, 255, 0)
                     cv2.putText(cv_image, f"Gripper: {state_text}", (10, 40), 
                                 cv2.FONT_HERSHEY_SIMPLEX, 1, color, 2)
+
+
+
+
                 else:
                     cv2.putText(cv_image, "No Hand Detected", (10, 40), 
                                 cv2.FONT_HERSHEY_SIMPLEX, 1, (150, 150, 150), 2)
