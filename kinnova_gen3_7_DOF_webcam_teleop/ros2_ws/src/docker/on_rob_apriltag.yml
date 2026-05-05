@@ -80,3 +80,5 @@ volumes:
 # ros2 launch apriltag_ros apriltag.launch.py \
 #   image_rect_topic:=/camera/color/image_raw \
 #   camera_info_topic:=/camera/color/camera_info
+
+# emchanced ros2 launch apriltag_ros apriltag.launch.py image_rect_topic:=/camera/color/image_enhanced camera_info_topic:=/camera/color/camera_info 
