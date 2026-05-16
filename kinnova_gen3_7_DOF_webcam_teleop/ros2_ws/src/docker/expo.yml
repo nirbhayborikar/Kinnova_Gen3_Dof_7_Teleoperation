@@ -1,0 +1,81 @@
+services:
+  kinova_teleop:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: kinova_gen3_teleop
+    container_name: kinova_gen3_teleop
+    stdin_open: true
+    tty: true
+    environment:
+      - DISPLAY=${DISPLAY}
+      - RMW_IMPLEMENTATION=rmw_zenoh_cpp  # cyclonedds # zenoh
+      - QT_X11_NO_MITSHM=1
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - ROS_DOMAIN_ID=145
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      
+      # - ../stage_1/kinova_gen3_teleop:/ros2_ws/src/stage_1/kinova_gen3_teleop:rw
+      - ../stage_1:/root/ros2_ws/src/stage_1:rw  
+      - /home/iki/apriltag:/root/ros2_ws/src/stage_1/apriltag:rw  
+      - apriltag_shared_install:/root/ros2_ws/install:rw
+
+    devices:
+      - /dev/video0:/dev/video0 # webcam
+    network_mode: host
+    privileged: true
+    command:
+      - bash
+      - -c
+      - |
+        source /opt/ros/jazzy/setup.bash &&
+        # 1. Removed --symlink-install so it creates real files, not broken shortcuts!
+        colcon build --packages-select apriltag apriltag_msgs apriltag_ros webcam_tag_detection &&
+        source /root/ros2_ws/install/setup.bash &&
+        # 2. Removed the Zenoh router command so it doesn't fight for port 7447!
+        
+        tail -f /dev/null
+
+
+  apriltag_start:
+    image: kinova_gen3_teleop
+
+    container_name: apriltag_start
+    stdin_open: true
+    tty: true
+    environment:
+      - DISPLAY=${DISPLAY}
+      - RMW_IMPLEMENTATION=rmw_zenoh_cpp  # cyclonedds # zenoh
+      - QT_X11_NO_MITSHM=1
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - ROS_DOMAIN_ID=145
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      
+      # - ../stage_1/kinova_gen3_teleop:/ros2_ws/src/stage_1/kinova_gen3_teleop:rw
+      - ../stage_1:/root/ros2_ws/src/stage_1:rw  
+      - /home/iki/apriltag:/root/ros2_ws/src/stage_1/apriltag:rw  
+      - apriltag_shared_install:/root/ros2_ws/install:rw
+
+    devices:
+      - /dev/video0:/dev/video0 # webcam
+    network_mode: host
+    privileged: true
+    command:
+      - bash
+      - -c
+      - |
+        sleep 15
+        source /opt/ros/jazzy/setup.bash &&
+        source /root/ros2_ws/install/setup.bash &&
+        ros2 launch apriltag_ros apriltag.launch.py image_rect_topic:=/image_raw camera_info_topic:=/camera_info 
+        tail -f /dev/null
+
+# ========== EXTERNAL VOLUME DEFINITION ==========
+volumes:
+  apriltag_shared_install:
+    external: true
+    name: apriltag_shared_install

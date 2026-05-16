@@ -1,0 +1,1370 @@
+ros2 param get /move_group robot_description_semantic
+<?xml version="1.0" encoding="UTF-8"?>
+<!--This does not replace URDF, and is not an extension of URDF.
+    This is a format for representing semantic information about the robot structure.
+    A URDF file must exist for this robot as well, where the joints and the links that are referenced are defined
+-->
+<robot name="gen3">
+    <!--GROUPS: Representation of a set of joints and links. This can be useful for specifying DOF to plan for, defining arms, end effectors, etc-->
+    <!--LINKS: When a link is specified, the parent joint of that link (if it exists) is automatically included-->
+    <!--JOINTS: When a joint is specified, the child link of that joint (which will always exist) is automatically included-->
+    <!--CHAINS: When a chain is specified, all the links along the chain (including endpoints) are included in the group. Additionally, all the joints that are parents to included links are also included. This means that joints along the chain and the parent joint of the base link are included in the group-->
+    <!--SUBGROUPS: Groups can also be formed by referencing to already defined group names-->
+    <group name="manipulator">
+        <chain base_link="base_link" tip_link="grasping_frame"/>
+    </group>
+    <group name="gripper">
+        <joint name="robotiq_base_joint"/>
+        <joint name="robotiq_140_base_joint"/>
+        <joint name="finger_joint"/>
+        <joint name="left_outer_finger_joint"/>
+        <joint name="left_inner_finger_joint"/>
+        <joint name="left_inner_finger_pad_joint"/>
+        <joint name="left_inner_knuckle_joint"/>
+        <joint name="right_inner_knuckle_joint"/>
+        <joint name="right_outer_knuckle_joint"/>
+        <joint name="right_outer_finger_joint"/>
+        <joint name="right_inner_finger_joint"/>
+        <joint name="right_inner_finger_pad_joint"/>
+        <joint name="grasping_frame_joint"/>
+    </group>
+    <!--GROUP STATES: Purpose: Define a named state for a particular group, in terms of joint values. This is useful to define states like 'folded arms'-->
+    <group_state name="open" group="gripper">
+        <joint name="finger_joint" value="0"/>
+    </group_state>
+    <group_state name="close" group="gripper">
+        <joint name="finger_joint" value="0.7"/>
+    </group_state>
+    <group_state name="home" group="manipulator">
+        <joint name="joint_1" value="0"/>
+        <joint name="joint_2" value="0.26"/>
+        <joint name="joint_3" value="3.14"/>
+        <joint name="joint_4" value="-2.27"/>
+        <joint name="joint_5" value="0"/>
+        <joint name="joint_6" value="0.96"/>
+        <joint name="joint_7" value="1.57"/>
+    </group_state>
+    <group_state name="retract" group="manipulator">
+        <joint name="joint_1" value="0"/>
+        <joint name="joint_2" value="-0.35"/>
+        <joint name="joint_3" value="3.14"/>
+        <joint name="joint_4" value="-2.54"/>
+        <joint name="joint_5" value="0"/>
+        <joint name="joint_6" value="-0.87"/>
+        <joint name="joint_7" value="1.57"/>
+    </group_state>
+    <group_state name="vertical" group="manipulator">
+        <joint name="joint_1" value="0"/>
+        <joint name="joint_2" value="0"/>
+        <joint name="joint_3" value="0"/>
+        <joint name="joint_4" value="0"/>
+        <joint name="joint_5" value="0"/>
+        <joint name="joint_6" value="0"/>
+        <joint name="joint_7" value="0"/>
+    </group_state>
+    <!--END EFFECTOR: Purpose: Represent information about an end effector.-->
+    <end_effector name="gripper" parent_link="end_effector_link" group="gripper" parent_group="manipulator"/>
+    <!--PASSIVE JOINT: Purpose: this element is used to mark joints that are not actuated-->
+    <passive_joint name="left_inner_finger_joint"/>
+    <passive_joint name="left_inner_knuckle_joint"/>
+    <passive_joint name="right_inner_knuckle_joint"/>
+    <passive_joint name="right_outer_knuckle_joint"/>
+    <passive_joint name="right_inner_finger_joint"/>
+    <passive_joint name="grasping_frame_joint"/>
+    <!--DISABLE COLLISIONS: By default it is assumed that any link of the robot could potentially come into collision with any other link in the robot. This tag disables collision checking between a specified pair of links. -->
+    <disable_collisions link1="base_link" link2="forearm_link" reason="Never"/>
+    <disable_collisions link1="base_link" link2="half_arm_1_link" reason="Never"/>
+    <disable_collisions link1="base_link" link2="half_arm_2_link" reason="Never"/>
+    <disable_collisions link1="base_link" link2="shoulder_link" reason="Adjacent"/>
+    <disable_collisions link1="bracelet_link" link2="forearm_link" reason="Never"/>
+    <disable_collisions link1="bracelet_link" link2="left_inner_finger" reason="Never"/>
+    <disable_collisions link1="bracelet_link" link2="left_inner_finger_pad" reason="Never"/>
+    <disable_collisions link1="bracelet_link" link2="left_inner_knuckle" reason="Never"/>
+    <disable_collisions link1="bracelet_link" link2="left_outer_finger" reason="Never"/>
+    <disable_collisions link1="bracelet_link" link2="left_outer_knuckle" reason="Never"/>
+    <disable_collisions link1="bracelet_link" link2="right_inner_finger" reason="Never"/>
+    <disable_collisions link1="bracelet_link" link2="right_inner_finger_pad" reason="Never"/>
+    <disable_collisions link1="bracelet_link" link2="right_inner_knuckle" reason="Never"/>
+    <disable_collisions link1="bracelet_link" link2="right_outer_finger" reason="Never"/>
+    <disable_collisions link1="bracelet_link" link2="right_outer_knuckle" reason="Never"/>
+    <disable_collisions link1="bracelet_link" link2="robotiq_140_base_link" reason="Adjacent"/>
+    <disable_collisions link1="bracelet_link" link2="spherical_wrist_1_link" reason="Never"/>
+    <disable_collisions link1="bracelet_link" link2="spherical_wrist_2_link" reason="Adjacent"/>
+    <disable_collisions link1="forearm_link" link2="half_arm_1_link" reason="Never"/>
+    <disable_collisions link1="forearm_link" link2="half_arm_2_link" reason="Adjacent"/>
+    <disable_collisions link1="forearm_link" link2="left_inner_finger" reason="Never"/>
+    <disable_collisions link1="forearm_link" link2="left_inner_finger_pad" reason="Never"/>
+    <disable_collisions link1="forearm_link" link2="left_inner_knuckle" reason="Never"/>
+    <disable_collisions link1="forearm_link" link2="left_outer_finger" reason="Never"/>
+    <disable_collisions link1="forearm_link" link2="left_outer_knuckle" reason="Never"/>
+    <disable_collisions link1="forearm_link" link2="right_inner_finger" reason="Never"/>
+    <disable_collisions link1="forearm_link" link2="right_inner_finger_pad" reason="Never"/>
+    <disable_collisions link1="forearm_link" link2="right_inner_knuckle" reason="Never"/>
+    <disable_collisions link1="forearm_link" link2="right_outer_finger" reason="Never"/>
+    <disable_collisions link1="forearm_link" link2="right_outer_knuckle" reason="Never"/>
+    <disable_collisions link1="forearm_link" link2="robotiq_140_base_link" reason="Never"/>
+    <disable_collisions link1="forearm_link" link2="shoulder_link" reason="Never"/>
+    <disable_collisions link1="forearm_link" link2="spherical_wrist_1_link" reason="Adjacent"/>
+    <disable_collisions link1="forearm_link" link2="spherical_wrist_2_link" reason="Never"/>
+    <disable_collisions link1="half_arm_1_link" link2="half_arm_2_link" reason="Adjacent"/>
+    <disable_collisions link1="half_arm_1_link" link2="shoulder_link" reason="Adjacent"/>
+    <disable_collisions link1="half_arm_1_link" link2="spherical_wrist_1_link" reason="Never"/>
+    <disable_collisions link1="half_arm_1_link" link2="spherical_wrist_2_link" reason="Never"/>
+    <disable_collisions link1="half_arm_2_link" link2="left_inner_finger" reason="Never"/>
+    <disable_collisions link1="half_arm_2_link" link2="left_inner_finger_pad" reason="Never"/>
+    <disable_collisions link1="half_arm_2_link" link2="left_inner_knuckle" reason="Never"/>
+    <disable_collisions link1="half_arm_2_link" link2="left_outer_finger" reason="Never"/>
+    <disable_collisions link1="half_arm_2_link" link2="left_outer_knuckle" reason="Never"/>
+    <disable_collisions link1="half_arm_2_link" link2="right_inner_finger" reason="Never"/>
+    <disable_collisions link1="half_arm_2_link" link2="right_inner_finger_pad" reason="Never"/>
+    <disable_collisions link1="half_arm_2_link" link2="right_inner_knuckle" reason="Never"/>
+    <disable_collisions link1="half_arm_2_link" link2="right_outer_finger" reason="Never"/>
+    <disable_collisions link1="half_arm_2_link" link2="right_outer_knuckle" reason="Never"/>
+    <disable_collisions link1="half_arm_2_link" link2="robotiq_140_base_link" reason="Never"/>
+    <disable_collisions link1="half_arm_2_link" link2="shoulder_link" reason="Never"/>
+    <disable_collisions link1="half_arm_2_link" link2="spherical_wrist_1_link" reason="Never"/>
+    <disable_collisions link1="half_arm_2_link" link2="spherical_wrist_2_link" reason="Never"/>
+    <disable_collisions link1="left_inner_finger" link2="left_inner_finger_pad" reason="Adjacent"/>
+    <disable_collisions link1="left_inner_finger" link2="left_inner_knuckle" reason="Default"/>
+    <disable_collisions link1="left_inner_finger" link2="left_outer_finger" reason="Adjacent"/>
+    <disable_collisions link1="left_inner_finger" link2="left_outer_knuckle" reason="Never"/>
+    <disable_collisions link1="left_inner_finger" link2="right_inner_finger" reason="Never"/>
+    <disable_collisions link1="left_inner_finger" link2="right_inner_finger_pad" reason="Never"/>
+    <disable_collisions link1="left_inner_finger" link2="right_inner_knuckle" reason="Never"/>
+    <disable_collisions link1="left_inner_finger" link2="right_outer_finger" reason="Never"/>
+    <disable_collisions link1="left_inner_finger" link2="right_outer_knuckle" reason="Never"/>
+    <disable_collisions link1="left_inner_finger" link2="robotiq_140_base_link" reason="Never"/>
+    <disable_collisions link1="left_inner_finger" link2="spherical_wrist_1_link" reason="Never"/>
+    <disable_collisions link1="left_inner_finger" link2="spherical_wrist_2_link" reason="Never"/>
+    <disable_collisions link1="left_inner_finger_pad" link2="left_inner_knuckle" reason="Never"/>
+    <disable_collisions link1="left_inner_finger_pad" link2="left_outer_finger" reason="Never"/>
+    <disable_collisions link1="left_inner_finger_pad" link2="left_outer_knuckle" reason="Never"/>
+    <disable_collisions link1="left_inner_finger_pad" link2="right_inner_finger" reason="Never"/>
+    <disable_collisions link1="left_inner_finger_pad" link2="right_inner_knuckle" reason="Never"/>
+    <disable_collisions link1="left_inner_finger_pad" link2="right_outer_finger" reason="Never"/>
+    <disable_collisions link1="left_inner_finger_pad" link2="right_outer_knuckle" reason="Never"/>
+    <disable_collisions link1="left_inner_finger_pad" link2="right_inner_finger_pad" reason="Default"/>
+    <disable_collisions link1="left_inner_finger_pad" link2="robotiq_140_base_link" reason="Never"/>
+    <disable_collisions link1="left_inner_finger_pad" link2="spherical_wrist_1_link" reason="Never"/>
+    <disable_collisions link1="left_inner_finger_pad" link2="spherical_wrist_2_link" reason="Never"/>
+    <disable_collisions link1="left_inner_knuckle" link2="left_outer_finger" reason="Never"/>
+    <disable_collisions link1="left_inner_knuckle" link2="left_outer_knuckle" reason="Default"/>
+    <disable_collisions link1="left_inner_knuckle" link2="right_inner_finger" reason="Never"/>
+    <disable_collisions link1="left_inner_knuckle" link2="right_inner_finger_pad" reason="Never"/>
+    <disable_collisions link1="left_inner_knuckle" link2="right_inner_knuckle" reason="Never"/>
+    <disable_collisions link1="left_inner_knuckle" link2="right_outer_finger" reason="Never"/>
+    <disable_collisions link1="left_inner_knuckle" link2="right_outer_knuckle" reason="Never"/>
+    <disable_collisions link1="left_inner_knuckle" link2="robotiq_140_base_link" reason="Adjacent"/>
+    <disable_collisions link1="left_inner_knuckle" link2="spherical_wrist_1_link" reason="Never"/>
+    <disable_collisions link1="left_inner_knuckle" link2="spherical_wrist_2_link" reason="Never"/>
+    <disable_collisions link1="left_outer_finger" link2="left_outer_knuckle" reason="Adjacent"/>
+    <disable_collisions link1="left_outer_finger" link2="right_inner_finger" reason="Never"/>
+    <disable_collisions link1="left_outer_finger" link2="right_inner_finger_pad" reason="Never"/>
+    <disable_collisions link1="left_outer_finger" link2="right_inner_knuckle" reason="Never"/>
+    <disable_collisions link1="left_outer_finger" link2="right_outer_finger" reason="Never"/>
+    <disable_collisions link1="left_outer_finger" link2="right_outer_knuckle" reason="Never"/>
+    <disable_collisions link1="left_outer_finger" link2="robotiq_140_base_link" reason="Never"/>
+    <disable_collisions link1="left_outer_finger" link2="spherical_wrist_1_link" reason="Never"/>
+    <disable_collisions link1="left_outer_finger" link2="spherical_wrist_2_link" reason="Never"/>
+    <disable_collisions link1="left_outer_knuckle" link2="right_inner_finger" reason="Never"/>
+    <disable_collisions link1="left_outer_knuckle" link2="right_inner_finger_pad" reason="Never"/>
+    <disable_collisions link1="left_outer_knuckle" link2="right_inner_knuckle" reason="Never"/>
+    <disable_collisions link1="left_outer_knuckle" link2="right_outer_finger" reason="Never"/>
+    <disable_collisions link1="left_outer_knuckle" link2="right_outer_knuckle" reason="Never"/>
+    <disable_collisions link1="left_outer_knuckle" link2="robotiq_140_base_link" reason="Adjacent"/>
+    <disable_collisions link1="left_outer_knuckle" link2="spherical_wrist_1_link" reason="Never"/>
+    <disable_collisions link1="left_outer_knuckle" link2="spherical_wrist_2_link" reason="Never"/>
+    <disable_collisions link1="right_inner_finger" link2="right_inner_finger_pad" reason="Adjacent"/>
+    <disable_collisions link1="right_inner_finger" link2="right_inner_knuckle" reason="Default"/>
+    <disable_collisions link1="right_inner_finger" link2="right_outer_finger" reason="Adjacent"/>
+    <disable_collisions link1="right_inner_finger" link2="right_outer_knuckle" reason="Never"/>
+    <disable_collisions link1="right_inner_finger" link2="robotiq_140_base_link" reason="Never"/>
+    <disable_collisions link1="right_inner_finger" link2="spherical_wrist_1_link" reason="Never"/>
+    <disable_collisions link1="right_inner_finger" link2="spherical_wrist_2_link" reason="Never"/>
+    <disable_collisions link1="right_inner_finger_pad" link2="right_inner_knuckle" reason="Never"/>
+    <disable_collisions link1="right_inner_finger_pad" link2="right_outer_finger" reason="Never"/>
+    <disable_collisions link1="right_inner_finger_pad" link2="right_outer_knuckle" reason="Never"/>
+    <disable_collisions link1="right_inner_finger_pad" link2="robotiq_140_base_link" reason="Never"/>
+    <disable_collisions link1="right_inner_finger_pad" link2="spherical_wrist_1_link" reason="Never"/>
+    <disable_collisions link1="right_inner_finger_pad" link2="spherical_wrist_2_link" reason="Never"/>
+    <disable_collisions link1="right_inner_knuckle" link2="right_outer_finger" reason="Never"/>
+    <disable_collisions link1="right_inner_knuckle" link2="right_outer_knuckle" reason="Default"/>
+    <disable_collisions link1="right_inner_knuckle" link2="robotiq_140_base_link" reason="Adjacent"/>
+    <disable_collisions link1="right_inner_knuckle" link2="spherical_wrist_1_link" reason="Never"/>
+    <disable_collisions link1="right_inner_knuckle" link2="spherical_wrist_2_link" reason="Never"/>
+    <disable_collisions link1="right_outer_finger" link2="right_outer_knuckle" reason="Adjacent"/>
+    <disable_collisions link1="right_outer_finger" link2="robotiq_140_base_link" reason="Never"/>
+    <disable_collisions link1="right_outer_finger" link2="spherical_wrist_1_link" reason="Never"/>
+    <disable_collisions link1="right_outer_finger" link2="spherical_wrist_2_link" reason="Never"/>
+    <disable_collisions link1="right_outer_knuckle" link2="robotiq_140_base_link" reason="Adjacent"/>
+    <disable_collisions link1="right_outer_knuckle" link2="spherical_wrist_1_link" reason="Never"/>
+    <disable_collisions link1="right_outer_knuckle" link2="spherical_wrist_2_link" reason="Never"/>
+    <disable_collisions link1="robotiq_140_base_link" link2="spherical_wrist_1_link" reason="Never"/>
+    <disable_collisions link1="robotiq_140_base_link" link2="spherical_wrist_2_link" reason="Never"/>
+    <disable_collisions link1="shoulder_link" link2="spherical_wrist_1_link" reason="Never"/>
+    <disable_collisions link1="shoulder_link" link2="spherical_wrist_2_link" reason="Never"/>
+    <disable_collisions link1="spherical_wrist_1_link" link2="spherical_wrist_2_link" reason="Adjacent"/>
+    <!-- I think its not necessary as link is empty and has no collision -->
+    <!-- <disable_collisions link1="grasping_frame" link2="left_inner_finger_pad" reason="Default"/>
+    <disable_collisions link1="grasping_frame" link2="right_inner_finger_pad" reason="Default"/>
+    <disable_collisions link1="grasping_frame" link2="left_inner_finger" reason="Default"/>
+    <disable_collisions link1="grasping_frame" link2="right_inner_finger" reason="Default"/>
+    <disable_collisions link1="grasping_frame" link2="left_inner_knuckle" reason="Default"/>
+    <disable_collisions link1="grasping_frame" link2="right_inner_knuckle" reason="Default"/> -->
+</robot>
+
+
+
+-------------- action error ---------
+The error you're seeing, specifically goal ID already exists, combined with the std::runtime_error: Failed to accept new goal, is a classic ROS 2 Action timing issue.
+The Root Cause
+
+Your HandPosePublisher sends commands at 30Hz (from the rate parameter). 
+Every time your camera processes a frame, it publishes to /gripper_control.
+
+In your ArmControllerNode, the _gripper_cb is triggered every time that message arrives. 
+Because 30Hz is very fast for an Action Server, you are calling self.gripper_client.send_goal_async(goal) 
+while the previous goal is likely still being processed or "accepted" by the Robotiq controller.
+ When you send goals that fast without checking if the previous one finished, the Action Client can
+  reuse/clash IDs or overwhelm the server, leading to the crash.
+
+
+
+ros2 action list
+
+  /execute_trajectory
+/joint_trajectory_controller/follow_joint_trajectory
+/move_action
+/robotiq_gripper_controller/gripper_cmd
+/sequence_move_group
+
+
+ros2 action info /robotiq_gripper_controller/g
+ripper_cmd
+Action: /robotiq_gripper_controller/gripper_cmd
+Action clients: 2
+    /arm_controller
+    /moveit_simple_controller_manager
+Action servers: 1
+    /robotiq_gripper_controller
+
+ros2 action info /move_group
+
+Action clients: 1
+    /arm_controller
+Action servers: 0
+
+
+
+
+ros2 run tf2_ros tf2_echo base_link grasping_frame
+
+
+
+At time 83.520000000
+- Translation: [0.624, 0.002, 0.434]
+- Rotation: in Quaternion (xyzw) [0.001, -0.000, 0.001, 1.000]
+- Rotation: in RPY (radian) [0.001, -0.001, 0.002]
+- Rotation: in RPY (degree) [0.069, -0.045, 0.088]
+- Matrix:
+  1.000 -0.002 -0.001  0.624
+  0.002  1.000 -0.001  0.002
+  0.001  0.001  1.000  0.434
+  0.000  0.000  0.000  1.000
+At time 83.570000000
+- Translation: [0.624, 0.002, 0.434]
+- Rotation: in Quaternion (xyzw) [0.001, -0.000, 0.001, 1.000]
+- Rotation: in RPY (radian) [0.001, -0.001, 0.002]
+- Rotation: in RPY (degree) [0.069, -0.045, 0.088]
+- Matrix:
+  1.000 -0.002 -0.001  0.624
+  0.002  1.000 -0.001  0.002
+  0.001  0.001  1.000  0.434
+  0.000  0.000  0.000  1.000
+At time 83.620000000
+- Translation: [0.624, 0.002, 0.434]
+- Rotation: in Quaternion (xyzw) [0.001, -0.000, 0.001, 1.000]
+- Rotation: in RPY (radian) [0.001, -0.001, 0.002]
+- Rotation: in RPY (degree) [0.069, -0.045, 0.088]
+- Matrix:
+  1.000 -0.002 -0.001  0.624
+  0.002  1.000 -0.001  0.002
+  0.001  0.001  1.000  0.434
+  0.000  0.000  0.000  1.000
+^C[INFO] [1775939500.767356814] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+
+
+ros2 topic echo /joint_state
+not changing 
+
+
+
+opic
+root@nirbhayborikar-HP-Pavilion-x360-Convertible-14-dh1xxx:/ros2_ws/src/stage_1# ros2 topic echo /move_group/result
+WARNING: topic [/move_group/result] does not appear to be published yet
+Could not determine the type for the passed topic
+root@nirbhayborikar-HP-Pavilion-x360-Convertible-14-dh1x
+
+
+
+
+ros2 topic echo /joint_trajectory_controller/joint_trajectory
+^C^C
+notthing coming when waving hand
+
+
+
+kortex_gz_server      | [component_container_mt-1] [INFO] [1775940483.097538916] [robotiq_gripper_controller]: Received & accepted new action goal
+this error in my arm terminal comes
+
+
+[arm_controller-2] [WARN] [1775940507.575317125] [arm_controller]: MoveGroup not available
+this in my teleop comes 
+
+
+ros2 topic echo /move_group/result
+WARNING: topic [/move_group/result] does not appear to be published yet
+and this 
+
+
+
+---------------------------------------
+ros2 action send_goal /move_action moveit_msgs/action/MoveGroup \
+  "{request: {group_name: 'manipulator', num_planning_attempts: 1, allowed_planning_time: 5.0}}"
+Waiting for an action server to become available...
+Sending goal:
+     request:
+  workspace_parameters:
+    header:
+      stamp:
+        sec: 0
+        nanosec: 0
+      frame_id: ''
+    min_corner:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    max_corner:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  start_state:
+    joint_state:
+      header:
+        stamp:
+          sec: 0
+          nanosec: 0
+        frame_id: ''
+      name: []
+      position: []
+      velocity: []
+      effort: []
+    multi_dof_joint_state:
+      header:
+        stamp:
+          sec: 0
+          nanosec: 0
+        frame_id: ''
+      joint_names: []
+      transforms: []
+      twist: []
+      wrench: []
+    attached_collision_objects: []
+    is_diff: false
+  goal_constraints: []
+  path_constraints:
+    name: ''
+    joint_constraints: []
+    position_constraints: []
+    orientation_constraints: []
+    visibility_constraints: []
+  trajectory_constraints:
+    constraints: []
+  reference_trajectories: []
+  pipeline_id: ''
+  planner_id: ''
+  group_name: manipulator
+  num_planning_attempts: 1
+  allowed_planning_time: 5.0
+  max_velocity_scaling_factor: 0.0
+  max_acceleration_scaling_factor: 0.0
+  cartesian_speed_limited_link: ''
+  max_cartesian_speed: 0.0
+planning_options:
+  planning_scene_diff:
+    name: ''
+    robot_state:
+      joint_state:
+        header:
+          stamp:
+            sec: 0
+            nanosec: 0
+          frame_id: ''
+        name: []
+        position: []
+        velocity: []
+        effort: []
+      multi_dof_joint_state:
+        header:
+          stamp:
+            sec: 0
+            nanosec: 0
+          frame_id: ''
+        joint_names: []
+        transforms: []
+        twist: []
+        wrench: []
+      attached_collision_objects: []
+      is_diff: false
+    robot_model_name: ''
+    fixed_frame_transforms: []
+    allowed_collision_matrix:
+      entry_names: []
+      entry_values: []
+      default_entry_names: []
+      default_entry_values: []
+    link_padding: []
+    link_scale: []
+    object_colors: []
+    world:
+      collision_objects: []
+      octomap:
+        header:
+          stamp:
+            sec: 0
+            nanosec: 0
+          frame_id: ''
+        origin:
+          position:
+            x: 0.0
+            y: 0.0
+            z: 0.0
+          orientation:
+            x: 0.0
+            y: 0.0
+            z: 0.0
+            w: 1.0
+        octomap:
+          header:
+            stamp:
+              sec: 0
+              nanosec: 0
+            frame_id: ''
+          binary: false
+          id: ''
+          resolution: 0.0
+          data: []
+    is_diff: false
+  plan_only: false
+  look_around: false
+  look_around_attempts: 0
+  max_safe_execution_cost: 0.0
+  replan: false
+  replan_attempts: 0
+  replan_delay: 0.0
+
+
+
+
+
+
+ ros2 topic hz /target_pose
+WARNING: topic [/target_pose] does not appear to be published yet
+average rate: 6.206
+	min: 0.149s max: 0.169s std dev: 0.00672s window: 8
+average rate: 6.168
+	min: 0.142s max: 0.176s std dev: 0.00852s window: 15
+average rate: 6.137
+	min: 0.142s max: 0.180s std dev: 0.00834s window: 22
+average rate: 6.094
+	min: 0.142s max: 0.180s std dev: 0.00845s window: 28
+average rate: 6.064
+	min: 0.142s max: 0.180s std dev: 0.00914s window: 35
+average rate: 6.077
+
+
+
+
+
+---------------
+
+[move_group-1] [INFO] [1775941128.564189344] [move_group.moveit.moveit.ros.move_group.executable]: 
+kortex_moveit         | [move_group-1] 
+kortex_moveit         | [move_group-1] ********************************************************
+kortex_moveit         | [move_group-1] * MoveGroup using: 
+kortex_moveit         | [move_group-1] *     - apply_planning_scene_service
+kortex_moveit         | [move_group-1] *     - clear_octomap_service
+kortex_moveit         | [move_group-1] *     - get_group_urdf
+kortex_moveit         | [move_group-1] *     - load_geometry_from_file
+kortex_moveit         | [move_group-1] *     - CartesianPathService
+kortex_moveit         | [move_group-1] *     - execute_trajectory_action
+kortex_moveit         | [move_group-1] *     - get_planning_scene_service
+kortex_moveit         | [move_group-1] *     - kinematics_service
+kortex_moveit         | [move_group-1] *     - move_action
+kortex_moveit         | [move_group-1] *     - motion_plan_service
+kortex_moveit         | [move_group-1] *     - query_planners_service
+kortex_moveit         | [move_group-1] *     - state_validation_service
+kortex_moveit         | [move_group-1] *     - save_geometry_to_file
+kortex_moveit         | [move_group-1] *     - SequenceAction
+kortex_moveit         | [move_group-1] *     - SequenceService
+kortex_moveit         | [move_group-1] ********************************************************
+kortex_moveit         | [move_group-1] 
+kortex_moveit         | [move_group-1] [INFO] [1775941128.564334274] [move_group.moveit.moveit.ros.move_group.context]: MoveGroup context using pipeline ompl
+kortex_moveit         | [move_group-1] [INFO] [1775941128.564376463] [move_group.moveit.moveit.ros.move_group.context]: MoveGroup context initialization complete
+kortex_moveit         | [move_group-1] Loading 'move_group/ApplyPlanningSceneService'...
+kortex_moveit         | [move_group-1] Loading 'move_group/ClearOctomapService'...
+kortex_moveit         | [move_group-1] Loading 'move_group/GetUrdfService'...
+kortex_moveit         | [move_group-1] Loading 'move_group/LoadGeometryFromFileService'...
+kortex_moveit         | [move_group-1] Loading 'move_group/MoveGroupCartesianPathService'...
+kortex_moveit         | [move_group-1] Loading 'move_group/MoveGroupExecuteTrajectoryAction'...
+kortex_moveit         | [move_group-1] Loading 'move_group/MoveGroupGetPlanningSceneService'...
+kortex_moveit         | [move_group-1] Loading 'move_group/MoveGroupKinematicsService'...
+kortex_moveit         | [move_group-1] Loading 'move_group/MoveGroupMoveAction'...
+kortex_moveit         | [move_group-1] Loading 'move_group/MoveGroupPlanService'...
+kortex_moveit         | [move_group-1] Loading 'move_group/MoveGroupQueryPlannersService'...
+kortex_moveit         | [move_group-1] Loading 'move_group/MoveGroupStateValidationService'...
+kortex_moveit         | [move_group-1] Loading 'move_group/SaveGeometryToFileService'...
+kortex_moveit         | [move_group-1] Loading 'pilz_industrial_motion_planner/MoveGroupSequenceAction'...
+kortex_moveit         | [move_group-1] Loading 'pilz_industrial_motion_planner/MoveGroupSequenceService'...
+kortex_moveit         | [move_group-1] 
+kortex_moveit         | [move_group-1] You can start planning now!
+kortex_moveit         | [move_group-1] 
+
+
+
+
+
+
+
+
+
+/ros2_ws# ros2 action send_goal /move_action moveit_msgs/action/MoveGroup "{request: {group_name: 'manipulator', num_planning_attempts: 1, \
+allowed_planning_time: 5.0, goal_constraints: []}}"
+Waiting for an action server to become available...
+Sending goal:
+     request:
+  workspace_parameters:
+    header:
+      stamp:
+        sec: 0
+        nanosec: 0
+      frame_id: ''
+    min_corner:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    max_corner:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  start_state:
+    joint_state:
+      header:
+        stamp:
+          sec: 0
+          nanosec: 0
+        frame_id: ''
+      name: []
+      position: []
+      velocity: []
+      effort: []
+    multi_dof_joint_state:
+      header:
+        stamp:
+          sec: 0
+          nanosec: 0
+        frame_id: ''
+      joint_names: []
+      transforms: []
+      twist: []
+      wrench: []
+    attached_collision_objects: []
+    is_diff: false
+  goal_constraints: []
+  path_constraints:
+    name: ''
+    joint_constraints: []
+    position_constraints: []
+    orientation_constraints: []
+    visibility_constraints: []
+  trajectory_constraints:
+    constraints: []
+  reference_trajectories: []
+  pipeline_id: ''
+  planner_id: ''
+  group_name: manipulator
+  num_planning_attempts: 1
+  allowed_planning_time: 5.0
+  max_velocity_scaling_factor: 0.0
+  max_acceleration_scaling_factor: 0.0
+  cartesian_speed_limited_link: ''
+  max_cartesian_speed: 0.0
+planning_options:
+  planning_scene_diff:
+    name: ''
+    robot_state:
+      joint_state:
+        header:
+          stamp:
+            sec: 0
+            nanosec: 0
+          frame_id: ''
+        name: []
+        position: []
+        velocity: []
+        effort: []
+      multi_dof_joint_state:
+        header:
+          stamp:
+            sec: 0
+            nanosec: 0
+          frame_id: ''
+        joint_names: []
+        transforms: []
+        twist: []
+        wrench: []
+      attached_collision_objects: []
+      is_diff: false
+    robot_model_name: ''
+    fixed_frame_transforms: []
+    allowed_collision_matrix:
+      entry_names: []
+      entry_values: []
+      default_entry_names: []
+      default_entry_values: []
+    link_padding: []
+    link_scale: []
+    object_colors: []
+    world:
+      collision_objects: []
+      octomap:
+        header:
+          stamp:
+            sec: 0
+            nanosec: 0
+          frame_id: ''
+        origin:
+          position:
+            x: 0.0
+            y: 0.0
+            z: 0.0
+          orientation:
+            x: 0.0
+            y: 0.0
+            z: 0.0
+            w: 1.0
+        octomap:
+          header:
+            stamp:
+              sec: 0
+              nanosec: 0
+            frame_id: ''
+          binary: false
+          id: ''
+          resolution: 0.0
+          data: []
+    is_diff: false
+  plan_only: false
+  look_around: false
+  look_around_attempts: 0
+  max_safe_execution_cost: 0.0
+  replan: false
+  replan_attempts: 0
+  replan_delay: 0.0
+
+2026-04-11 21:08:20.722 [RTPS_READER_HISTORY Error] Change payload size of '32' bytes is larger than the history payload size of '19' bytes and cannot be resized. -> Function can_change_be_added_nts
+
+
+
+ros2 node info /arm_controller
+/arm_controller
+  Subscribers:
+    /gripper_control: std_msgs/msg/Bool
+    /joint_states: sensor_msgs/msg/JointState
+    /target_pose: geometry_msgs/msg/PoseStamped
+  Publishers:
+    /parameter_events: rcl_interfaces/msg/ParameterEvent
+    /rosout: rcl_interfaces/msg/Log
+  Service Servers:
+    /arm_controller/describe_parameters: rcl_interfaces/srv/DescribeParameters
+    /arm_controller/get_parameter_types: rcl_interfaces/srv/GetParameterTypes
+    /arm_controller/get_parameters: rcl_interfaces/srv/GetParameters
+    /arm_controller/get_type_description: type_description_interfaces/srv/GetTypeDescription
+    /arm_controller/list_parameters: rcl_interfaces/srv/ListParameters
+    /arm_controller/set_parameters: rcl_interfaces/srv/SetParameters
+    /arm_controller/set_parameters_atomically: rcl_interfaces/srv/SetParametersAtomically
+  Service Clients:
+
+  Action Servers:
+
+  Action Clients:
+    /move_action: moveit_msgs/action/MoveGroup
+    /robotiq_gripper_controller/gripper_cmd: control_msgs/action/GripperCommand
+root@nirbhayborikar-HP-Pavilion-x360-Convertible-14-dh1xxx:/ros2_ws# 
+
+
+
+ ros2 topic echo /joint_states --once
+
+    nanosec: 608000000
+  frame_id: ''
+name:
+- finger_joint
+- joint_1
+- joint_2
+- joint_3
+- joint_4
+- joint_5
+- joint_6
+- joint_7
+
+
+
+
+ros2 topic list:
+
+
+/attached_collision_object
+/clock
+/collision_object
+/controller_manager/activity
+/controller_manager/introspection_data/full
+/controller_manager/introspection_data/names
+/controller_manager/introspection_data/values
+/diagnostics
+/display_contacts
+/display_planned_path
+/dynamic_joint_states
+/joint_state_broadcaster/transition_event
+/joint_states
+/joint_trajectory_controller/controller_state
+
+/joint_trajectory_controller/joint_trajectory  (this moves arm)
+
+
+
+
+/joint_trajectory_controller/transition_event
+/kortex_vision/color/camera_info
+/kortex_vision/color/image
+/kortex_vision/color/image_raw
+/kortex_vision/depth/camera_info
+/kortex_vision/depth/color/points
+/kortex_vision/depth/image
+/monitored_planning_scene
+/parameter_events
+/pipeline_state
+/planning_scene
+/planning_scene_world
+/recognized_object_array
+/robot_description
+/robot_description_semantic
+/robotiq_gripper_controller/transition_event
+/rosout
+/rviz_moveit_motion_planning_display/robot_interaction_interactive_marker_topic/feedback
+/rviz_moveit_motion_planning_display/robot_interaction_interactive_marker_topic/update
+/tf
+/tf_static
+/trajectory_execution_event
+/twist_controller/commands
+/twist_controller/transition_event
+
+
+
+
+# check with topic wether the arm moving or not
+
+ros2 topic pub --once /joint_trajectory_controller/joint_trajectory \
+  trajectory_msgs/msg/JointTrajectory \
+  "{header: {stamp: {sec: 0, nanosec: 0}, frame_id: 'base_link'}, 
+    joint_names: ['joint_1', 'joint_2', 'joint_3', 'joint_4', 'joint_5', 'joint_6', 'joint_7'],
+    points: [{positions: [0.0, 0.0, 3.14, 0.0, 0.0, -1.57, 1.57], 
+              velocities: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+              time_from_start: {sec: 3, nanosec: 0}}]}"
+
+
+
+# check what it accept 
+in pose 
+
+
+
+ ros2 interface show trajectory_msgs/msg/JointTrajectoryPoint
+
+
+
+# Each trajectory point specifies +++++++either----------- positions[, velocities[, accelerations]]
+# or positions[, effort] for the trajectory to be executed.
+# All specified values are in the same order as the joint names in JointTrajectory.msg.
+
+# Single DOF joint positions for each joint relative to their "0" position.
+# The units depend on the specific joint type: radians for revolute or
+# continuous joints, and meters for prismatic joints.
+float64[] positions
+
+# The rate of change in position of each joint. Units are joint type dependent.
+# Radians/second for revolute or continuous joints, and meters/second for
+# prismatic joints.
+float64[] velocities
+
+# Rate of change in velocity of each joint. Units are joint type dependent.
+# Radians/second^2 for revolute or continuous joints, and meters/second^2 for
+# prismatic joints.
+float64[] accelerations
+
+# The torque or the force to be applied at each joint. For revolute/continuous
+# joints effort denotes a torque in newton-meters. For prismatic joints, effort
+# denotes a force in newtons.
+float64[] effort
+
+# Desired time from the trajectory start to arrive at this trajectory point.
+builtin_interfaces/Duration time_from_start
+	int32 sec
+	uint32 nanosec
+
+
+
+ros2 control list_controllers
+[INFO] [1776112777.438301181] [_ros2cli_197]: waiting for service /controller_manager/list_controllers to become available...
+joint_state_broadcaster     joint_state_broadcaster/JointStateBroadcaster          inactive  
+twist_controller            picknik_twist_controller/PicknikTwistController        inactive
+robotiq_gripper_controller  position_controllers/GripperActionController           active  
+joint_trajectory_controller joint_trajectory_controller/JointTrajectoryController  inactive  
+
+
+Error activating controller, check controller_manager logs
+
+ros2 control list_hardware_components
+Hardware Component 1
+	name: KortexMultiInterfaceHardware
+	type: system
+	plugin name: kortex_driver/KortexMultiInterfaceHardware
+	state: id=1 label=unconfigured
+	read/write rate: 1000 Hz
+	is_async: False
+	command interfaces
+		finger_joint/position [unavailable] [unclaimed]
+		finger_joint/set_gripper_max_velocity [unavailable] [unclaimed]
+		finger_joint/set_gripper_max_effort [unavailable] [unclaimed]
+		joint_1/position [unavailable] [unclaimed]
+		joint_1/velocity [unavailable] [unclaimed]
+		joint_1/effort [unavailable] [unclaimed]
+		joint_2/position [unavailable] [unclaimed]
+		joint_2/velocity [unavailable] [unclaimed]
+		joint_2/effort [unavailable] [unclaimed]
+		joint_3/position [unavailable] [unclaimed]
+		joint_3/velocity [unavailable] [unclaimed]
+		joint_3/effort [unavailable] [unclaimed]
+		joint_4/position [unavailable] [unclaimed]
+		joint_4/velocity [unavailable] [unclaimed]
+		joint_4/effort [unavailable] [unclaimed]
+		joint_5/position [unavailable] [unclaimed]
+		joint_5/velocity [unavailable] [unclaimed]
+		joint_5/effort [unavailable] [unclaimed]
+		joint_6/position [unavailable] [unclaimed]
+		joint_6/velocity [unavailable] [unclaimed]
+		joint_6/effort [unavailable] [unclaimed]
+		joint_7/position [unavailable] [unclaimed]
+		joint_7/velocity [unavailable] [unclaimed]
+		joint_7/effort [unavailable] [unclaimed]
+		tcp/twist.linear.x [unavailable] [unclaimed]
+		tcp/twist.linear.y [unavailable] [unclaimed]
+		tcp/twist.linear.z [unavailable] [unclaimed]
+		tcp/twist.angular.x [unavailable] [unclaimed]
+		tcp/twist.angular.y [unavailable] [unclaimed]
+		tcp/twist.angular.z [unavailable] [unclaimed]
+		reset_fault/command [unavailable] [unclaimed]
+		reset_fault/async_success [unavailable] [unclaimed]
+
+
+
+
+
+##################steps to follow #####################################
+change rmw implementation to zenoh 
+
+
+################ check with twist command wether twist working ##############
+ros2 topic pub --once /twist_controller/commands geometry_msgs/msg/Twist "{linear: {x: 1.0, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0.0}}"
+
+
+
+You can also command the arm using Twist messages. Before doing so, you must active the twist_controller and deactivate the joint_trajectory_controller:
+
+# activate the twist and test it 
+
+ros2 service call /controller_manager/switch_controller controller_manager_msgs/srv/SwitchController "{
+  activate_controllers: [twist_controller],
+  deactivate_controllers: [joint_trajectory_controller],
+  strictness: 1,
+  activate_asap: true,
+}"
+
+
+# deactivate the twist, and activate the joint_trajectory_controller and test it 
+ros2 service call /controller_manager/switch_controller controller_manager_msgs/srv/SwitchController "{
+  activate_controllers: [joint_trajectory_controller],
+  deactivate_controllers: [twist_controller],
+  strictness: 1,
+  activate_asap: true,
+}"
+
+
+most important for visulization 
+
+Click Add -> By Topic -> Select /teleop_velocity_arrow.
+
+If you want the arrow's tail to physically attach to the robot's gripper and move with the arm, your node needs to know where the gripper is.
+To do that, we would need to add a tf2_ros.Buffer and TransformListener to your script to look up the tool_frame coordinates on every tick.
+
+
+#########################################################################
+
+Note: the required interface for the twist_controller does not currently exist in 
+the gazebo or mock hardware simulation setups. So the twist_controller is currently only functional on Kinova hardware.
+
+
+
+
+Write time : 1486.082 us
+kortex          | [ros2_control_node-1] [WARN] [1776173473.129696412] [controller_manager]: Overrun detected! The controller manager missed its desired rate of 1000 Hz. The loop took 1.706272 ms (missed cycles : 2).
+kortex          | [ros2_control_node-1] [WARN] [1776173478.249854399] [controller_manager]: Overrun might occur, Total time : 1804.006 us (Expected < 1000.000 us) --> Read time : 4.783 us, Update time : 57.483 us, Write time : 1741.740 us
+kortex          | [ros2_control_node-1] [WARN] [1776173478.249996411] [controller_manager]: Overrun detected! The 
+
+
+
+
+Successfully switched controllers!   | [ros2_control_node-1] [WARN] [1776173321.429556455] [controller_manager]: Overrun detected! The controller manager missed its desired rate of 1000 Hz. The loop took 46.120766 ms (missed cycles : 47).
+kortex          | [ros2_control_node-1] [WARN] [1776173322.429406232] [controller_manager]: Overrun might occur, Total time : 49918.066 us (Expected < 1000.000 us) --> Read time : 12.914 us, Update time : 62.757 us, Write time : 49842.395 us
+kortex          | [ros2_control_node-1] [WARN] [1776173322.429590120] [controller_manager]: Overrun detected! The controller manager missed its desired rate of 1000 Hz. The loop took 50.154401 ms (missed cycles : 51).
+kortex          | [ros2_control_node-1] [ERROR] [1776173325.879307161] [controller_manager]: Exception of type : St13runtime_error thrown during write of the component 'KortexMultiInterfaceHardware': timeout detected: BaseCyclicClient::RefreshFeedback
+kortex          | [ros2_control_node-1] 
+kortex          | [ros2_control_node-1] [ERROR] [1776173325.879442273] [controller_manager]: Deactivating following hardware components as their write cycle resulted in an error: [ KortexMultiInterfaceHardware ]
+kortex          | [ros2_control_node-1] [ERROR] [1776173325.879448628] [controller_manager]: Deactivating following controllers as their hardware components write cycle resulted in an error: [ robotiq_gripper_controller joint_trajectory_controller joint_state_broadcaster fault_controller twist_controller ]
+kortex          | [ros2_control_node-1] [ERROR] [1776173325.879487106] [controller_manager]: Not acceptable command interfaces combination: 
+kortex          | [ros2_control_node-1] Start interfaces: 
+kortex          | [ros2_control_node-1] [
+kortex          | [ros2_control_node-1] ]
+kortex          | [ros2_control_node-1] Stop interfaces: 
+kortex          | [ros2_control_node-1] [
+kortex          | [ros2_control_node-1]   finger_joint/position
+kortex          | [ros2_control_node-1]   joint_1/position
+kortex          | [ros2_control_node-1]   joint_2/position
+kortex          | [ros2_control_node-1]   joint_3/position
+kortex          | [ros2_control_node-1]   joint_4/position
+kortex          | [ros2_control_node-1]   joint_5/position
+kortex          | [ros2_control_node-1]   joint_6/position
+kortex          | [ros2_control_node-1]   joint_7/position
+kortex          | [ros2_control_node-1]   reset_fault/command
+kortex          | [ros2_control_node-1]   reset_fault/async_success
+kortex          | [ros2_control_node-1]   tcp/twist.linear.x
+kortex          | [ros2_control_node-1]   tcp/twist.linear.y
+kortex          | [ros2_control_node-1]   tcp/twist.linear.z
+kortex          | [ros2_control_node-1]   tcp/twist.angular.x
+kortex          | [ros2_control_node-1]   tcp/twist.angular.y
+kortex          | [ros2_control_node-1]   tcp/twist.angular.z
+kortex          | [ros2_control_node-1] ]
+kortex          | [ros2_control_node-1] Not available: 
+kortex          | [ros2_control_node-1] [
+kortex          | [ros2_control_node-1]  finger_joint/position
+kortex          | [ros2_control_node-1]  joint_1/position
+kortex          | [ros2_control_node-1]  joint_2/position
+kortex          | [ros2_control_node-1]  joint_3/position
+kortex          | [ros2_control_node-1]  joint_4/position
+kortex          | [ros2_control_node-1]  joint_5/position
+kortex          | [ros2_control_node-1]  joint_6/position
+kortex          | [ros2_control_node-1]  joint_7/position
+kortex          | [ros2_control_node-1]  reset_fault/command
+kortex          | [ros2_control_node-1]  reset_fault/async_success
+kortex          | [ros2_control_node-1]  tcp/twist.linear.x
+kortex          | [ros2_control_node-1]  tcp/twist.linear.y
+kortex          | [ros2_control_node-1]  tcp/twist.linear.z
+kortex          | [ros2_control_node-1]  tcp/twist.angular.x
+kortex          | [ros2_control_node-1]  tcp/twist.angular.y
+kortex          | [ros2_control_node-1]  tcp/twist.angular.z
+kortex          | [ros2_control_node-1] ]
+kortex          | [ros2_control_node-1] 
+kortex          | [ros2_control_node-1] [ERROR] [1776173325.879510234] [controller_manager]: Error while attempting mode switch when deactivating controllers in write cycle!
+kortex          | [ros2_control_node-1] [WARN] [1776173325.879570892] [controller_manager]: Overrun might occur, Total time : 3050107.761 us (Expected < 1000.000 us) --> Read time : 19.277 us, Update time : 99.142 us, Write time : 3049989.342 us
+kortex          | [ros2_control_node-1] [WARN] [1776173325.879582360] [controller_manager]: Overrun detected! The controller manager missed its desired rate of 1000 Hz. The loop took 3050.149393 ms (missed cycles : 3051).
+kortex          | [ros2_control_node-1] Error Receiving: recvfrom() failed with error code : 104
+moveit_wrapper exited with code 0
+moveit_wrapper exited with code 0
+kortex          | [ros2_control_node-1] [WARN] [1776173364.617209667] [controller_manager]: Overrun detected! The controller manager missed its desired rate of 1000 Hz. The loop took 1.776975 ms (missed cycles : 2).
+
+
+w Enable Watch
+
+. Can you close the gripper with a Twist command?
+
+No, you cannot use the PicknikTwistController to control the gripper.
+
+A Twist message (geometry_msgs/Twist) strictly contains 6 numbers: Linear X, Y, Z and Angular X, Y, Z. 
+It is pure 3D spatial math meant only for the 6 (or 7) main joints of the arm.
+
+
+gripper-----------
+
+
+The Robotiq gripper is a completely separate piece of hardware with its own motor. To control
+ it, you must use the robotiq_gripper_controller (which is a GripperActionController).
+
+
+
+ error:
+  while using robotiq gripper
+ ontrol_node-1] [ERROR] [1776178573.080158077] [KortexMultiInterfaceHardware]: Error sub-code: VALUE_IS_ABOVE_MAXIMUM
+kortex          | [ros2_control_node-1] [ERROR] [1776178573.130101682] [KortexMultiInterfaceHardware]: Exception caught while sending internal gripper command!
+kortex          | [ros2_control_node-1] [ERROR] [1776178573.130147207] [KortexMultiInterfaceHardware]: Kortex exception: Device error, Error sub type=VALUE_IS_ABOVE_MAXIMUM => <srv: 2, fct: 136, msgType: 3>
+
+
+ # 0.0 (open )
+# 0.8 (closed)
+#If your driver is configured for meters, sending 0.8 tells the gripper to open to 800 millimeters, which triggers the "ABOVE MAXIMUM" error!
+
+
+check gripper open an close
+
+close gripper command:
+
+ros2 action send_goal /robotiq_gripper_controller/gripper_cmd control_msgs/action/GripperCommand "{command: {position: 0.8, max_effort: 0.0}}"
+
+
+open gripper command
+ros2 action send_goal /robotiq_gripper_controller/gripper_cmd control_msgs/action/GripperCommand "{command: {position: 0.0, max_effort: 0.0}}"
+
+
+###########the gripper control defition-------
+
+robotiq_gripper_controller # controller name
+control_msgs/action/GripperCommand # std_msg type
+
+ros2 interface show control_msgs/action/GripperCommand
+
+
+
+
+GripperCommand command
+	float64 position
+	float64 max_effort
+---
+float64 position  # The current gripper gap size (in meters)
+float64 effort    # The current effort exerted (in Newtons)
+bool stalled      # True iff the gripper is exerting max effort and not moving
+bool reached_goal # True iff the gripper position has reached the commanded setpoint
+---
+float64 position  # The current gripper gap size (in meters)
+float64 effort    # The current effort exerted (in Newtons)
+bool stalled      # True iff the gripper is exerting max effort and not moving
+bool reached_goal # True iff the gripper position has reached the commanded setpoint
+
+
+seting planning group to gripper
+and in joints moving 
+
+finger_joint to 28 deg this is the close 
+
+finger_joint to 4 deg t
+
+
+
+check with 
+/joint_states
+
+close ----------
+
+ finger_joint
+ position:
+- 0.48676077960703884
+
+effort:
+- .nan
+
+  frame_id: base_link
+
+open-------
+
+position:
+- 0.07130892161478655
+effort nan
+
+
+
+-------------------------------# SENSAGRAM -----------------------------
+
+
+Having the phone send data twice as fast as the robot 
+reads it is the perfect setup for minimizing latency
+
+rotation.sensor.rotation_vector
+
+"type":"android.sensor.rotation_vector"}{"timestamp":1079185177367330,"values":[0.016176637,0.0050351284,0.14927568,0.98865044,-1.0],"type":"android.sensor.rotation_vector"}
+
+
+
+
+android.sensor.gyroscope
+
+"type":"android.sensor.gyroscope"}{"timestamp":1079253825463035,"values":[2.663159E-4,9.321057E-4,-5.326318E-4],"type":"android.sensor.gyroscope"}{"timestamp":1079253835490275,"values":[0.0013315795,0.0041278964,-0.0015978955],"type":"android.sensor.gyroscope"}{"t
+
+
+android.sensor.accelerometer
+"type":"android.sensor.accelerometer"}{"timestamp":1079220169782723,"values":[-0.037387855,0.37567315,9.759426],"type":"android.sensor.accelerometer"}{"timestamp":1079220179785379,"values":[-0.085244305,0.3469593,9.78814],"type":"android.sensor.accelerometer"}{"timestamp":1079220189811421,"values":[-0.09720842,0.30149564,9.94158],"type":"andr
+
+
+
+
+Twist Linear Control (Translation Mode): This mode allows the end effector to be translated in Cartesian space (forward/backward, sideways, up/down) while keeping the orientation of the gripper fixed.
+Twist Angular Control (Rotation Mode): This mode is used to change the orientation (pitch, yaw, roll) of the gripper (end effector) without altering its position.
+Combined/Other Modes: A "Twist combined" mapping exists, which brings both Twist linear and Angular maps together. In this mode, you can toggle or switch to rotate the gripper by using specific buttons (often by holding a trigger or button) to switch the joystick controls from translation to orientation.
+Gamepad Controls: The robot typically starts in Twist Linear mode. Switching between translation and rotation is done using the gamepad’s View or Menu buttons to cycle through control maps
+
+
+
+https://github.com/baqwas/FtcRobotController/wiki/TeleOpPreviewEvent 
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+-------------cross conection............................
+
+rmw-cyclonedds-cpp to zenoh cpp
+
+
+1. To connect your Olive Sense X1 (using rmw_cyclonedds_cpp) to your Kinova Gen3 (using rmw_zenoh_cpp), you must use the zenoh-bridge-ros2dds. 
+This bridge acts as a translator, allowing DDS-based nodes to appear as native Zenoh nodes and vice versa
+
+2.
+
+# 1. Check zenohd is up
+curl http://localhost:8000/router/local
+
+# 2. Check bridge is bridging correct domain
+docker logs zenoh_bridge_dds | grep "domain"
+
+
+"listen": { "endpoints": ["tcp/[::]:7448"] }
+
+
+
+# 2. Force your PC to download the correct 1.0.2 versions from the internet
+docker pull eclipse/zenoh:1.0.2
+docker pull eclipse/zenoh-bridge-ros2dds:1.0.2
+
+
+
+#3. delete cache
+docker builder prune -f
+
+
+
+
+
+
+
+
+
+
+########################
+
+
+1.
+
+docker pull eclipse/zenoh-bridge-ros2dds:nightly
+
+
+2. 
+#################################################apriltag#######################################
+
+
+ros2 run rmw_zenoh_cpp rmw_zenohd  (start zenoh router before launching camera)
+Then in another terminal:
+
+ros2 run usb_cam usb_cam_node_exe
+
+The webcam topic 
+will now available
+
+/camera_info
+/image_raw
+/image_raw/compressed
+/image_raw/compressedDepth
+/image_raw/theora
+/image_raw/zstd
+
+
+Then in another terminal:
+
+ros2 launch apriltag_ros apriltag.launch.py \
+  image_rect_topic:=/image_raw \
+  camera_info_topic:=/camera_info
+
+
+If you want accurate pose estimation: for rectified image
+
+step 1
+ros2 run image_proc image_proc
+
+
+ros2 launch apriltag_ros apriltag.launch.py \
+  image_rect_topic:=/image_rect \
+  camera_info_topic:=/camera_info
+
+
+  basically here images is rectified
+camera → /image_raw
+      → image_proc → /image_rect
+      → apriltag_ros
+
+
+      ##############################
+  
+ros2 interface show apriltag_msgs/msg/AprilTagDetectionArray
+std_msgs/Header header
+	builtin_interfaces/Time stamp
+		int32 sec
+		uint32 nanosec
+	string frame_id
+AprilTagDetection[] detections
+	string family
+	int32 id
+	int32 hamming
+	float32 goodness
+	float32 decision_margin
+	Point centre                    #
+		float64 x
+		float64 y
+	Point[4] corners                #
+		float64 x
+		float64 y
+	float64[9] homography           #
+
+
+
+      y: 55.368625640869105
+  - x: 203.92504882812503
+    y: 71.31938934326172
+  homography:
+  - 107.14228487747778
+  - -5.771979152037241
+  - 315.5826811891242
+  - -9.832667000861639
+  - 110.04062748721498
+  - 175.1251709792919
+  - -0.02627759286356062
+  - -0.02416901335120172
+  - 1.0
+---
+header:
+  stamp:
+    sec: 1777208425
+    nanosec: 407133000
+  frame_id: default_cam
+detections:
+- family: tag36h11
+  id: 0
+  hamming: 0
+  goodness: 0.0
+  decision_margin: 139.41064453125
+  centre:
+    x: 315.223687869059
+    y: 175.34339992116614
+  corners:
+  - x: 201.96479797363276
+    y: 294.50170898437506
+  - x: 438.7496643066406
+    y: 290.37499999999994
+  - x: 429.0671691894532
+    y: 55.57004928588866
+  - x: 203.71539306640625
+    y: 71.50307464599615
+  homography:
+  - 106.9155019267534
+  - -5.8235039691854045
+  - 315.223687869059
+  - -9.86606880072363
+  - 110.05032646294615
+  - 175.34339992116614
+  - -0.026852872878931358
+  - -0.024278741125756745
+  - 1.0
+---
+header:
+  stamp:
+    sec: 1777208425
+    nanosec: 439149000
+  frame_id: default_cam
+detections:
+- family: tag36h11
+  id: 0
+  hamming: 0
+  goodness: 0.0
+  decision_margin: 139.4303436279297
+  centre:
+    x: 315.2269168707415
+    y: 175.5916015181093
+  corners:
+  - x: 201.943359375
+    y: 294.95654296875006
+  - x: 438.7682800292969
+    y: 290.34252929687494
+  - x: 428.83453369140625
+    y: 55.88520431518555
+  - x: 203.56210327148438
+    y: 71.8721618652344
+  homography:
+  - 107.19061828471621
+  - -5.804511823274405
+  - 315.2269168707415
+  - -9.847951980755587
+  - 109.9382637591304
+  - 175.5916015181093
+  - -0.0259612333066392
+  - -0.024532974468896213
+  - 1.0
+---
+header:
+  stamp:
+    sec: 1777208425
+    nanosec: 475153000
+  frame_id: default_cam
+detections:
+- family: tag36h11
+  id: 0
+  hamming: 0
+  goodness: 0.0
+  decision_margin: 139.71481323242188
+  centre:
+    x: 314.9031707659331
+    y: 175.51631473083114
+  corners:
+  - x: 201.68399047851565
+    y: 294.857666015625
+  - x: 438.5057067871094
+    y: 290.1308898925781
+  - x: 428.49139404296875
+    y: 55.78596496582029
+  - x: 203.23785400390628
+    y: 71.97092437744146
+  homography:
+  - 107.1221393927907
+  - -5.768876726991133
+  - 314.9031707659331
+  - -9.9637257612681
+  - 109.85739449432717
+  - 175.51631473083114
+  - -0.026182983084806467
+  - -0.024555862524285127
+  - 1.0
+---
+

@@ -18,7 +18,7 @@ def generate_launch_description():
         ),
         DeclareLaunchArgument(
             "planning_group",
-            default_value="manipulator",
+            default_value="manipulator", # manipulator,
         ),
     ]
     
@@ -159,16 +159,40 @@ def generate_launch_description():
     # servo_params["moveit_servo"]["move_group_name"] = LaunchConfiguration("planning_group")
     if "moveit_servo" not in servo_params:
         servo_params["moveit_servo"] = {}
-    servo_params["moveit_servo"]["command_in_type"] = "speed_units"
+    servo_params["moveit_servo"]["command_in_type"] = "unitless" # speed_units
     servo_params["moveit_servo"]["command_out_type"] = "trajectory_msgs/JointTrajectory"
     servo_params["moveit_servo"]["command_out_topic"] = "/joint_trajectory_controller/joint_trajectory"
     servo_params["moveit_servo"]["planning_frame"] = "base_link"
     servo_params["moveit_servo"]["robot_link_command_frame"] = "grasping_frame"
-    servo_params["moveit_servo"]["move_group_name"] = LaunchConfiguration("planning_group")
+    servo_params["moveit_servo"]["move_group_name"] = LaunchConfiguration("planning_group") # manipulator does not exist
 
 # Topics (they might have defaults, but set them explicitly)
-    servo_params["moveit_servo"]["cartesian_command_in_topic"] = "servo_node/delta_twist_cmds"
-    servo_params["moveit_servo"]["joint_command_in_topic"] = "servo_node/delta_joint_cmds"
+    servo_params["moveit_servo"]["cartesian_command_in_topic"] = "/servo_node/delta_twist_cmds"
+    servo_params["moveit_servo"]["joint_command_in_topic"] = "/servo_node/delta_joint_cmds"
+    #### 
+    servo_params["moveit_servo"]["publish_joint_velocities"] = False # test 2
+
+    servo_params["moveit_servo"]["joint_topic"] = "/joint_states"
+    servo_params["moveit_servo"]["status_topic"] = "~/status"
+
+    servo_params["moveit_servo"]["lower_singularity_threshold"] = 8.0
+
+    servo_params["moveit_servo"]["hard_stop_singularity_threshold"] = 80.0 # lower =lesss strict  #30.0
+    servo_params["moveit_servo"]["leaving_singularity_threshold_multiplier"] = 50.0  # reduce sensitivity by increase # 5.0
+
+    # Collision
+    servo_params["moveit_servo"]["check_collisions"] = True
+    servo_params["moveit_servo"]["collision_check_rate"] = 10.0
+    servo_params["moveit_servo"]["self_collision_proximity_threshold"] = 0.01
+    servo_params["moveit_servo"]["scene_collision_proximity_threshold"] = 0.02
+
+    # Safety
+    servo_params["moveit_servo"]["halt_all_joints_in_joint_mode"] = False
+    servo_params["moveit_servo"]["halt_all_joints_in_cartesian_mode"] = False
+    servo_params["moveit_servo"]["override_velocity_scaling_factor"] = 0.8
+
+
+
     # Check if we have minimal content
     if not urdf_content:
         print("✗ WARNING: Empty URDF content!")

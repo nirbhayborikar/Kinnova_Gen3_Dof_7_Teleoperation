@@ -1,0 +1,36 @@
+running egg_info
+creating ../../build/apriltag_inspector/apriltag_inspector.egg-info
+writing ../../build/apriltag_inspector/apriltag_inspector.egg-info/PKG-INFO
+writing dependency_links to ../../build/apriltag_inspector/apriltag_inspector.egg-info/dependency_links.txt
+writing entry points to ../../build/apriltag_inspector/apriltag_inspector.egg-info/entry_points.txt
+writing requirements to ../../build/apriltag_inspector/apriltag_inspector.egg-info/requires.txt
+writing top-level names to ../../build/apriltag_inspector/apriltag_inspector.egg-info/top_level.txt
+writing manifest file '../../build/apriltag_inspector/apriltag_inspector.egg-info/SOURCES.txt'
+reading manifest file '../../build/apriltag_inspector/apriltag_inspector.egg-info/SOURCES.txt'
+adding license file 'LICENSE'
+writing manifest file '../../build/apriltag_inspector/apriltag_inspector.egg-info/SOURCES.txt'
+running build
+running build_py
+creating /root/ros2_ws/build/apriltag_inspector/build
+creating /root/ros2_ws/build/apriltag_inspector/build/lib
+creating /root/ros2_ws/build/apriltag_inspector/build/lib/apriltag_inspector
+copying apriltag_inspector/apriltag_inspector_node.py -> /root/ros2_ws/build/apriltag_inspector/build/lib/apriltag_inspector
+copying apriltag_inspector/__init__.py -> /root/ros2_ws/build/apriltag_inspector/build/lib/apriltag_inspector
+running install
+running install_lib
+creating /root/ros2_ws/install/apriltag_inspector/lib/python3.12/site-packages/apriltag_inspector
+copying /root/ros2_ws/build/apriltag_inspector/build/lib/apriltag_inspector/apriltag_inspector_node.py -> /root/ros2_ws/install/apriltag_inspector/lib/python3.12/site-packages/apriltag_inspector
+copying /root/ros2_ws/build/apriltag_inspector/build/lib/apriltag_inspector/__init__.py -> /root/ros2_ws/install/apriltag_inspector/lib/python3.12/site-packages/apriltag_inspector
+byte-compiling /root/ros2_ws/install/apriltag_inspector/lib/python3.12/site-packages/apriltag_inspector/apriltag_inspector_node.py to apriltag_inspector_node.cpython-312.pyc
+byte-compiling /root/ros2_ws/install/apriltag_inspector/lib/python3.12/site-packages/apriltag_inspector/__init__.py to __init__.cpython-312.pyc
+running install_data
+creating /root/ros2_ws/install/apriltag_inspector/share/ament_index
+creating /root/ros2_ws/install/apriltag_inspector/share/ament_index/resource_index
+creating /root/ros2_ws/install/apriltag_inspector/share/ament_index/resource_index/packages
+copying resource/apriltag_inspector -> /root/ros2_ws/install/apriltag_inspector/share/ament_index/resource_index/packages
+copying package.xml -> /root/ros2_ws/install/apriltag_inspector/share/apriltag_inspector
+running install_egg_info
+Copying ../../build/apriltag_inspector/apriltag_inspector.egg-info to /root/ros2_ws/install/apriltag_inspector/lib/python3.12/site-packages/apriltag_inspector-0.0.0-py3.12.egg-info
+running install_scripts
+Installing apriltag_inspector_node script to /root/ros2_ws/install/apriltag_inspector/lib/apriltag_inspector
+writing list of installed files to '/root/ros2_ws/build/apriltag_inspector/install.log'

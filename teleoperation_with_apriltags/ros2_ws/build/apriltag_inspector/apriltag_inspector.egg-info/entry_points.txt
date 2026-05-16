@@ -1,0 +1,2 @@
+[console_scripts]
+apriltag_inspector_node = apriltag_inspector.apriltag_inspector_node:main

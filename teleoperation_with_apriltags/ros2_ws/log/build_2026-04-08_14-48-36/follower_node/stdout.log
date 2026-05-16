@@ -1,0 +1,36 @@
+running egg_info
+creating ../../build/follower_node/follower_node.egg-info
+writing ../../build/follower_node/follower_node.egg-info/PKG-INFO
+writing dependency_links to ../../build/follower_node/follower_node.egg-info/dependency_links.txt
+writing entry points to ../../build/follower_node/follower_node.egg-info/entry_points.txt
+writing requirements to ../../build/follower_node/follower_node.egg-info/requires.txt
+writing top-level names to ../../build/follower_node/follower_node.egg-info/top_level.txt
+writing manifest file '../../build/follower_node/follower_node.egg-info/SOURCES.txt'
+reading manifest file '../../build/follower_node/follower_node.egg-info/SOURCES.txt'
+adding license file 'LICENSE'
+writing manifest file '../../build/follower_node/follower_node.egg-info/SOURCES.txt'
+running build
+running build_py
+creating /root/ros2_ws/build/follower_node/build
+creating /root/ros2_ws/build/follower_node/build/lib
+creating /root/ros2_ws/build/follower_node/build/lib/follower_node
+copying follower_node/__init__.py -> /root/ros2_ws/build/follower_node/build/lib/follower_node
+copying follower_node/apriltag_follower.py -> /root/ros2_ws/build/follower_node/build/lib/follower_node
+running install
+running install_lib
+creating /root/ros2_ws/install/follower_node/lib/python3.12/site-packages/follower_node
+copying /root/ros2_ws/build/follower_node/build/lib/follower_node/__init__.py -> /root/ros2_ws/install/follower_node/lib/python3.12/site-packages/follower_node
+copying /root/ros2_ws/build/follower_node/build/lib/follower_node/apriltag_follower.py -> /root/ros2_ws/install/follower_node/lib/python3.12/site-packages/follower_node
+byte-compiling /root/ros2_ws/install/follower_node/lib/python3.12/site-packages/follower_node/__init__.py to __init__.cpython-312.pyc
+byte-compiling /root/ros2_ws/install/follower_node/lib/python3.12/site-packages/follower_node/apriltag_follower.py to apriltag_follower.cpython-312.pyc
+running install_data
+creating /root/ros2_ws/install/follower_node/share/ament_index
+creating /root/ros2_ws/install/follower_node/share/ament_index/resource_index
+creating /root/ros2_ws/install/follower_node/share/ament_index/resource_index/packages
+copying resource/follower_node -> /root/ros2_ws/install/follower_node/share/ament_index/resource_index/packages
+copying package.xml -> /root/ros2_ws/install/follower_node/share/follower_node
+running install_egg_info
+Copying ../../build/follower_node/follower_node.egg-info to /root/ros2_ws/install/follower_node/lib/python3.12/site-packages/follower_node-0.0.0-py3.12.egg-info
+running install_scripts
+Installing apriltag_follower script to /root/ros2_ws/install/follower_node/lib/follower_node
+writing list of installed files to '/root/ros2_ws/build/follower_node/install.log'

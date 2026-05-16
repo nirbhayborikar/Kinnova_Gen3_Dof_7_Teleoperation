@@ -1,0 +1,38 @@
+[0.858s] Invoking command in '/root/ros2_ws/src/follower_node': PYTHONPATH=/root/ros2_ws/build/follower_node/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/root/ros2_ws/install/follower_node/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/follower_node build --build-base /root/ros2_ws/build/follower_node/build install --record /root/ros2_ws/build/follower_node/install.log --single-version-externally-managed install_data
+[1.048s] running egg_info
+[1.048s] creating ../../build/follower_node/follower_node.egg-info
+[1.058s] writing ../../build/follower_node/follower_node.egg-info/PKG-INFO
+[1.058s] writing dependency_links to ../../build/follower_node/follower_node.egg-info/dependency_links.txt
+[1.058s] writing entry points to ../../build/follower_node/follower_node.egg-info/entry_points.txt
+[1.058s] writing requirements to ../../build/follower_node/follower_node.egg-info/requires.txt
+[1.058s] writing top-level names to ../../build/follower_node/follower_node.egg-info/top_level.txt
+[1.058s] writing manifest file '../../build/follower_node/follower_node.egg-info/SOURCES.txt'
+[1.096s] reading manifest file '../../build/follower_node/follower_node.egg-info/SOURCES.txt'
+[1.096s] adding license file 'LICENSE'
+[1.097s] writing manifest file '../../build/follower_node/follower_node.egg-info/SOURCES.txt'
+[1.097s] running build
+[1.097s] running build_py
+[1.098s] creating /root/ros2_ws/build/follower_node/build
+[1.102s] creating /root/ros2_ws/build/follower_node/build/lib
+[1.102s] creating /root/ros2_ws/build/follower_node/build/lib/follower_node
+[1.102s] copying follower_node/__init__.py -> /root/ros2_ws/build/follower_node/build/lib/follower_node
+[1.102s] copying follower_node/apriltag_follower.py -> /root/ros2_ws/build/follower_node/build/lib/follower_node
+[1.102s] running install
+[1.117s] running install_lib
+[1.143s] creating /root/ros2_ws/install/follower_node/lib/python3.12/site-packages/follower_node
+[1.144s] copying /root/ros2_ws/build/follower_node/build/lib/follower_node/__init__.py -> /root/ros2_ws/install/follower_node/lib/python3.12/site-packages/follower_node
+[1.144s] copying /root/ros2_ws/build/follower_node/build/lib/follower_node/apriltag_follower.py -> /root/ros2_ws/install/follower_node/lib/python3.12/site-packages/follower_node
+[1.144s] byte-compiling /root/ros2_ws/install/follower_node/lib/python3.12/site-packages/follower_node/__init__.py to __init__.cpython-312.pyc
+[1.144s] byte-compiling /root/ros2_ws/install/follower_node/lib/python3.12/site-packages/follower_node/apriltag_follower.py to apriltag_follower.cpython-312.pyc
+[1.148s] running install_data
+[1.149s] creating /root/ros2_ws/install/follower_node/share/ament_index
+[1.149s] creating /root/ros2_ws/install/follower_node/share/ament_index/resource_index
+[1.149s] creating /root/ros2_ws/install/follower_node/share/ament_index/resource_index/packages
+[1.149s] copying resource/follower_node -> /root/ros2_ws/install/follower_node/share/ament_index/resource_index/packages
+[1.149s] copying package.xml -> /root/ros2_ws/install/follower_node/share/follower_node
+[1.149s] running install_egg_info
+[1.192s] Copying ../../build/follower_node/follower_node.egg-info to /root/ros2_ws/install/follower_node/lib/python3.12/site-packages/follower_node-0.0.0-py3.12.egg-info
+[1.197s] running install_scripts
+[1.344s] Installing apriltag_follower script to /root/ros2_ws/install/follower_node/lib/follower_node
+[1.345s] writing list of installed files to '/root/ros2_ws/build/follower_node/install.log'
+[1.439s] Invoked command in '/root/ros2_ws/src/follower_node' returned '0': PYTHONPATH=/root/ros2_ws/build/follower_node/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/root/ros2_ws/install/follower_node/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/follower_node build --build-base /root/ros2_ws/build/follower_node/build install --record /root/ros2_ws/build/follower_node/install.log --single-version-externally-managed install_data

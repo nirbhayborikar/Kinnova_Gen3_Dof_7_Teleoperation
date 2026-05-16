@@ -1,0 +1,11 @@
+/root/ros2_ws/build/apriltag/CMakeFiles/apriltag.dir
+/root/ros2_ws/build/apriltag/CMakeFiles/apriltag_py_docstrings.dir
+/root/ros2_ws/build/apriltag/CMakeFiles/apriltag.cpython-312-x86_64-linux-gnu.dir
+/root/ros2_ws/build/apriltag/CMakeFiles/apriltag_demo.dir
+/root/ros2_ws/build/apriltag/CMakeFiles/opencv_demo.dir
+/root/ros2_ws/build/apriltag/CMakeFiles/edit_cache.dir
+/root/ros2_ws/build/apriltag/CMakeFiles/rebuild_cache.dir
+/root/ros2_ws/build/apriltag/CMakeFiles/list_install_components.dir
+/root/ros2_ws/build/apriltag/CMakeFiles/install.dir
+/root/ros2_ws/build/apriltag/CMakeFiles/install/local.dir
+/root/ros2_ws/build/apriltag/CMakeFiles/install/strip.dir

@@ -397,3 +397,482 @@ twist:
 │ LAYER 5: Auto-Home Recovery (Your Existing Code)     │
 │ → Go to safe position when servo halts               │
 └──────────────────────────────────────────────────────┘
+
+
+
+List list_controllers
+ros2 control list_controllers
+
+
+Gripper Joint name
+ros2 topic echo /joint_states --once
+
+
+Planning group name
+
+ros2 param list /move_group
+
+base frame:
+might be base_link or base — check with
+
+ros2 run tf2_ros tf2_echo world base_link
+
+
+
+List of controllers in Kortex kinnova gen 3:
+
+joint_state_broadcaster     joint_state_broadcaster/JointStateBroadcaster          active  
+twist_controller            picknik_twist_controller/PicknikTwistController        inactive
+joint_trajectory_controller joint_trajectory_controller/JointTrajectoryController  active  
+robotiq_gripper_controller  position_controllers/GripperActionController           active  
+
+
+
+
+Gripper Joint Name:
+
+header:
+  stamp:
+    sec: 18
+    nanosec: 700000000
+  frame_id: ''
+name:
+- finger_joint
+- joint_1
+- joint_2
+- joint_3
+- joint_4
+- joint_5
+- joint_6
+- joint_7
+position:
+- 0.6949995140251474
+- 3.660059287597652e-06
+- 0.26001449313037883
+- 3.1399951063604186
+- -2.2700154698275194
+- -3.4847490985041043e-06
+- 0.9600142728880883
+- 1.570004698439808
+velocity:
+- -4.836062106328143e-14
+- -3.469446951953614e-18
+- -7.28583859910259e-17
+- -1.837870133858388e-13
+- -8.218252467440124e-14
+- 8.673617379884035e-19
+- -5.818262538426211e-15
+- -6.320725193242893e-14
+effort:
+- .nan
+- -7.746288944592342e-05
+- -10.544629562939202
+- -0.10679991079028912
+- 5.951291892088895
+- -0.0034309563788285174
+- 1.7899963298874833
+- -0.001454745196290111
+---
+
+
+Planning group name:
+
+allow_trajectory_execution
+  capabilities
+  default_planning_pipeline
+  default_sensor.filtered_cloud_topic
+  default_sensor.max_range
+  default_sensor.max_update_rate
+  default_sensor.padding_offset
+  default_sensor.padding_scale
+  default_sensor.point_cloud_topic
+  default_sensor.point_subsample
+  default_sensor.sensor_plugin
+  disable_capabilities
+  monitor_dynamics
+  moveit_controller_manager
+  moveit_manage_controllers
+  moveit_simple_controller_manager.controller_names
+  moveit_simple_controller_manager.joint_trajectory_controller.action_ns
+  moveit_simple_controller_manager.joint_trajectory_controller.default
+  moveit_simple_controller_manager.joint_trajectory_controller.joints
+  moveit_simple_controller_manager.joint_trajectory_controller.type
+  moveit_simple_controller_manager.robotiq_gripper_controller.action_ns
+  moveit_simple_controller_manager.robotiq_gripper_controller.default
+  moveit_simple_controller_manager.robotiq_gripper_controller.joints
+  moveit_simple_controller_manager.robotiq_gripper_controller.type
+  octomap_resolution
+  ompl.default_workspace_bounds
+  ompl.display_contacts_topic
+  ompl.display_path_topic
+  ompl.fix_start_state
+  ompl.gripper.planner_configs
+  ompl.manipulator.planner_configs
+  ompl.planner_configs.BFMTkConfigDefault.balanced
+  ompl.planner_configs.BFMTkConfigDefault.cache_cc
+  ompl.planner_configs.BFMTkConfigDefault.extended_fmt
+  ompl.planner_configs.BFMTkConfigDefault.heuristics
+  ompl.planner_configs.BFMTkConfigDefault.nearest_k
+  ompl.planner_configs.BFMTkConfigDefault.num_samples
+  ompl.planner_configs.BFMTkConfigDefault.optimality
+  ompl.planner_configs.BFMTkConfigDefault.radius_multiplier
+  ompl.planner_configs.BFMTkConfigDefault.type
+  ompl.planner_configs.BKPIECEkConfigDefault.border_fraction
+  ompl.planner_configs.BKPIECEkConfigDefault.failed_expansion_score_factor
+  ompl.planner_configs.BKPIECEkConfigDefault.min_valid_path_fraction
+  ompl.planner_configs.BKPIECEkConfigDefault.range
+  ompl.planner_configs.BKPIECEkConfigDefault.type
+  ompl.planner_configs.BiESTkConfigDefault.range
+  ompl.planner_configs.BiESTkConfigDefault.type
+  ompl.planner_configs.BiTRRTkConfigDefault.cost_threshold
+  ompl.planner_configs.BiTRRTkConfigDefault.frountier_node_ratio
+  ompl.planner_configs.BiTRRTkConfigDefault.frountier_threshold
+  ompl.planner_configs.BiTRRTkConfigDefault.init_temperature
+  ompl.planner_configs.BiTRRTkConfigDefault.range
+  ompl.planner_configs.BiTRRTkConfigDefault.temp_change_factor
+  ompl.planner_configs.BiTRRTkConfigDefault.type
+  ompl.planner_configs.ESTkConfigDefault.goal_bias
+  ompl.planner_configs.ESTkConfigDefault.range
+  ompl.planner_configs.ESTkConfigDefault.type
+  ompl.planner_configs.FMTkConfigDefault.cache_cc
+  ompl.planner_configs.FMTkConfigDefault.extended_fmt
+  ompl.planner_configs.FMTkConfigDefault.heuristics
+  ompl.planner_configs.FMTkConfigDefault.nearest_k
+  ompl.planner_configs.FMTkConfigDefault.num_samples
+  ompl.planner_configs.FMTkConfigDefault.radius_multiplier
+  ompl.planner_configs.FMTkConfigDefault.type
+  ompl.planner_configs.KPIECEkConfigDefault.border_fraction
+  ompl.planner_configs.KPIECEkConfigDefault.failed_expansion_score_factor
+  ompl.planner_configs.KPIECEkConfigDefault.goal_bias
+  ompl.planner_configs.KPIECEkConfigDefault.min_valid_path_fraction
+  ompl.planner_configs.KPIECEkConfigDefault.range
+  ompl.planner_configs.KPIECEkConfigDefault.type
+  ompl.planner_configs.LBKPIECEkConfigDefault.border_fraction
+  ompl.planner_configs.LBKPIECEkConfigDefault.min_valid_path_fraction
+  ompl.planner_configs.LBKPIECEkConfigDefault.range
+  ompl.planner_configs.LBKPIECEkConfigDefault.type
+  ompl.planner_configs.LBTRRTkConfigDefault.epsilon
+  ompl.planner_configs.LBTRRTkConfigDefault.goal_bias
+  ompl.planner_configs.LBTRRTkConfigDefault.range
+  ompl.planner_configs.LBTRRTkConfigDefault.type
+  ompl.planner_configs.LazyPRMkConfigDefault.range
+  ompl.planner_configs.LazyPRMkConfigDefault.type
+  ompl.planner_configs.LazyPRMstarkConfigDefault.type
+  ompl.planner_configs.PDSTkConfigDefault.type
+  ompl.planner_configs.PRMkConfigDefault.max_nearest_neighbors
+  ompl.planner_configs.PRMkConfigDefault.type
+  ompl.planner_configs.PRMstarkConfigDefault.type
+  ompl.planner_configs.ProjESTkConfigDefault.goal_bias
+  ompl.planner_configs.ProjESTkConfigDefault.range
+  ompl.planner_configs.ProjESTkConfigDefault.type
+  ompl.planner_configs.RRTConnectkConfigDefault.range
+  ompl.planner_configs.RRTConnectkConfigDefault.type
+  ompl.planner_configs.RRTkConfigDefault.goal_bias
+  ompl.planner_configs.RRTkConfigDefault.range
+  ompl.planner_configs.RRTkConfigDefault.type
+  ompl.planner_configs.RRTstarkConfigDefault.delay_collision_checking
+  ompl.planner_configs.RRTstarkConfigDefault.goal_bias
+  ompl.planner_configs.RRTstarkConfigDefault.range
+  ompl.planner_configs.RRTstarkConfigDefault.type
+  ompl.planner_configs.SBLkConfigDefault.range
+  ompl.planner_configs.SBLkConfigDefault.type
+  ompl.planner_configs.SPARSkConfigDefault.dense_delta_fraction
+  ompl.planner_configs.SPARSkConfigDefault.max_failures
+  ompl.planner_configs.SPARSkConfigDefault.sparse_delta_fraction
+  ompl.planner_configs.SPARSkConfigDefault.stretch_factor
+  ompl.planner_configs.SPARSkConfigDefault.type
+  ompl.planner_configs.SPARStwokConfigDefault.dense_delta_fraction
+  ompl.planner_configs.SPARStwokConfigDefault.max_failures
+  ompl.planner_configs.SPARStwokConfigDefault.sparse_delta_fraction
+  ompl.planner_configs.SPARStwokConfigDefault.stretch_factor
+  ompl.planner_configs.SPARStwokConfigDefault.type
+  ompl.planner_configs.STRIDEkConfigDefault.degree
+  ompl.planner_configs.STRIDEkConfigDefault.estimated_dimension
+  ompl.planner_configs.STRIDEkConfigDefault.goal_bias
+  ompl.planner_configs.STRIDEkConfigDefault.max_degree
+  ompl.planner_configs.STRIDEkConfigDefault.max_pts_per_leaf
+  ompl.planner_configs.STRIDEkConfigDefault.min_degree
+  ompl.planner_configs.STRIDEkConfigDefault.min_valid_path_fraction
+  ompl.planner_configs.STRIDEkConfigDefault.range
+  ompl.planner_configs.STRIDEkConfigDefault.type
+  ompl.planner_configs.STRIDEkConfigDefault.use_projected_distance
+  ompl.planner_configs.TRRTkConfigDefault.frountierNodeRatio
+  ompl.planner_configs.TRRTkConfigDefault.frountier_threshold
+  ompl.planner_configs.TRRTkConfigDefault.goal_bias
+  ompl.planner_configs.TRRTkConfigDefault.init_temperature
+  ompl.planner_configs.TRRTkConfigDefault.k_constant
+  ompl.planner_configs.TRRTkConfigDefault.max_states_failed
+  ompl.planner_configs.TRRTkConfigDefault.min_temperature
+  ompl.planner_configs.TRRTkConfigDefault.range
+  ompl.planner_configs.TRRTkConfigDefault.temp_change_factor
+  ompl.planner_configs.TRRTkConfigDefault.type
+  ompl.planner_configs.TrajOptDefault.type
+  ompl.planning_plugins
+  ompl.progress_topic
+  ompl.request_adapters
+  ompl.response_adapters
+  ompl.start_state_max_bounds_error
+  ompl.totg.min_angle_change
+  ompl.totg.path_tolerance
+  ompl.totg.resample_dt
+  pilz_industrial_motion_planner.capabilities
+  pilz_industrial_motion_planner.default_planner_config
+  pilz_industrial_motion_planner.default_workspace_bounds
+  pilz_industrial_motion_planner.display_contacts_topic
+  pilz_industrial_motion_planner.display_path_topic
+  pilz_industrial_motion_planner.fix_start_state
+  pilz_industrial_motion_planner.planning_plugins
+  pilz_industrial_motion_planner.progress_topic
+  pilz_industrial_motion_planner.request_adapters
+  pilz_industrial_motion_planner.response_adapters
+  pilz_industrial_motion_planner.totg.min_angle_change
+  pilz_industrial_motion_planner.totg.path_tolerance
+  pilz_industrial_motion_planner.totg.resample_dt
+  planning_pipelines
+  publish_geometry_updates
+  publish_planning_scene
+  publish_robot_description
+  publish_robot_description_semantic
+  publish_state_updates
+  publish_transforms_updates
+  qos_overrides./clock.subscription.depth
+  qos_overrides./clock.subscription.durability
+  qos_overrides./clock.subscription.history
+  qos_overrides./clock.subscription.reliability
+  qos_overrides./parameter_events.publisher.depth
+  qos_overrides./parameter_events.publisher.durability
+  qos_overrides./parameter_events.publisher.history
+  qos_overrides./parameter_events.publisher.reliability
+  robot_description
+  robot_description_continuous
+  robot_description_kinematics.gripper.kinematics_solver
+  robot_description_kinematics.gripper.kinematics_solver_search_resolution
+  robot_description_kinematics.gripper.kinematics_solver_timeout
+  robot_description_kinematics.manipulator.epsilon
+  robot_description_kinematics.manipulator.joints
+  robot_description_kinematics.manipulator.kinematics_solver
+  robot_description_kinematics.manipulator.kinematics_solver_search_resolution
+  robot_description_kinematics.manipulator.kinematics_solver_timeout
+  robot_description_kinematics.manipulator.max_solver_iterations
+  robot_description_kinematics.manipulator.orientation_vs_position
+  robot_description_kinematics.manipulator.position_only_ik
+  robot_description_planning.cartesian_limits.max_rot_vel
+  robot_description_planning.cartesian_limits.max_trans_acc
+  robot_description_planning.cartesian_limits.max_trans_dec
+  robot_description_planning.cartesian_limits.max_trans_vel
+  robot_description_planning.default_acceleration_scaling_factor
+  robot_description_planning.default_velocity_scaling_factor
+  robot_description_planning.joint_limits.finger_joint.angle_wraparound
+  robot_description_planning.joint_limits.finger_joint.has_acceleration_limits
+  robot_description_planning.joint_limits.finger_joint.has_deceleration_limits
+  robot_description_planning.joint_limits.finger_joint.has_effort_limits
+  robot_description_planning.joint_limits.finger_joint.has_jerk_limits
+  robot_description_planning.joint_limits.finger_joint.has_position_limits
+  robot_description_planning.joint_limits.finger_joint.has_soft_limits
+  robot_description_planning.joint_limits.finger_joint.has_velocity_limits
+  robot_description_planning.joint_limits.finger_joint.k_position
+  robot_description_planning.joint_limits.finger_joint.k_velocity
+  robot_description_planning.joint_limits.finger_joint.max_acceleration
+  robot_description_planning.joint_limits.finger_joint.max_effort
+  robot_description_planning.joint_limits.finger_joint.max_jerk
+  robot_description_planning.joint_limits.finger_joint.max_position
+  robot_description_planning.joint_limits.finger_joint.max_velocity
+  robot_description_planning.joint_limits.finger_joint.min_position
+  robot_description_planning.joint_limits.finger_joint.min_velocity
+  robot_description_planning.joint_limits.finger_joint.soft_lower_limit
+  robot_description_planning.joint_limits.finger_joint.soft_upper_limit
+  robot_description_planning.joint_limits.joint_1.angle_wraparound
+  robot_description_planning.joint_limits.joint_1.has_acceleration_limits
+  robot_description_planning.joint_limits.joint_1.has_deceleration_limits
+  robot_description_planning.joint_limits.joint_1.has_effort_limits
+  robot_description_planning.joint_limits.joint_1.has_jerk_limits
+  robot_description_planning.joint_limits.joint_1.has_position_limits
+  robot_description_planning.joint_limits.joint_1.has_soft_limits
+  robot_description_planning.joint_limits.joint_1.has_velocity_limits
+  robot_description_planning.joint_limits.joint_1.k_position
+  robot_description_planning.joint_limits.joint_1.k_velocity
+  robot_description_planning.joint_limits.joint_1.max_acceleration
+  robot_description_planning.joint_limits.joint_1.max_effort
+  robot_description_planning.joint_limits.joint_1.max_jerk
+  robot_description_planning.joint_limits.joint_1.max_position
+  robot_description_planning.joint_limits.joint_1.max_velocity
+  robot_description_planning.joint_limits.joint_1.min_position
+  robot_description_planning.joint_limits.joint_1.min_velocity
+  robot_description_planning.joint_limits.joint_1.soft_lower_limit
+  robot_description_planning.joint_limits.joint_1.soft_upper_limit
+  robot_description_planning.joint_limits.joint_2.angle_wraparound
+  robot_description_planning.joint_limits.joint_2.has_acceleration_limits
+  robot_description_planning.joint_limits.joint_2.has_deceleration_limits
+  robot_description_planning.joint_limits.joint_2.has_effort_limits
+  robot_description_planning.joint_limits.joint_2.has_jerk_limits
+  robot_description_planning.joint_limits.joint_2.has_position_limits
+  robot_description_planning.joint_limits.joint_2.has_soft_limits
+  robot_description_planning.joint_limits.joint_2.has_velocity_limits
+  robot_description_planning.joint_limits.joint_2.k_position
+  robot_description_planning.joint_limits.joint_2.k_velocity
+  robot_description_planning.joint_limits.joint_2.max_acceleration
+  robot_description_planning.joint_limits.joint_2.max_effort
+  robot_description_planning.joint_limits.joint_2.max_jerk
+  robot_description_planning.joint_limits.joint_2.max_position
+  robot_description_planning.joint_limits.joint_2.max_velocity
+  robot_description_planning.joint_limits.joint_2.min_position
+  robot_description_planning.joint_limits.joint_2.min_velocity
+  robot_description_planning.joint_limits.joint_2.soft_lower_limit
+  robot_description_planning.joint_limits.joint_2.soft_upper_limit
+  robot_description_planning.joint_limits.joint_3.angle_wraparound
+  robot_description_planning.joint_limits.joint_3.has_acceleration_limits
+  robot_description_planning.joint_limits.joint_3.has_deceleration_limits
+  robot_description_planning.joint_limits.joint_3.has_effort_limits
+  robot_description_planning.joint_limits.joint_3.has_jerk_limits
+  robot_description_planning.joint_limits.joint_3.has_position_limits
+  robot_description_planning.joint_limits.joint_3.has_soft_limits
+  robot_description_planning.joint_limits.joint_3.has_velocity_limits
+  robot_description_planning.joint_limits.joint_3.k_position
+  robot_description_planning.joint_limits.joint_3.k_velocity
+  robot_description_planning.joint_limits.joint_3.max_acceleration
+  robot_description_planning.joint_limits.joint_3.max_effort
+  robot_description_planning.joint_limits.joint_3.max_jerk
+  robot_description_planning.joint_limits.joint_3.max_position
+  robot_description_planning.joint_limits.joint_3.max_velocity
+  robot_description_planning.joint_limits.joint_3.min_position
+  robot_description_planning.joint_limits.joint_3.min_velocity
+  robot_description_planning.joint_limits.joint_3.soft_lower_limit
+  robot_description_planning.joint_limits.joint_3.soft_upper_limit
+  robot_description_planning.joint_limits.joint_4.angle_wraparound
+  robot_description_planning.joint_limits.joint_4.has_acceleration_limits
+  robot_description_planning.joint_limits.joint_4.has_deceleration_limits
+  robot_description_planning.joint_limits.joint_4.has_effort_limits
+  robot_description_planning.joint_limits.joint_4.has_jerk_limits
+  robot_description_planning.joint_limits.joint_4.has_position_limits
+  robot_description_planning.joint_limits.joint_4.has_soft_limits
+  robot_description_planning.joint_limits.joint_4.has_velocity_limits
+  robot_description_planning.joint_limits.joint_4.k_position
+  robot_description_planning.joint_limits.joint_4.k_velocity
+  robot_description_planning.joint_limits.joint_4.max_acceleration
+  robot_description_planning.joint_limits.joint_4.max_effort
+  robot_description_planning.joint_limits.joint_4.max_jerk
+  robot_description_planning.joint_limits.joint_4.max_position
+  robot_description_planning.joint_limits.joint_4.max_velocity
+  robot_description_planning.joint_limits.joint_4.min_position
+  robot_description_planning.joint_limits.joint_4.min_velocity
+  robot_description_planning.joint_limits.joint_4.soft_lower_limit
+  robot_description_planning.joint_limits.joint_4.soft_upper_limit
+  robot_description_planning.joint_limits.joint_5.angle_wraparound
+  robot_description_planning.joint_limits.joint_5.has_acceleration_limits
+  robot_description_planning.joint_limits.joint_5.has_deceleration_limits
+  robot_description_planning.joint_limits.joint_5.has_effort_limits
+  robot_description_planning.joint_limits.joint_5.has_jerk_limits
+  robot_description_planning.joint_limits.joint_5.has_position_limits
+  robot_description_planning.joint_limits.joint_5.has_soft_limits
+  robot_description_planning.joint_limits.joint_5.has_velocity_limits
+  robot_description_planning.joint_limits.joint_5.k_position
+  robot_description_planning.joint_limits.joint_5.k_velocity
+  robot_description_planning.joint_limits.joint_5.max_acceleration
+  robot_description_planning.joint_limits.joint_5.max_effort
+  robot_description_planning.joint_limits.joint_5.max_jerk
+  robot_description_planning.joint_limits.joint_5.max_position
+  robot_description_planning.joint_limits.joint_5.max_velocity
+  robot_description_planning.joint_limits.joint_5.min_position
+  robot_description_planning.joint_limits.joint_5.min_velocity
+  robot_description_planning.joint_limits.joint_5.soft_lower_limit
+  robot_description_planning.joint_limits.joint_5.soft_upper_limit
+  robot_description_planning.joint_limits.joint_6.angle_wraparound
+  robot_description_planning.joint_limits.joint_6.has_acceleration_limits
+  robot_description_planning.joint_limits.joint_6.has_deceleration_limits
+  robot_description_planning.joint_limits.joint_6.has_effort_limits
+  robot_description_planning.joint_limits.joint_6.has_jerk_limits
+  robot_description_planning.joint_limits.joint_6.has_position_limits
+  robot_description_planning.joint_limits.joint_6.has_soft_limits
+  robot_description_planning.joint_limits.joint_6.has_velocity_limits
+  robot_description_planning.joint_limits.joint_6.k_position
+  robot_description_planning.joint_limits.joint_6.k_velocity
+  robot_description_planning.joint_limits.joint_6.max_acceleration
+  robot_description_planning.joint_limits.joint_6.max_effort
+  robot_description_planning.joint_limits.joint_6.max_jerk
+  robot_description_planning.joint_limits.joint_6.max_position
+  robot_description_planning.joint_limits.joint_6.max_velocity
+  robot_description_planning.joint_limits.joint_6.min_position
+  robot_description_planning.joint_limits.joint_6.min_velocity
+  robot_description_planning.joint_limits.joint_6.soft_lower_limit
+  robot_description_planning.joint_limits.joint_6.soft_upper_limit
+  robot_description_planning.joint_limits.joint_7.angle_wraparound
+  robot_description_planning.joint_limits.joint_7.has_acceleration_limits
+  robot_description_planning.joint_limits.joint_7.has_deceleration_limits
+  robot_description_planning.joint_limits.joint_7.has_effort_limits
+  robot_description_planning.joint_limits.joint_7.has_jerk_limits
+  robot_description_planning.joint_limits.joint_7.has_position_limits
+  robot_description_planning.joint_limits.joint_7.has_soft_limits
+  robot_description_planning.joint_limits.joint_7.has_velocity_limits
+  robot_description_planning.joint_limits.joint_7.k_position
+  robot_description_planning.joint_limits.joint_7.k_velocity
+  robot_description_planning.joint_limits.joint_7.max_acceleration
+  robot_description_planning.joint_limits.joint_7.max_effort
+  robot_description_planning.joint_limits.joint_7.max_jerk
+  robot_description_planning.joint_limits.joint_7.max_position
+  robot_description_planning.joint_limits.joint_7.max_velocity
+  robot_description_planning.joint_limits.joint_7.min_position
+  robot_description_planning.joint_limits.joint_7.min_velocity
+  robot_description_planning.joint_limits.joint_7.soft_lower_limit
+  robot_description_planning.joint_limits.joint_7.soft_upper_limit
+  robot_description_planning.joint_limits.left_inner_finger_joint.has_acceleration_limits
+  robot_description_planning.joint_limits.left_inner_finger_joint.has_jerk_limits
+  robot_description_planning.joint_limits.left_inner_finger_joint.has_velocity_limits
+  robot_description_planning.joint_limits.left_inner_finger_joint.max_position
+  robot_description_planning.joint_limits.left_inner_finger_joint.min_position
+  robot_description_planning.joint_limits.left_inner_knuckle_joint.has_acceleration_limits
+  robot_description_planning.joint_limits.left_inner_knuckle_joint.has_jerk_limits
+  robot_description_planning.joint_limits.left_inner_knuckle_joint.has_velocity_limits
+  robot_description_planning.joint_limits.left_inner_knuckle_joint.max_position
+  robot_description_planning.joint_limits.left_inner_knuckle_joint.min_position
+  robot_description_planning.joint_limits.right_inner_finger_joint.has_acceleration_limits
+  robot_description_planning.joint_limits.right_inner_finger_joint.has_jerk_limits
+  robot_description_planning.joint_limits.right_inner_finger_joint.has_velocity_limits
+  robot_description_planning.joint_limits.right_inner_finger_joint.max_position
+  robot_description_planning.joint_limits.right_inner_finger_joint.min_position
+  robot_description_planning.joint_limits.right_inner_knuckle_joint.has_acceleration_limits
+  robot_description_planning.joint_limits.right_inner_knuckle_joint.has_jerk_limits
+  robot_description_planning.joint_limits.right_inner_knuckle_joint.has_velocity_limits
+  robot_description_planning.joint_limits.right_inner_knuckle_joint.max_position
+  robot_description_planning.joint_limits.right_inner_knuckle_joint.min_position
+  robot_description_planning.joint_limits.right_outer_knuckle_joint.has_acceleration_limits
+  robot_description_planning.joint_limits.right_outer_knuckle_joint.has_jerk_limits
+  robot_description_planning.joint_limits.right_outer_knuckle_joint.has_velocity_limits
+  robot_description_planning.joint_limits.right_outer_knuckle_joint.max_position
+  robot_description_planning.joint_limits.right_outer_knuckle_joint.min_position
+  robot_description_semantic
+  robot_description_timeout
+  sensors
+  start_type_description_service
+  trajectory_execution.allowed_execution_duration_scaling
+  trajectory_execution.allowed_goal_duration_margin
+  trajectory_execution.allowed_start_tolerance
+  trajectory_execution.execution_duration_monitoring
+  use_sim_time
+
+
+
+  Base name 
+
+
+  ros2 run tf2_ros tf2_echo world base_link
+[INFO] [1775914064.320911233] [tf2_echo]: Waiting for transform world ->  base_link: Invalid frame ID "world" passed to canTransform argument target_frame - frame does not exist
+At time 0.0
+- Translation: [0.000, 0.000, 0.000]
+- Rotation: in Quaternion [0.000, 0.000, 0.000, 1.000]
+- Rotation: in RPY (radian) [0.000, -0.000, 0.000]
+- Rotation: in RPY (degree) [0.000, -0.000, 0.000]
+- Matrix:
+  1.000  0.000  0.000  0.000
+  0.000  1.000  0.000  0.000
+  0.000  0.000  1.000  0.000
+  0.000  0.000  0.000  1.000
+At time 0.0
+- Translation: [0.000, 0.000, 0.000]
+- Rotation: in Quaternion [0.000, 0.000, 0.000, 1.000]
+- Rotation: in RPY (radian) [0.000, -0.000, 0.000]
+- Rotation: in RPY (degree) [0.000, -0.000, 0.000]
+- Matrix:
+  1.000  0.000  0.000  0.000
+  0.000  1.000  0.000  0.000
+  0.000  0.000  1.000  0.000
+  0.000  0.000  0.000  1.000

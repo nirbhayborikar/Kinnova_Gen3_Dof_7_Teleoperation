@@ -1,0 +1,125 @@
+[0.019s] Invoking command in '/root/ros2_ws/build/apriltag': CMAKE_PREFIX_PATH=/opt/ros/jazzy /usr/bin/cmake /root/ros2_ws/src/ros2-apriltags/submodules/apriltag -DCMAKE_INSTALL_PREFIX=/root/ros2_ws/install/apriltag
+[0.198s] -- The C compiler identification is GNU 13.3.0
+[0.198s] -- Detecting C compiler ABI info
+[0.204s] -- Detecting C compiler ABI info - done
+[0.210s] -- Check for working C compiler: /usr/bin/cc - skipped
+[0.211s] -- Detecting C compile features
+[0.211s] -- Detecting C compile features - done
+[0.211s] -- Setting build type to 'Release' as none was specified.
+[0.212s] -- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+[0.305s] -- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+[0.306s] -- Found Threads: TRUE  
+[0.871s] -- The CXX compiler identification is GNU 13.3.0
+[0.887s] -- Detecting CXX compiler ABI info
+[0.991s] -- Detecting CXX compiler ABI info - done
+[1.000s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[1.000s] -- Detecting CXX compile features
+[1.000s] -- Detecting CXX compile features - done
+[1.001s] -- Configuring done (1.0s)
+[1.012s] -- Generating done (0.0s)
+[1.015s] -- Build files have been written to: /root/ros2_ws/build/apriltag
+[1.019s] Invoked command in '/root/ros2_ws/build/apriltag' returned '0': CMAKE_PREFIX_PATH=/opt/ros/jazzy /usr/bin/cmake /root/ros2_ws/src/ros2-apriltags/submodules/apriltag -DCMAKE_INSTALL_PREFIX=/root/ros2_ws/install/apriltag
+[1.021s] Invoking command in '/root/ros2_ws/build/apriltag': CMAKE_PREFIX_PATH=/opt/ros/jazzy /usr/bin/cmake --build /root/ros2_ws/build/apriltag -- -j16 -l16
+[1.073s] [  4%] [34m[1mGenerating apriltag_detect_docstring.h, apriltag_detect_docstring.cxx[0m
+[1.073s] [  4%] [34m[1mGenerating apriltag_py_type_docstring.h, apriltag_py_type_docstring.cxx[0m
+[1.081s] [  7%] [32mBuilding C object CMakeFiles/apriltag.dir/apriltag.c.o[0m
+[1.081s] [ 14%] [32mBuilding C object CMakeFiles/apriltag.dir/apriltag_quad_thresh.c.o[0m
+[1.081s] [ 14%] [32mBuilding C object CMakeFiles/apriltag.dir/common/g2d.c.o[0m
+[1.081s] [ 14%] [32mBuilding C object CMakeFiles/apriltag.dir/apriltag_pose.c.o[0m
+[1.083s] [ 17%] [32mBuilding C object CMakeFiles/apriltag.dir/common/image_u8.c.o[0m
+[1.084s] [ 19%] [32mBuilding C object CMakeFiles/apriltag.dir/common/homography.c.o[0m
+[1.084s] [ 21%] [32mBuilding C object CMakeFiles/apriltag.dir/common/getopt.c.o[0m
+[1.084s] [ 24%] [32mBuilding C object CMakeFiles/apriltag.dir/common/image_u8x4.c.o[0m
+[1.085s] [ 26%] [32mBuilding C object CMakeFiles/apriltag.dir/common/matd.c.o[0m
+[1.091s] [ 29%] [32mBuilding C object CMakeFiles/apriltag.dir/common/image_u8x3.c.o[0m
+[1.121s] [ 31%] [32mBuilding C object CMakeFiles/apriltag.dir/common/pam.c.o[0m
+[1.122s] [ 36%] [32mBuilding C object CMakeFiles/apriltag.dir/common/pjpeg.c.o[0m
+[1.122s] [ 34%] [32mBuilding C object CMakeFiles/apriltag.dir/common/pnm.c.o[0m
+[1.122s] [ 39%] [32mBuilding C object CMakeFiles/apriltag.dir/common/pjpeg-idct.c.o[0m
+[1.139s] [ 41%] [32mBuilding C object CMakeFiles/apriltag.dir/common/pthreads_cross.c.o[0m
+[1.157s] [ 41%] Built target apriltag_py_docstrings
+[1.191s] [ 43%] [32mBuilding C object CMakeFiles/apriltag.dir/common/string_util.c.o[0m
+[1.242s] [ 46%] [32mBuilding C object CMakeFiles/apriltag.dir/common/svd22.c.o[0m
+[1.250s] [ 48%] [32mBuilding C object CMakeFiles/apriltag.dir/common/time_util.c.o[0m
+[1.336s] [ 51%] [32mBuilding C object CMakeFiles/apriltag.dir/common/unionfind.c.o[0m
+[1.372s] [ 53%] [32mBuilding C object CMakeFiles/apriltag.dir/common/workerpool.c.o[0m
+[1.403s] [ 56%] [32mBuilding C object CMakeFiles/apriltag.dir/common/zarray.c.o[0m
+[1.412s] [ 58%] [32mBuilding C object CMakeFiles/apriltag.dir/common/zmaxheap.c.o[0m
+[1.426s] [ 60%] [32mBuilding C object CMakeFiles/apriltag.dir/common/zhash.c.o[0m
+[1.482s] [ 63%] [32mBuilding C object CMakeFiles/apriltag.dir/tag16h5.c.o[0m
+[1.485s] [ 65%] [32mBuilding C object CMakeFiles/apriltag.dir/tag25h9.c.o[0m
+[1.580s] [ 68%] [32mBuilding C object CMakeFiles/apriltag.dir/tag36h10.c.o[0m
+[1.583s] [ 70%] [32mBuilding C object CMakeFiles/apriltag.dir/tagCircle21h7.c.o[0m
+[1.585s] [ 73%] [32mBuilding C object CMakeFiles/apriltag.dir/tag36h11.c.o[0m
+[1.592s] [ 75%] [32mBuilding C object CMakeFiles/apriltag.dir/tagCircle49h12.c.o[0m
+[1.600s] [ 78%] [32mBuilding C object CMakeFiles/apriltag.dir/tagCustom48h12.c.o[0m
+[1.632s] [ 80%] [32mBuilding C object CMakeFiles/apriltag.dir/tagStandard41h12.c.o[0m
+[1.688s] [ 82%] [32mBuilding C object CMakeFiles/apriltag.dir/tagStandard52h13.c.o[0m
+[2.559s] [ 85%] [32m[1mLinking C shared library libapriltag.so[0m
+[2.638s] [ 85%] Built target apriltag
+[2.654s] [ 87%] [32mBuilding C object CMakeFiles/apriltag_demo.dir/example/apriltag_demo.c.o[0m
+[2.655s] [ 92%] [32mBuilding CXX object CMakeFiles/opencv_demo.dir/example/opencv_demo.cc.o[0m
+[2.655s] [ 92%] [32mBuilding C object CMakeFiles/apriltag.cpython-312-x86_64-linux-gnu.dir/apriltag_pywrap.c.o[0m
+[2.771s] [ 95%] [32m[1mLinking C executable apriltag_demo[0m
+[2.808s] [ 97%] [32m[1mLinking C shared module apriltag.cpython-312-x86_64-linux-gnu.so[0m
+[2.815s] [ 97%] Built target apriltag_demo
+[2.859s] [ 97%] Built target apriltag.cpython-312-x86_64-linux-gnu
+[4.284s] [100%] [32m[1mLinking CXX executable opencv_demo[0m
+[5.268s] [100%] Built target opencv_demo
+[5.284s] Invoked command in '/root/ros2_ws/build/apriltag' returned '0': CMAKE_PREFIX_PATH=/opt/ros/jazzy /usr/bin/cmake --build /root/ros2_ws/build/apriltag -- -j16 -l16
+[5.294s] Invoking command in '/root/ros2_ws/build/apriltag': CMAKE_PREFIX_PATH=/opt/ros/jazzy /usr/bin/cmake --install /root/ros2_ws/build/apriltag
+[5.303s] -- Install configuration: "Release"
+[5.303s] -- Installing: /root/ros2_ws/install/apriltag/include/apriltag/apriltag.h
+[5.304s] -- Installing: /root/ros2_ws/install/apriltag/include/apriltag/apriltag_math.h
+[5.304s] -- Installing: /root/ros2_ws/install/apriltag/include/apriltag/apriltag_pose.h
+[5.304s] -- Installing: /root/ros2_ws/install/apriltag/include/apriltag/common/debug_print.h
+[5.304s] -- Installing: /root/ros2_ws/install/apriltag/include/apriltag/common/doubles.h
+[5.304s] -- Installing: /root/ros2_ws/install/apriltag/include/apriltag/common/doubles_floats_impl.h
+[5.304s] -- Installing: /root/ros2_ws/install/apriltag/include/apriltag/common/floats.h
+[5.304s] -- Installing: /root/ros2_ws/install/apriltag/include/apriltag/common/g2d.h
+[5.304s] -- Installing: /root/ros2_ws/install/apriltag/include/apriltag/common/getopt.h
+[5.304s] -- Installing: /root/ros2_ws/install/apriltag/include/apriltag/common/homography.h
+[5.304s] -- Installing: /root/ros2_ws/install/apriltag/include/apriltag/common/image_types.h
+[5.305s] -- Installing: /root/ros2_ws/install/apriltag/include/apriltag/common/image_u8.h
+[5.305s] -- Installing: /root/ros2_ws/install/apriltag/include/apriltag/common/image_u8x3.h
+[5.305s] -- Installing: /root/ros2_ws/install/apriltag/include/apriltag/common/image_u8x4.h
+[5.305s] -- Installing: /root/ros2_ws/install/apriltag/include/apriltag/common/matd.h
+[5.305s] -- Installing: /root/ros2_ws/install/apriltag/include/apriltag/common/math_util.h
+[5.306s] -- Installing: /root/ros2_ws/install/apriltag/include/apriltag/common/pam.h
+[5.306s] -- Installing: /root/ros2_ws/install/apriltag/include/apriltag/common/pjpeg.h
+[5.306s] -- Installing: /root/ros2_ws/install/apriltag/include/apriltag/common/pnm.h
+[5.306s] -- Installing: /root/ros2_ws/install/apriltag/include/apriltag/common/postscript_utils.h
+[5.306s] -- Installing: /root/ros2_ws/install/apriltag/include/apriltag/common/pthreads_cross.h
+[5.306s] -- Installing: /root/ros2_ws/install/apriltag/include/apriltag/common/string_util.h
+[5.306s] -- Installing: /root/ros2_ws/install/apriltag/include/apriltag/common/svd22.h
+[5.306s] -- Installing: /root/ros2_ws/install/apriltag/include/apriltag/common/time_util.h
+[5.307s] -- Installing: /root/ros2_ws/install/apriltag/include/apriltag/common/timeprofile.h
+[5.307s] -- Installing: /root/ros2_ws/install/apriltag/include/apriltag/common/unionfind.h
+[5.307s] -- Installing: /root/ros2_ws/install/apriltag/include/apriltag/common/workerpool.h
+[5.307s] -- Installing: /root/ros2_ws/install/apriltag/include/apriltag/common/zarray.h
+[5.307s] -- Installing: /root/ros2_ws/install/apriltag/include/apriltag/common/zhash.h
+[5.307s] -- Installing: /root/ros2_ws/install/apriltag/include/apriltag/common/zmaxheap.h
+[5.307s] -- Installing: /root/ros2_ws/install/apriltag/include/apriltag/tag16h5.h
+[5.307s] -- Installing: /root/ros2_ws/install/apriltag/include/apriltag/tag25h9.h
+[5.307s] -- Installing: /root/ros2_ws/install/apriltag/include/apriltag/tag36h10.h
+[5.308s] -- Installing: /root/ros2_ws/install/apriltag/include/apriltag/tag36h11.h
+[5.308s] -- Installing: /root/ros2_ws/install/apriltag/include/apriltag/tagCircle21h7.h
+[5.308s] -- Installing: /root/ros2_ws/install/apriltag/include/apriltag/tagCircle49h12.h
+[5.308s] -- Installing: /root/ros2_ws/install/apriltag/include/apriltag/tagCustom48h12.h
+[5.308s] -- Installing: /root/ros2_ws/install/apriltag/include/apriltag/tagStandard41h12.h
+[5.308s] -- Installing: /root/ros2_ws/install/apriltag/include/apriltag/tagStandard52h13.h
+[5.308s] -- Installing: /root/ros2_ws/install/apriltag/lib/libapriltag.so.3.4.2
+[5.308s] -- Installing: /root/ros2_ws/install/apriltag/lib/libapriltag.so.3
+[5.309s] -- Installing: /root/ros2_ws/install/apriltag/lib/libapriltag.so
+[5.309s] -- Installing: /root/ros2_ws/install/apriltag/share/apriltag/cmake/apriltagTargets.cmake
+[5.309s] -- Installing: /root/ros2_ws/install/apriltag/share/apriltag/cmake/apriltagTargets-release.cmake
+[5.309s] -- Installing: /root/ros2_ws/install/apriltag/share/apriltag/cmake/apriltagConfig.cmake
+[5.309s] -- Installing: /root/ros2_ws/install/apriltag/share/apriltag/cmake/apriltagConfigVersion.cmake
+[5.309s] -- Installing: /root/ros2_ws/install/apriltag/lib/pkgconfig/apriltag.pc
+[5.309s] -- Installing: /root/ros2_ws/install/apriltag/lib/python3.12/site-packages/apriltag.cpython-312-x86_64-linux-gnu.so
+[5.309s] -- Set non-toolchain portion of runtime path of "/root/ros2_ws/install/apriltag/lib/python3.12/site-packages/apriltag.cpython-312-x86_64-linux-gnu.so" to ""
+[5.310s] -- Installing: /root/ros2_ws/install/apriltag/bin/opencv_demo
+[5.310s] -- Set non-toolchain portion of runtime path of "/root/ros2_ws/install/apriltag/bin/opencv_demo" to ""
+[5.310s] -- Installing: /root/ros2_ws/install/apriltag/bin/apriltag_demo
+[5.310s] -- Set non-toolchain portion of runtime path of "/root/ros2_ws/install/apriltag/bin/apriltag_demo" to ""
+[5.312s] Invoked command in '/root/ros2_ws/build/apriltag' returned '0': CMAKE_PREFIX_PATH=/opt/ros/jazzy /usr/bin/cmake --install /root/ros2_ws/build/apriltag

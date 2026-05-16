@@ -1,0 +1,38 @@
+[0.936s] Invoking command in '/root/ros2_ws/src/apriltag_inspector': PYTHONPATH=/root/ros2_ws/build/apriltag_inspector/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/root/ros2_ws/install/apriltag_inspector/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/apriltag_inspector build --build-base /root/ros2_ws/build/apriltag_inspector/build install --record /root/ros2_ws/build/apriltag_inspector/install.log --single-version-externally-managed install_data
+[1.198s] running egg_info
+[1.198s] creating ../../build/apriltag_inspector/apriltag_inspector.egg-info
+[1.218s] writing ../../build/apriltag_inspector/apriltag_inspector.egg-info/PKG-INFO
+[1.232s] writing dependency_links to ../../build/apriltag_inspector/apriltag_inspector.egg-info/dependency_links.txt
+[1.232s] writing entry points to ../../build/apriltag_inspector/apriltag_inspector.egg-info/entry_points.txt
+[1.232s] writing requirements to ../../build/apriltag_inspector/apriltag_inspector.egg-info/requires.txt
+[1.232s] writing top-level names to ../../build/apriltag_inspector/apriltag_inspector.egg-info/top_level.txt
+[1.233s] writing manifest file '../../build/apriltag_inspector/apriltag_inspector.egg-info/SOURCES.txt'
+[1.279s] reading manifest file '../../build/apriltag_inspector/apriltag_inspector.egg-info/SOURCES.txt'
+[1.281s] adding license file 'LICENSE'
+[1.281s] writing manifest file '../../build/apriltag_inspector/apriltag_inspector.egg-info/SOURCES.txt'
+[1.281s] running build
+[1.282s] running build_py
+[1.282s] creating /root/ros2_ws/build/apriltag_inspector/build
+[1.283s] creating /root/ros2_ws/build/apriltag_inspector/build/lib
+[1.283s] creating /root/ros2_ws/build/apriltag_inspector/build/lib/apriltag_inspector
+[1.283s] copying apriltag_inspector/apriltag_inspector_node.py -> /root/ros2_ws/build/apriltag_inspector/build/lib/apriltag_inspector
+[1.285s] copying apriltag_inspector/__init__.py -> /root/ros2_ws/build/apriltag_inspector/build/lib/apriltag_inspector
+[1.286s] running install
+[1.297s] running install_lib
+[1.316s] creating /root/ros2_ws/install/apriltag_inspector/lib/python3.12/site-packages/apriltag_inspector
+[1.317s] copying /root/ros2_ws/build/apriltag_inspector/build/lib/apriltag_inspector/apriltag_inspector_node.py -> /root/ros2_ws/install/apriltag_inspector/lib/python3.12/site-packages/apriltag_inspector
+[1.317s] copying /root/ros2_ws/build/apriltag_inspector/build/lib/apriltag_inspector/__init__.py -> /root/ros2_ws/install/apriltag_inspector/lib/python3.12/site-packages/apriltag_inspector
+[1.319s] byte-compiling /root/ros2_ws/install/apriltag_inspector/lib/python3.12/site-packages/apriltag_inspector/apriltag_inspector_node.py to apriltag_inspector_node.cpython-312.pyc
+[1.325s] byte-compiling /root/ros2_ws/install/apriltag_inspector/lib/python3.12/site-packages/apriltag_inspector/__init__.py to __init__.cpython-312.pyc
+[1.325s] running install_data
+[1.326s] creating /root/ros2_ws/install/apriltag_inspector/share/ament_index
+[1.326s] creating /root/ros2_ws/install/apriltag_inspector/share/ament_index/resource_index
+[1.326s] creating /root/ros2_ws/install/apriltag_inspector/share/ament_index/resource_index/packages
+[1.326s] copying resource/apriltag_inspector -> /root/ros2_ws/install/apriltag_inspector/share/ament_index/resource_index/packages
+[1.327s] copying package.xml -> /root/ros2_ws/install/apriltag_inspector/share/apriltag_inspector
+[1.327s] running install_egg_info
+[1.363s] Copying ../../build/apriltag_inspector/apriltag_inspector.egg-info to /root/ros2_ws/install/apriltag_inspector/lib/python3.12/site-packages/apriltag_inspector-0.0.0-py3.12.egg-info
+[1.364s] running install_scripts
+[1.560s] Installing apriltag_inspector_node script to /root/ros2_ws/install/apriltag_inspector/lib/apriltag_inspector
+[1.560s] writing list of installed files to '/root/ros2_ws/build/apriltag_inspector/install.log'
+[1.778s] Invoked command in '/root/ros2_ws/src/apriltag_inspector' returned '0': PYTHONPATH=/root/ros2_ws/build/apriltag_inspector/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/root/ros2_ws/install/apriltag_inspector/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/apriltag_inspector build --build-base /root/ros2_ws/build/apriltag_inspector/build install --record /root/ros2_ws/build/apriltag_inspector/install.log --single-version-externally-managed install_data

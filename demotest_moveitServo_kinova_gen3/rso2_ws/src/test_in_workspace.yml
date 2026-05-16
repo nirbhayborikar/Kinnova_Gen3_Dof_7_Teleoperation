@@ -3,8 +3,10 @@
 services:
 
   gpu:
-    image: moveit/moveit2:main-jazzy-tutorial-source
-    # build: .
+    image: servo_mediapipe_image
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: moveit2_container_demo
     privileged: true
     network_mode: host
