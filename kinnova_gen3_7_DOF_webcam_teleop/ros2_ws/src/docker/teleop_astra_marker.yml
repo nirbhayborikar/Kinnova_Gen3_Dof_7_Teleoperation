@@ -1,0 +1,103 @@
+services:
+  kinova_teleop:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: kinova_gen3_teleop
+    container_name: kinova_gen3_teleop
+    stdin_open: true
+    tty: true
+    environment:
+      - DISPLAY=${DISPLAY}
+      - RMW_IMPLEMENTATION=rmw_zenoh_cpp
+      - QT_X11_NO_MITSHM=1
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - ROS_DOMAIN_ID=145
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - ../stage_1:/root/ros2_ws/src/stage_1:rw
+      - ../../../../../apriltag:/root/ros2_ws/src/stage_1/apriltag:rw
+      - ./zenoh_config.json5:/zenoh_config.json5:ro
+      - apriltag_shared_install:/root/ros2_ws/install:rw
+    devices:
+      - /dev/video0:/dev/video0
+    network_mode: host
+    privileged: true
+    command:
+      - bash
+      - -c
+      - |
+        source /opt/ros/jazzy/setup.bash &&
+        colcon build --symlink-install --packages-select apriltag apriltag_msgs apriltag_ros webcam_tag_detection &&
+        source /root/ros2_ws/install/setup.bash &&
+        source install/setup.bash &&
+        sleep 3
+        ros2 run webcam_tag_detection webcam_apriltag_node &&
+        tail -f /dev/null
+
+  astra:
+    container_name: astra
+    image: fbe-dockerreg.rwu.de/prj-iki-ros2/sensors/astra:jazzy
+    build:
+      context: ../../../../astra/
+      dockerfile: docker/Dockerfile
+    environment:
+      DISPLAY: $DISPLAY
+      ROS_DOMAIN_ID: 145
+      RMW_IMPLEMENTATION: rmw_zenoh_cpp
+    network_mode: host
+    ipc: host
+    privileged: true
+    stdin_open: true
+    volumes:
+      - /dev/bus/usb:/dev/bus/usb
+    command: ros2 launch astra_camera astra.launch.py
+
+  apriltag_detection:
+    container_name: ros2_apriltag_detection
+    image: fbe-dockerreg.rwu.de/prj-iki-ros2/perception/apriltag:jazzy-zenoh_dds
+    build:
+      context: ../../../../apriltag/
+      dockerfile: docker/Dockerfile
+    runtime: nvidia
+    environment:
+      DISPLAY: $DISPLAY
+      RMW_IMPLEMENTATION: rmw_zenoh_cpp
+      ROS_DOMAIN_ID: 145
+      QT_X11_NO_MITSHM: '1'
+      NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: compute,video,utility,graphics
+    network_mode: host
+    restart: unless-stopped
+    privileged: true
+    stdin_open: true
+    tty: true
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - ../cfgs/:/root/ros2_ws/install/apriltag_ros/share/apriltag_ros/cfg
+    command:
+      - bash
+      - -c
+      - |
+        source /opt/ros/jazzy/setup.bash &&
+        source install/setup.bash &&
+        sleep 6
+        ros2 launch apriltag_ros apriltag.launch.py image_rect_topic:=/camera/color/image_enhanced camera_info_topic:=/camera/color/camera_info &&
+        tail -f /dev/null
+
+  nb-246830_workspace_conainer:
+    image: kinova_gen3_teleop
+    command:
+      - bash
+      - -c
+      - |
+        source /opt/ros/jazzy/setup.bash &&
+        source /root/ros2_ws/install/setup.bash &&
+        ros2 run rmw_zenoh_cpp rmw_zenohd &
+        tail -f /dev/null
+
+# ========== EXTERNAL VOLUME DEFINITION ==========
+volumes:
+  apriltag_shared_install:
+    name: apriltag_shared_install
