@@ -1,0 +1,14 @@
+image: fbe-dockerreg.rwu.de/adm-iki/systems/gitlab-runner-docker:master
+#image: docker:20.10.14
+
+stages:
+    - docker
+
+apriltag_ros:
+    stage: docker
+    tags:
+       - image-build
+    script: 
+    - git submodule update --init --recursive #update submodules
+    - docker build -t fbe-dockerreg.rwu.de/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME:jazzy -f docker/Dockerfile .
+    - docker push fbe-dockerreg.rwu.de/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME:jazzy

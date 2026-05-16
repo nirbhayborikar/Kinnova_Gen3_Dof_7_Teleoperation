@@ -1,0 +1,46 @@
+services:
+  apriltag_detection:
+    container_name: ros2_apriltag_detection
+    image: fbe-dockerreg.rwu.de/prj-iki-ros2/perception/apriltag:jazzy-zenoh_dds
+    # image: apriltag:jetson  
+    runtime: nvidia
+    environment:
+      DISPLAY: $DISPLAY
+      RMW_IMPLEMENTATION: rmw_zenoh_cpp
+      ROS_DOMAIN_ID: 145
+      QT_X11_NO_MITSHM: '1'
+      NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: compute,video,utility,graphics
+    network_mode: host
+    restart: 'unless-stopped'
+    privileged: true
+    stdin_open: true
+    tty: true
+    # platform: linux/arm64
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      # - $HOME/.Xauthority:/root/.Xauthority
+      - ../cfgs/:/root/ros2_ws/install/apriltag_ros/share/apriltag_ros/cfg
+    command: 
+    - bash 
+    - -c 
+    - |
+        source /opt/ros/jazzy/setup.bash &&
+        source install/setup.bash &&
+
+        tail -f /dev/null
+
+
+# ros2 run image_transport republish compressed raw --ros-args --remap in/compressed:=/zed2i/zed_node/rgb_raw/image_raw_color/compressed --remap out:=/zed2i/zed_node/rgb_raw/image_raw_color &        
+# ros2 launch apriltag_ros apriltag.launch.py \
+# image_rect_topic:=/zed2i/zed_node/rgb_raw/image_raw_color \
+# camera_info_topic:=/zed2i/zed_node/rgb_raw/camera_info
+
+
+
+# compressed camera stream coming from a zed2i. 
+# ros2 run image_transport republish compressed raw (subscribe to a compressed image topic and republish it as raw.)
+# camera is publishing to /zed2i/zed_node/rgb_raw/image_raw_color/compressed, but the apriltag node accept  standard msg type input sensor_msgs/Image
+# syntay republish <in_transport> <out_transport>
+#
+# s. AprilTag works better on rectified images because lens distortion hurts pose estimation.

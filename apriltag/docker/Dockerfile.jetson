@@ -1,0 +1,38 @@
+ARG BASE_IMAGE=fbe-dockerreg.rwu.de/prj-iki-ros2/orga/ros2-docker-base:jazzy
+FROM $BASE_IMAGE AS base
+RUN apt update \ 
+&& apt install -y vim \
+   ros-$ROS_DISTRO-image-transport \
+   ros-$ROS_DISTRO-image-transport-plugins \
+   #ros-$ROS_DISTRO-cv-bridge \
+&& rm -rf /var/lib/apt/lists/*
+
+ENV WS=/root/ros2_ws/src/prj-iki-ros2/perception
+
+# copy necessary packages for apriltag_detection
+WORKDIR ${WS}
+
+COPY submodules/apriltag ${WS}/apriltag
+COPY submodules/apriltag_msgs ${WS}/apriltag_msgs
+COPY apriltag_ros ${WS}/apriltag_ros
+
+RUN apt remove --purge -y libopencv-dev 
+RUN apt autoremove -y 
+#RUN apt remove -y opencv-licenses
+
+FROM base AS build
+#build packages
+WORKDIR /root/ros2_ws/
+
+RUN apt update \
+    && apt install -y \
+    ros-$ROS_DISTRO-image-transport \
+    ros-$ROS_DISTRO-image-transport-plugins \
+    && rm /etc/ros/rosdep/sources.list.d/20-default.list \
+    && rosdep init \
+    && rosdep update \
+    && rosdep install -y --ignore-src --from-paths src \
+    && rm -rf /var/lib/apt/lists/*
+
+
+RUN source /opt/ros/$ROS_DISTRO/setup.bash && colcon build --symlink-install --packages-select apriltag apriltag_msgs apriltag_ros 

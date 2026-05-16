@@ -1,0 +1,7 @@
+services:
+  apriltag_detection:
+    container_name: ros2_apriltag_detection
+    image: fbe-dockerreg.rwu.de/prj-iki-ros2/perception/apriltag:jazzy-zenoh_dds
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile

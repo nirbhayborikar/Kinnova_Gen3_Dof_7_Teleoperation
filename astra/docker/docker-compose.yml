@@ -1,0 +1,18 @@
+services:
+  astra:
+    container_name: astra
+    image: fbe-dockerreg.rwu.de/prj-iki-ros2/sensors/astra:jazzy
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    environment:
+      DISPLAY: $DISPLAY
+      ROS_DOMAIN_ID: 145
+      RMW_IMPLEMENTATION: rmw_zenoh_cpp
+    network_mode: host
+    ipc: host
+    privileged: true
+    stdin_open: true
+    volumes:
+      - /dev/bus/usb:/dev/bus/usb
+    command: ros2 launch astra_camera astra.launch.py
