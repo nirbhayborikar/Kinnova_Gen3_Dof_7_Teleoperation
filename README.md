@@ -146,6 +146,7 @@ Launches and configures the Orbbec Astra depth camera node inside a dedicated RO
 
 Pipeline of astra.launch.py:
 
+``` text
 astra.launch.py
     │
     ├── Declare launch arguments
@@ -168,7 +169,7 @@ astra.launch.py
             • Publish camera topics
             • Publish camera TF frames
             • Publish point clouds
-
+```
 
 ---
 
