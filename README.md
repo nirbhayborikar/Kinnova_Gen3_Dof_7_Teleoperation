@@ -21,6 +21,7 @@ In this project report, we have explored algorithms for 3D spatial tracking and 
 -   X11 display server
 -   Astra camera or webcam
 -   Kinova Gen3 robot 
+-   Connect to iki_robolab wifi network
 
 ## 🚀 Setup & Installation  Docker Recommended
 
@@ -94,8 +95,23 @@ Astra Camera → AprilTag Detection → Gesture Tracking → Workspace Mapping
 ``` text
 kinnova_gen3_7_DOF_webcam_teleop/
 ├── ros2_ws
+    └── src/
+        ├── docker/
+        │   ├── Dockerfile              # ROS2 jazzy + ROS2 controller + MediaPipe
+        │   ├── teleop_astra_marker.yml # One-command build & run
+        │   └── zenoh_config.json5      # zenoh router config file
+        └── stage_1/
+          │── webcam_tag_detection
+            └── webcam_tag_detection
+                ├── __init__.py
+                ├── webcam_apriltag_node.py
 ├── apriltag
+    ├── docker/
+    │   ├── Dockerfile              # AprilTag
+ 
 ├── astra
+    ├── docker/
+    │   ├── Dockerfile              # Astra 
 └── README.md
 ```
 
@@ -105,3 +121,8 @@ kinnova_gen3_7_DOF_webcam_teleop/
 -   Multiple AprilTag support
 -   Depth integration
 -   Safety zones
+
+## 🚀 For Depth Understanding
+
+-   Follow this report
+
