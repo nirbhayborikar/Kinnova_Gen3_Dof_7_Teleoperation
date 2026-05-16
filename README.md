@@ -133,14 +133,13 @@ kinnova_gen3_7_DOF_webcam_teleop/
             └── webcam_tag_detection
                 ├── __init__.py
                 ├── webcam_apriltag_node.py
-├── apriltag
-    ├── docker/
-    │   ├── Dockerfile              # AprilTag
- 
-├── astra
-    ├── docker/
-    │   ├── Dockerfile              # Astra 
-└── README.md
+apriltag
+├── docker/
+│   ├── Dockerfile              # AprilTag
+astra
+├── docker/
+│   ├── Dockerfile              # Astra 
+README.md
 ```
 
 ## 🚀 Future Improvements
@@ -152,5 +151,5 @@ kinnova_gen3_7_DOF_webcam_teleop/
 
 ## 🚀 For Depth Understanding
 
--   Follow this report
+-   Follow this report ->
 
