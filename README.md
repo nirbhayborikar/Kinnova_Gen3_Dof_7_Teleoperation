@@ -8,7 +8,7 @@ In this project report, we have explored algorithms for 3D spatial tracking and 
 
 ![Demo](media/videos/apriltag_teleop_demo.gif)
 
-![Full_Video_On_Github_High_Quality] (https://github.com/user-attachments/assets/a066718c-373d-490d-a892-551655c1226c)
+![Full_Video_On_Github_High_Quality] (https://github.com/nirbhayborikar/Kinnova_Gen3_Dof_7_Teleoperation/blob/teleop_markerbased/media/videos/apriltag_teleop_human_hand_tracking.mp4)
 
 > If video doesn't load above, [watch on Google Drive](https://drive.google.com/file/d/1Zj7HWqPut_pNBBrGEh6CWhcCuvjJqi9f/view?usp=sharing)
 ---
