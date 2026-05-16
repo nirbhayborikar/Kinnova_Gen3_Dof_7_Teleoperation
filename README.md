@@ -99,7 +99,7 @@ Sit facing the camera. Show both hands — you'll see landmark points and connec
 
 | Gesture | Action |
 |---------|--------|
-| Open hand | Open gripper |
+| Open finger/ fist | Open gripper |
 | Pinch thumb + index finger | Close gripper |
 | Close fist | Close gripper |
 | Move hand left/right | Arm moves laterally (Y-axis) |
@@ -118,6 +118,59 @@ Sit facing the camera. Show both hands — you'll see landmark points and connec
 | Gripper Open | ![Apart](media/images/away_position_moving_away_arm.png) |
 | Arms moving together (Y-direction) | ![Together](media/images/going_towards.png) |
 
+
+
+### Node Details
+
+**1. webcam_apriltag_node.py** — The Main Code Pipeline ([source](https://github.com/nirbhayborikar/Kinnova_Gen3_Dof_7_Teleoperation/blob/teleop_markerbased/kinnova_gen3_7_DOF_webcam_teleop/ros2_ws/src/stage_1/webcam_tag_detection/webcam_tag_detection/webcam_apriltag_node.py))
+
+Captures webcam feed/ feed from astra camera, tracks hands using MediaPipe, detect AprilTag using tf2 and applies 3-stage noise filtering (dead zone → velocity clamping → EMA smoothing), maps AprilTag based hand positions to robot workspace, detects pinch gesture for gripper control, and publishes target poses and gripper commands at 30Hz.
+
+**2. apriltag.launch.py** — AprilTag Detection Launcher ([source](https://github.com/nirbhayborikar/Kinnova_Gen3_Dof_7_Teleoperation/blob/teleop_markerbased/apriltag/apriltag_ros/launch/apriltag.launch.py))
+
+Launches the apriltag_ros detection node and configures it dynamically at runtime. This file acts as a wrapper around apriltag_node, allowing camera topics, parameter files, image transport methods, and naming prefixes to be changed without modifying source code.
+
+This file:
+1. Creates an apriltag_ros detection node
+2. Loads detector settings from tags_36h11.yaml
+3. Subscribes to camera image and camera calibration topics
+4. Remaps camera topics to match the active camera source (Astra/webcam)
+5. Supports namespace prefixes for running multiple detectors simultaneously
+6. Supports simulation time (use_sim_time)
+7. Supports different image transport types (raw, compressed, etc.)
+8. Dynamically builds node names using OpaqueFunction at launch time
+
+**3. astra.launch.py** — Hand Tracking ([source](https://github.com/nirbhayborikar/Kinnova_Gen3_Dof_7_Teleoperation/blob/teleop_markerbased/astra/astra_camera/launch/astra.launch.py))
+
+Launches and configures the Orbbec Astra depth camera node inside a dedicated ROS2 namespace, exposes many runtime parameters through launch arguments, and starts the camera driver responsible for publishing color images, depth images, infrared streams, point clouds, camera calibration data, and TF transforms. This file acts as the central camera configuration layer and allows changing camera behavior (resolution, FPS, point cloud generation, synchronization, QoS, etc.) without modifying source code.
+
+Pipeline of astra.launch.py:
+
+astra.launch.py
+    │
+    ├── Declare launch arguments
+    │       • Camera name / namespace
+    │       • Resolution (640x480 default)
+    │       • FPS settings (30Hz)
+    │       • Enable/disable color, depth, IR
+    │       • Point cloud options
+    │       • TF publishing options
+    │       • Synchronization settings
+    │
+    ├── Convert arguments → parameter dictionary
+    │
+    ├── Create namespace group
+    │       • PushRosNamespace(camera)
+    │
+    └── Launch astra_camera_node
+            • Connect to Astra sensor
+            • Initialize streams
+            • Publish camera topics
+            • Publish camera TF frames
+            • Publish point clouds
+
+
+---
 
 ## 📡 ROS Topics
 
