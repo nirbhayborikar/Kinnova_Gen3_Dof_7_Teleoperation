@@ -4,6 +4,15 @@ Real-time teleoperation of a **Kinova Gen3 (7-DOF)** robotic arm using
 
 In this project report, we have explored algorithms for 3D spatial tracking and robotic teleoperation and tested with 96 random people to study their hand movement and how they will teleoperate. We utilized a Kinova Gen3 robotic arm and a standard RGB camera setup to track AprilTag fiducial markers, along with the following associated control modules: the state estimation module, which extracts the absolute 3D Cartesian coordinates, orientation vectors (e.g., Roll, Pitch, Yaw), and the real-time calculated velocities of the operator's hand movements; and the ROS 2 filtering pipeline, which provides the exponential moving average (EMA) algorithms and deadzone thresholds required for smooth, Gimbal Lock-free kinematic control.
 
+## 🎬 Demo
+
+![Demo](media/videos/apriltag_teleop_demo.gif)
+
+![Full_Video_On_Github_High_Quality] (https://github.com/user-attachments/assets/a066718c-373d-490d-a892-551655c1226c)
+
+> If video doesn't load above, [watch on Google Drive](https://drive.google.com/file/d/1Zj7HWqPut_pNBBrGEh6CWhcCuvjJqi9f/view?usp=sharing)
+---
+
 ## ✨ Features
 
 -   Kinova Gen3 (7-DOF) teleoperation
