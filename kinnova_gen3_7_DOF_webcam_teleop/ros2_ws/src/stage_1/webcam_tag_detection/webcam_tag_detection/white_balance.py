@@ -164,7 +164,7 @@ class AprilTagTeleop(Node):
         self.last_tf_time = 0.0
 
 
-        self.timer = self.create_timer(1.0 / self.rate, self._timer_cb)
+        self.timer = self.create_timer(1.0 / self.rate, self._timer_cb) # 33.3 ms
 
         self.get_logger().info("=========================================")
         self.get_logger().info("  AprilTag 3D Teleop Activated!          ")
@@ -217,7 +217,7 @@ class AprilTagTeleop(Node):
                 
                 # 2. Apply CLAHE (Auto-balances the lighting and boosts contrast locally)
                 # (Contrast Limited Adaptive Histogram Equalization)
-                clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(16,16)) # below 2.0 more dark # if light chnage sharp increas from 8,8 to 16,16
+                clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(16,16)) # below 2.0 more dark # if light change sharp increas from 8,8 to 16,16
                 enhanced_gray = clahe.apply(gray_image)
                 
                 # 3. Publish the pristine grayscale image back to ROS 2
@@ -316,15 +316,16 @@ class AprilTagTeleop(Node):
             # NEW: THE GHOST FRAME FIX
             # ==========================================
             # Calculate the exact timestamp of the camera frame
+            # tf_time will generate when the tf2 is generated
 
             tf_time = t.header.stamp.sec + (t.header.stamp.nanosec / 1e9)
             
-            if tf_time == self.last_tf_time:
+            if tf_time == self.last_tf_time: # check : did TF give me exactly the same timestamp as last time
                 # The tag is hidden! TF2 is just repeating the last known position.
                 # We raise an error to force the script down to the Watchdog block!
                 raise TransformException("Stale Frame - Tag is Hidden!")
                 
-            self.last_tf_time = tf_time
+            self.last_tf_time = tf_time # update the tag seen time 
 
             # ==========================================
 
@@ -348,7 +349,7 @@ class AprilTagTeleop(Node):
 
 
 
-
+            # AprilTag position extraction
 
             # Extract absolute Cartesian Position (in meters)
             curr_x = t.transform.translation.x
@@ -416,14 +417,15 @@ class AprilTagTeleop(Node):
             # ==========================================
 
 
-            # 3. Apply the Ghost Filter (Deadzone)
+            # 3. Apply the Ghost Filter (Deadzone), pass threshold velocity
             active_vx = self.apply_smooth_deadzone(raw_vx, self.dead_zone)
             active_vy = self.apply_smooth_deadzone(raw_vy, self.dead_zone)
             active_vz = self.apply_smooth_deadzone(raw_vz, self.dead_zone)
 
             # 4. MAPPING (1-to-1 Aligned Frames)
 
-    
+            # Here self.scale is simply a gain / amplifier, ex: active_vx = 2.0 m/s, target_vx = 2.0 x 2.0 (scale) =4.0 m/s
+            # This means "Move Robot twice as fast as hand motion"
             target_vx = active_vx * self.scale
             target_vy = active_vy * self.scale
             target_vz = active_vz * self.scale  # x up down  goes to robot z down up
@@ -435,7 +437,7 @@ class AprilTagTeleop(Node):
             self.current_vx = (self.alpha * target_vx) + ((1 - self.alpha) * self.current_vx)
             self.current_vy = (self.alpha * target_vy) + ((1 - self.alpha) * self.current_vy)
             self.current_vz = (self.alpha * target_vz) + ((1 - self.alpha) * self.current_vz)
-
+            # take 20 % of new velocity input , rest use 90 % the old one.
 
 
 
