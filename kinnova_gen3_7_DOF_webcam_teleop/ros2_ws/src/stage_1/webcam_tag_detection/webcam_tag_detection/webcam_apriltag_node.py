@@ -169,58 +169,80 @@ class AprilTagTeleop(Node):
         self.get_logger().info("  AprilTag 3D Teleop Activated!          ")
         self.get_logger().info("  Show the tag to the camera to move.    ")
         self.get_logger().info("=========================================")
-
-    # Light issue / Tag is getting detected but flickering or jumping
-    
+   
+    # Function to remove tiny noisy movements smoothly. Light issue / Tag is getting detected but flickering or jumping
     def apply_smooth_deadzone(self, value, deadzone):
-        """Prevents sudden jerking when leaving the deadzone."""
+        """Prevents sudden jerking when leaving the deadzone.
+        Small movements caused by camera noise are ignored.
+        Larger movements are reduced smoothly instead of jumping suddenly """
+
+        # Check if input velocity is inside deadzone range
+
         if abs(value) <= deadzone: # 0.05
-            return 0.0
+            return 0.0 # Ignore tiny movements completely
+        
+        # Remove deadzone amount while preserving direction (+/-)
         return (abs(value) - deadzone) * math.copysign(1.0, value)
 
 
-
-
+    # Function to send open/close command to gripper
     def _send_gripper_command(self, close=True):
-        """Sends the exact motor positions to the Robotiq Gripper."""
-        if not self.gripper_client.wait_for_server(timeout_sec=0.1):
-            self.get_logger().warn('Gripper action server not ready')
-            return
+        # Sends target motor position to Robotiq gripper
 
-        goal = GripperCommand.Goal()
-        # 0.4867 = Closed | 0.0713 = Open (From your physical testing!)
-        goal.command.position = 0.5867 if close else 0.0713 # 0.5867
+        """ Uses ROS2 Action Client to asynchronously
+            send gripper open or close commands. 
+            Sends the exact motor positions to the Robotiq Gripper."""
+       
+        # Check if gripper action server is available
+        if not self.gripper_client.wait_for_server(timeout_sec=0.1):
+            
+            self.get_logger().warn('Gripper action server not ready') # Show warning if server is unavailable
+            return # Exit function safely
+
+        goal = GripperCommand.Goal() # Create a new action goal message
+        # 0.4867 = Closed | 0.0713 = Open (From physical testing!)
+        goal.command.position = 0.5867 if close else 0.0713 
          
         self.get_logger().info(f'Sending Gripper Goal: {"CLOSE" if close else "OPEN"}')
+        
+        # Send goal asynchronously without blocking program
         self.gripper_client.send_goal_async(goal)
 
 
 
-
-
-
+    # Image Callback runs whenever a new camera frame arrives
     def _image_cb(self, msg):
-            """Processes the raw camera image using MediaPipe to detect finger pinches."""
+            """
+            1. Converts ROS image → OpenCV image.
+            2. Enhances AprilTag visibility.
+            3. Detects hands with MediaPipe. 
+            4. Controls gripper using pinch gestures.
+            5. Video window with hand tracking and visual text.
+            """
+
+
             try:
                 # 1. Convert ROS Image to OpenCV format
                 cv_image = self.bridge.imgmsg_to_cv2(msg, desired_encoding='bgr8')
+                # 24 bits per pixel (8+8+8 = 24)
 
                 # ==========================================
                 # NEW: APRILTAG IMAGE ENHANCEMENT (CLAHE)
                 # ==========================================
 
                 """ AprilTags are just black and white squares. Color data is completely useless 
-                to the detector and just slows down your CPU. By stripping the color first, we make the math much faster."""
+                to the detector and just slows down CPU. By stripping the color first, we make the math much faster."""
+
                 # 1. Convert to Grayscale (AprilTags only care about black and white contrast)
                 gray_image = cv2.cvtColor(cv_image, cv2.COLOR_BGR2GRAY)
                 
                 # 2. Apply CLAHE (Auto-balances the lighting and boosts contrast locally)
                 # (Contrast Limited Adaptive Histogram Equalization)
-                clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(16,16)) # below 2.0 more dark # if light change sharp increas from 8,8 to 16,16
+                clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(16,16)) # below 2.0 more dark # if light change sharp then increas from 8,8 to 16,16
                 enhanced_gray = clahe.apply(gray_image)
                 
                 # 3. Publish the pristine grayscale image back to ROS 2
-                enhanced_msg = self.bridge.cv2_to_imgmsg(enhanced_gray, encoding="mono8")
+                enhanced_msg = self.bridge.cv2_to_imgmsg(enhanced_gray, encoding="mono8") # 8 bit per pixel
                 enhanced_msg.header = msg.header # CRITICAL: Keep the exact same timestamp for TF2 syncing!
                 self.enhanced_pub.publish(enhanced_msg)
                 
@@ -232,13 +254,13 @@ class AprilTagTeleop(Node):
                 # 2. MediaPipe requires RGB color space
                 rgb_image = cv2.cvtColor(cv_image, cv2.COLOR_BGR2RGB)
                 
-                # 3. Run the AI model
+                # 3. Run the AI model for hand detection
                 results = self.mp_hands.process(rgb_image)
                 
                 # 4. If a hand is found...
                 if results.multi_hand_landmarks:
                     
-                    # --- NEW: Draw the skeleton on the image! ---
+                    # Draw the skeleton on the image!
                     for hand_landmarks in results.multi_hand_landmarks:
                         mp_drawing.draw_landmarks(
                             cv_image,
@@ -246,12 +268,14 @@ class AprilTagTeleop(Node):
                             mp_hands.HAND_CONNECTIONS,
                             mp_drawing_styles.get_default_hand_landmarks_style(),
                             mp_drawing_styles.get_default_hand_connections_style())
-
+                    
+                    # Select first detected hand
                     hand = results.multi_hand_landmarks[0]
                     
                     # Get coordinates of Thumb Tip (4) and Index Tip (8)
-                    thumb = hand.landmark[mp_hands.HandLandmark.THUMB_TIP]
-                    index = hand.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP]
+                    
+                    thumb = hand.landmark[mp_hands.HandLandmark.THUMB_TIP] # Extract thumb tip position
+                    index = hand.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP]  # Extract index finger tip position
                     
                     # 5. Calculate 2D distance between Thumb (4) and Index (8)
                     pinch_dist = math.hypot(thumb.x - index.x, thumb.y - index.y)
@@ -260,12 +284,13 @@ class AprilTagTeleop(Node):
                     if pinch_dist < 0.05 and self.last_gripper_state != True:
                         self.last_gripper_state = True
                         self._send_gripper_command(close=True)
-                        
+
+                    # Open gripper if fingers separate    
                     elif pinch_dist > 0.10 and self.last_gripper_state != False:
                         self.last_gripper_state = False
                         self._send_gripper_command(close=False)
 
-                    # --- NEW: Visual Status Text ---
+                    #  Visual Status Text
                     state_text = "CLOSED (Pinching)" if self.last_gripper_state else "OPEN"
                     color = (0, 0, 255) if self.last_gripper_state else (0, 255, 0)
                     cv2.putText(cv_image, f"Gripper: {state_text}", (10, 40), 
@@ -275,10 +300,11 @@ class AprilTagTeleop(Node):
 
 
                 else:
+                    # Display message if no hand detected
                     cv2.putText(cv_image, "No Hand Detected", (10, 40), 
                                 cv2.FONT_HERSHEY_SIMPLEX, 1, (150, 150, 150), 2)
 
-                # --- NEW: SHOW THE VIDEO WINDOW ---
+                #  SHOW THE VIDEO WINDOW
                 cv2.imshow("MediaPipe Hand Tracker", cv_image)
                 cv2.waitKey(1) # Critical! This tells OpenCV to actually refresh the window
 
@@ -296,11 +322,11 @@ class AprilTagTeleop(Node):
 
 
 
-
-
-
+    # Timer callback runs repeatedly at fixed rate of 33.3 ms
 
     def _timer_cb(self):
+        
+        # Get current ROS system time
         current_time = self.get_clock().now()
 
         try:
@@ -333,7 +359,7 @@ class AprilTagTeleop(Node):
 
 
             # ==========================================
-            # NEW: Ask ROS 2 where the ROBOT is right NOW
+            # NEW: Ask ROS 2 where the ROBOT is right NOW, get robot end effector positon
             # ==========================================
             t_robot = self.tf_buffer.lookup_transform(
                 'base_link', 
@@ -356,7 +382,7 @@ class AprilTagTeleop(Node):
             curr_z = t.transform.translation.z
 
 
-            # 1. Grab Raw Quaternions
+            #  Grab Raw Quaternions
             qx = t.transform.rotation.x
             qy = t.transform.rotation.y
             qz = t.transform.rotation.z
