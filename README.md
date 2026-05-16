@@ -69,7 +69,7 @@ docker compose -f teleop_astra_marker.yml up
 ```
 
 This single command will:
-1. Build the Docker image (ROS2 Jazzy + MoveIt2 + MediaPipe)
+1. Build the Docker image (ROS2 Jazzy + MoveIt2 + MediaPipe + Apriltag + Astra Camera IMage)
 2. Launch the kortex arm from kortex_demo folder (for this contact University)
 3. Connect the astra camera
 4. Open the camera window with hand tracking overlay
@@ -81,6 +81,34 @@ This single command will:
 
 Astra Camera → AprilTag Detection → Gesture Tracking → Workspace Mapping
 → Kinova Teleop → Kinova Gen3
+
+
+## 🎮 Operating Instructions
+Sit facing the camera. Show both hands — you'll see landmark points and connections drawn on your hands in the camera window.
+
+### Controls
+
+| Gesture | Action |
+|---------|--------|
+| Open hand | Open gripper |
+| Pinch thumb + index finger | Close gripper |
+| Close fist | Close gripper |
+| Move hand left/right | Arm moves laterally (Y-axis) |
+| Move hand up/down | Arm moves vertically (Z-axis) |
+| Move hand toward/away from camera | Arm moves forward/backward (X-axis) |
+
+
+### Visual Guides
+
+| Action | Image |
+|--------|-------|
+| Human hand in Angle | ![Both arms](media/images/Gripper_Open.png) |
+| Move Forward | ![Open](media/images/Gripper_Open.png) |
+| Move Up (pinch) | ![Pinch](media/images/Gripper_close_with_Pinch.png) |
+| Gripper Close (fist) | ![Fist](media/images/Gripper_close_with_fist.png) |
+| Gripper Open | ![Apart](media/images/away_position_moving_away_arm.png) |
+| Arms moving together (Y-direction) | ![Together](media/images/going_towards.png) |
+
 
 ## 📡 ROS Topics
 
