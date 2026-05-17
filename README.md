@@ -120,7 +120,7 @@ Sit facing the camera. Show both hands — you'll see landmark points and connec
 
 
 
-### Node Details
+## Node Details
 
 **1. webcam_apriltag_node.py** — The Main Code Pipeline ([source](https://github.com/nirbhayborikar/Kinnova_Gen3_Dof_7_Teleoperation/blob/teleop_markerbased/kinnova_gen3_7_DOF_webcam_teleop/ros2_ws/src/stage_1/webcam_tag_detection/webcam_tag_detection/webcam_apriltag_node.py))
 
@@ -206,9 +206,9 @@ README.md
 ```
 
 
-### Other Methods
+## Other Methods
 
-## 🎬 Demo Gesture Based
+### 🎬 Demo Gesture Based
 
 ![Demo](media/videos/gif/gesture_based.gif)
 
@@ -223,7 +223,7 @@ cd Kinnova_Gen3_Dof_7_Teleoperation/kinnova_gen3_7_DOF_webcam_teleop/ros2_ws/src
 docker compose -f gesture_based.yml up
 ```
 
-## 🎬 Demo Phone IMU Based
+### 🎬 Demo Phone IMU Based
 
 ![Demo](media/videos/gif/imubased.gif)
 
@@ -238,7 +238,7 @@ cd Kinnova_Gen3_Dof_7_Teleoperation/kinnova_gen3_7_DOF_webcam_teleop/ros2_ws/src
 docker compose -f imu_based.yml up
 ```
 
-### Comparison With Other Methods
+## Comparison With Other Methods
 
 | Criterion | AprilTag Marker (Wearable Tag) | MediaPipe Hand Gesture | IMU Based Control |
 | :--- | :--- | :--- | :--- |
