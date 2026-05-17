@@ -222,6 +222,43 @@ README.md
 cd Kinnova_Gen3_Dof_7_Teleoperation/kinnova_gen3_7_DOF_webcam_teleop/ros2_ws/src/docker
 docker compose -f gesture_based.yml up
 ```
+###  Gesture Control Node
+
+**gesture_control_node.py** — The Main Code Pipeline ([source](https://github.com/nirbhayborikar/Kinnova_Gen3_Dof_7_Teleoperation/blob/teleop_markerbased/kinnova_gen3_7_DOF_webcam_teleop/ros2_ws/src/stage_1/gesture_control/gesture_control/gesture_control_node.py))
+
+This node (/twist_teleop_publisher) provides a fully markerless, vision-based control interface using a standard 2D webcam and Google's MediaPipe framework. It captures the video feed at 30Hz, tracks both hands simultaneously, and extracts wrist coordinates, rotation, and discrete gestures (fist, pinch, open hand). It implements a strict "dead-man's switch" safety architecture: robot motion is only authorized when the operator's right fist is closed. Hand movements are mapped to Cartesian velocities via a smart-switching dual-hand kinematics model, smoothed through a 3-stage filtering pipeline (dead-zone → Exponential Moving Average $\alpha = 0.4$ → velocity clamping). Furthermore, it handles asynchronous action goals to control the Robotiq gripper, monitors the end-effector TF2 frames, and generates a live OpenCV diagnostic overlay for the operator.
+
+## ✋ Operating Instructions: MediaPipe Gesture Control
+
+Once the node is running, it will open a live camera feed window. Ensure both your left and right hands are visible in the camera frame.
+
+1. The Safety Enable Switch (Right Hand)
+
+    To Move: You must close your right hand into a fist. This acts as an active safety switch. If your right hand is open (or leaves the camera frame), the robot will instantly stop and ignore all other commands.
+
+2. Robot Navigation (Motion Control)
+
+    X-Axis (Forward/Backward): While holding a right fist, move your right hand UP or DOWN in the camera frame.
+
+    Y-Axis (Left/Right): While holding a right fist, move your right hand LEFT or RIGHT. (Note: If your right hand is moving vertically, you can use your left hand's horizontal movement as a backup Y-axis control).
+
+    Z-Axis (Up/Down): While holding a right fist, move your left hand UP or DOWN in the camera frame.
+
+    End-Effector Roll: Rotate your right wrist clockwise or counterclockwise.
+
+3. Gripper Control (Left Hand)
+    (Note: Gripper commands only register while the right fist is closed).
+
+    Close Gripper: Form a Pinch or a Closed Fist with your left hand.
+
+    Open Gripper: Fully open your left hand.
+
+4. Emergency Stop
+
+    Simply open your right hand. The system will instantly publish a zero-velocity Twist command and apply the brakes, regardless of what your left hand is doing.
+
+    You can also press 'Q' while focused on the camera window to safely shut down the node.
+
 
 ### 🎬 Demo Phone IMU Based
 
@@ -237,6 +274,54 @@ docker compose -f gesture_based.yml up
 cd Kinnova_Gen3_Dof_7_Teleoperation/kinnova_gen3_7_DOF_webcam_teleop/ros2_ws/src/docker
 docker compose -f imu_based.yml up
 ```
+### IMU Control Node
+
+**sensagram_twist_final.py** — The Main Code Pipeline ([source](https://github.com/nirbhayborikar/Kinnova_Gen3_Dof_7_Teleoperation/blob/teleop_markerbased/kinnova_gen3_7_DOF_webcam_teleop/ros2_ws/src/stage_1/gesture_control/gesture_control/sensagram_twist_final.py))
+
+This node (/udp_twist_teleop_publisher) establishes a non-blocking UDP socket on port 5005 to receive android.sensor.rotation_vector JSON packets streamed over the local Wi-Fi from the Sensagram smartphone application. It converts incoming quaternions into Euler angles, performs a continuous 3-axis "Tare" operation against the initial phone orientation, and maps phone tilt directly to Cartesian robot velocities. To ensure safe operation, it implements a 3-stage noise filter (smooth dead-zone → Exponential Moving Average smoothing $\alpha = 0.1$ → velocity clamping) and a critical safety watchdog timer that slams the robot's brakes if a UDP packet is delayed by more than 0.2 seconds. It publishes filtered commands to /twist_controller/commands at 30Hz and visualizes the commanded velocity vector as an arrow in RViz2.
+
+### 📱 Mobile Application Requirement: Sensagram (IMU Control)
+
+If you intend to use the **IMU-Based Control** modality, you must install the open-source **Sensagram** application on your Android smartphone. This app streams your phone's internal accelerometer and gyroscope data over your local network to control the robot's orientation.
+
+**1. Download & Install**
+* Download Sensagram via F-Droid: [Sensagram on F-Droid](https://f-droid.org/packages/com.github.umer0586.sensagram/)
+
+**2. Network Configuration**
+* Your smartphone and the host PC running the robot's Docker containers **must be connected to the exact same Wi-Fi network (subnet)**.
+
+**3. App Configuration & Streaming**
+1. Open the Sensagram app and navigate to **Settings**.
+2. Enter the **IP Address** of your host PC (the computer connected to the robot).
+3. Set the **Port No.** to `5005`.
+4. Navigate to the **Sensors** tab and toggle ON **Rotation Vector Non-wakeup**.
+5. Return to the **Home** screen and press the **Stream (->)** button to begin transmitting IMU data to the ROS 2 middleware.
+
+> **Note on Data Rates:** The Sensagram app may send IMU data at a higher frequency than the robot's read rate. Ensure your Zenoh/DDS bridge is running correctly so the host machine can properly ingest the UDP stream without backlog.
+
+
+
+## 🎮 Operating Instructions: Sensagram IMU Control
+
+Once the node is running and the Sensagram app is actively streaming on your local network, the robot is controlled purely by tilting your smartphone in 3D space.
+
+1. Tare (Initialization)
+
+    Hold your phone perfectly still in your hand when starting the stream. The node will log --- TARE COMPLETE ---. This initial phone orientation becomes your absolute "Zero" position.
+
+2. Kinematic Controls
+
+    Move Forward/Backward (Robot X-Axis): Tilt the phone's pitch forward or backward.
+
+    Move Left/Right (Robot Y-Axis): Rotate the phone's yaw clockwise or counterclockwise.
+
+    Move Up/Down (Robot Z-Axis): Tilt the phone's roll left or right.
+
+3. Dead-zone & Safety
+
+    Dead-zone: The system requires a deliberate tilt of approximately 11.5 degrees (dead_zone: 0.29 radians) before the robot will move. This prevents accidental hand tremors from causing jitter.
+
+    Emergency Stop: If you need the robot to stop instantly, either return the phone to the flat "Tare" position, or simply pause the Sensagram stream. The 0.2-second Watchdog Timer will instantly publish a zero-velocity Twist command.
 
 ## Comparison With Other Methods
 
