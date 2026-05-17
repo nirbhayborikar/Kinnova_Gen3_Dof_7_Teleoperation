@@ -206,7 +206,7 @@ README.md
 ```
 
 
-## Other Methods
+### Other Methods
 
 ## 🎬 Demo Gesture Based
 
@@ -216,7 +216,12 @@ README.md
 
 > If video doesn't load above, [watch on Google Drive](https://drive.google.com/file/d/1imUobW2JqoDp8IXXe3lIxR-mGfJ9kDpR/view?usp=sharing)
 
+### Gesture Control: Build & Run
 
+```bash
+cd Kinnova_Gen3_Dof_7_Teleoperation/kinnova_gen3_7_DOF_webcam_teleop/ros2_ws/src/docker
+docker compose -f gesture_based.yml up
+```
 
 ## 🎬 Demo Phone IMU Based
 
@@ -225,6 +230,32 @@ README.md
 ![Full_Video_On_Github_High_Quality] (https://github.com/nirbhayborikar/Kinnova_Gen3_Dof_7_Teleoperation/blob/teleop_markerbased/media/videos/imubased.mp4)
 
 > If video doesn't load above, [watch on Google Drive](https://drive.google.com/file/d/1vcgR2-tFVCopmUTpgAxHbNPJVyZgdvpt/view?usp=sharing)
+
+### IMU Based Control: Build & Run
+
+```bash
+cd Kinnova_Gen3_Dof_7_Teleoperation/kinnova_gen3_7_DOF_webcam_teleop/ros2_ws/src/docker
+docker compose -f imu_based.yml up
+```
+
+### Comparison With Other Methods
+
+| Criterion | AprilTag Marker (Wearable Tag) | MediaPipe Hand Gesture | IMU Based Control |
+| :--- | :--- | :--- | :--- |
+| **Sensor Required** | Standard RGB camera | Standard RGB camera | IMU / wearable sensor |
+| **Marker / Device** | AprilTag wristband | Bare hand (markerless) | IMU worn on wrist/arm |
+| **Pose Estimation** | Full 6 DoF (TF2) | 21 point landmarks | Orientation only |
+| **Depth Information** | Via TF2 transform | Limited (2D only) | Yes (integration) |
+| **Occlusion Sensitivity** | High (watchdog mitigates) | Moderate | Low (body worn) |
+| **Setup Complexity** | Low (print + attach) | Very low (none) | Moderate (calibrate IMU) |
+| **Suitable for typical age group** | Yes (76.2% success) | Yes (gesture based) | Limited (calibration needed) |
+| **Primary Control Signal** | Cartesian velocity | Gesture classification | Orientation angle |
+| **Safety Mechanisms** | Watchdog, geofence, EMA filter, deadzone | Confidence threshold, deadzone filter | Drift correction, low pass filter |
+| **Control Latency / Data Updates** | Low (30 Hz loop) | Low (30 Hz loop) | 100–1000 Hz or higher (faster response) |
+| **Cost of Setup** | Very low (paper tag) | Zero (software only) | Moderate (hardware) |
+| **Robustness to Lighting** | Moderate (CLAHE helps) | Moderate | High (sensor independent) |
+
+*Table: Comparison of Teleoperation Approaches Implemented on the Kinova Gen3 Platform*
 
 
 ## 🚀 Future Improvements
