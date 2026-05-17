@@ -323,7 +323,7 @@ Once the node is running and the Sensagram app is actively streaming on your loc
 
     Emergency Stop: If you need the robot to stop instantly, either return the phone to the flat "Tare" position, or simply pause the Sensagram stream. The 0.2-second Watchdog Timer will instantly publish a zero-velocity Twist command.
 
-## Comparison With Other Methods
+## Comparison Between Methods
 
 | Criterion | AprilTag Marker (Wearable Tag) | MediaPipe Hand Gesture | IMU Based Control |
 | :--- | :--- | :--- | :--- |
