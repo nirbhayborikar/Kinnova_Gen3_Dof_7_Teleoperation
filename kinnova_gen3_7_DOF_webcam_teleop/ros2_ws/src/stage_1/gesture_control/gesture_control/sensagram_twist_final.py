@@ -1,39 +1,93 @@
 #!/usr/bin/env python3
 """
 UDP IMU Teleop Node for Kinova Gen3 7-DOF.
-Listens for Phone Orientation Data (Rotation Vector) via Sensagram JSON over WiFi.
+Target: picknik_twist_controller/PicknikTwistController
 
-rotate phone  arm goes in z direction  anticlockwise goes up , clockwise goes down
+Receives phone orientation data through UDP using Sensagram rotation vector JSON packets.
 
-tilt left goes backward tilt right goes forward
+Controls
+========
+Phone Roll (tilt left/right):
+    Tilt right-> Robot linear.x positive
+    Tilt left-> Robot linear.x negative
 
-tilt forward goes down, tilt backward goes up in z direction
+Phone Pitch (tilt forward/backward):
+    Tilt backward -> Robot linear.z positive
+    Tilt forward -> Robot linear.z negative
+
+Phone Yaw (rotate phone):
+    Rotate counterclockwise -> Robot linear.y positive
+    Rotate clockwise -> Robot linear.y negative
+
+Motion Processing
+=================
+- First valid IMU orientation is stored as reference pose
+- Motion is calculated relative to reference orientation
+- Angle wrapping keeps values within [-pi, pi]
+- Smooth dead-zone removes small movements
+- Exponential Moving Average (EMA) smooths velocity
+- Velocity values are clipped to configured limits
+
+Safety
+======
+- Watchdog monitors incoming UDP packets
+- If no valid packet arrives for 0.2 seconds:
+      Robot publishes zero Twist
+      Robot motion stops immediately
+Visualization
+=============
+1. Publishes RViz velocity arrow on: /teleop_velocity_arrow
+2. Publishes Twist commands on: /twist_controller/commands
+Runs continuously at configured update rate.
 """
 
-import socket
-import math
-import json
-import numpy as np
+import socket      # Used to create UDP network communication for receiving phone IMU data
+import math        # Provides mathematical functions (atan2, asin, pi, etc.)
+import json        # Used to parse incoming Sensagram JSON packets
+import numpy as np # Used for numerical operations such as clipping values
 
+# ---------------- ROS2 libraries ----------------
 import rclpy
-from rclpy.node import Node
-from geometry_msgs.msg import Twist
-from visualization_msgs.msg import Marker
-from geometry_msgs.msg import Point
+from rclpy.node import Node # Base class used to create ROS2 nodes
+from geometry_msgs.msg import Twist # Import Twist message for robot movement (linear/angular velocity)
+from visualization_msgs.msg import Marker # Marker visualization messages for RViz to see where robot is going
+from geometry_msgs.msg import Point # Point message used to define start and end coordinates of the velocity arrow visualization
 
-from tf2_ros import Buffer, TransformListener
-from tf2_ros import TransformException
 
 
 class UdpTwistTeleopNode(Node):
     def __init__(self):
+
+
+        # Create ROS2 node named:
+        # /udp_twist_teleop_publisher
         super().__init__('udp_twist_teleop_publisher')
+
+        # =====================================================
+        # ROS2 PARAMETERS
+        # =====================================================
+
+        # IP address to listen for UDP packets
+        # 0.0.0.0 means accept packets from any device
 
         # ---- Network Parameters ----
         self.declare_parameter('udp_ip',           "0.0.0.0") 
-        self.declare_parameter('udp_port',         5005)      
+
+        # UDP port used by Sensagram app
+        self.declare_parameter('udp_port',         5005)   
+
+        # Main loop frequency (Hz)   
         self.declare_parameter('rate',             30.0)
         
+        # =====================================================
+        # FILTER PARAMETERS
+        # =====================================================
+
+        # Exponential Moving Average coefficient
+        # Smaller values → smoother motion
+
+        # Ignore small phone movements
+        # Removes hand shaking and IMU noise
         # ---- STRICTER PARAMETERS FOR JITTER ----
         self.declare_parameter('alpha',            0.1)   # Lowered from 0.2 -> Absorbs hand shakes much better
         self.declare_parameter('dead_zone',        0.29)  # Increased from 0.10 -> Phone must tilt ~11.5 degrees before waking up
@@ -64,9 +118,6 @@ class UdpTwistTeleopNode(Node):
         self.twist_pub = self.create_publisher(Twist, '/twist_controller/commands', 10)
         self.arrow_pub = self.create_publisher(Marker, '/teleop_velocity_arrow', 10)
 
-        # ---- TF2 Listener ----
-        self.tf_buffer = Buffer()
-        self.tf_listener = TransformListener(self.tf_buffer, self)
 
         # Filtered velocity state (for EMA)
         self.current_vx = 0.0
@@ -94,24 +145,44 @@ class UdpTwistTeleopNode(Node):
         self.get_logger().info('  STRICT UDP Teleop + Safety Watchdog   ')
         self.get_logger().info('========================================')
 
+    # Function to remove tiny noisy movements smoothly. Light issue / Tag is getting detected but flickering or jumping
     def apply_smooth_deadzone(self, value, deadzone):
-        """Prevents sudden jerking when leaving the deadzone by scaling from 0.0 smoothly."""
+        """Prevents sudden jerking when leaving the deadzone.
+        Small movements caused by camera noise are ignored.
+        Larger movements are reduced smoothly instead of jumping suddenly """
+
+        # Check if input velocity is inside deadzone range
         if abs(value) <= deadzone:
-            return 0.0
+            return 0.0 # Ignore tiny movements completely
+        
         # If value is 0.25 and deadzone is 0.20, it returns 0.05
         return (abs(value) - deadzone) * math.copysign(1.0, value)
 
     def _timer_cb(self):
+
+
+        # =====================================================
+        # 1. READ ALL AVAILABLE UDP PACKETS
+        # =====================================================
+
+        # Since socket is non-blocking, keep reading packets
+        # until buffer becomes empty
+
         # 1. Drain the UDP buffer
         try:
             while True:
+                # Receive UDP packet
                 data, addr = self.sock.recvfrom(1024)
+
+                # Convert bytes → string
                 decoded = data.decode('utf-8').strip()
                 
+                # Sometimes packets may arrive merged: }{. Keep only latest JSON object
                 if '}{' in decoded:
                     decoded = '{' + decoded.split('}{')[-1]
 
                 try:
+                    # Convert JSON string → Python dictionary
                     data_dict = json.loads(decoded)
                     
                     if data_dict.get("type") == "android.sensor.rotation_vector":
@@ -119,13 +190,22 @@ class UdpTwistTeleopNode(Node):
                         # We got valid data! Update the clock.
                         self.last_valid_data_time = self.get_clock().now()
                         
+                        # Extract quaternion values
                         vals = data_dict.get("values", [])
                         if len(vals) >= 4:
                             qx, qy, qz, qw = vals[0], vals[1], vals[2], vals[3]
 
+
+                            # ===================================
+                            # Convert quaternion → roll
+                            # ===================================
                             sinr_cosp = 2 * (qw * qx + qy * qz)
                             cosr_cosp = 1 - 2 * (qx * qx + qy * qy)
                             self.latest_roll = math.atan2(sinr_cosp, cosr_cosp)
+
+                            # ===================================
+                            # Convert quaternion → pitch
+                            # ===================================
 
                             sinp = 2 * (qw * qy - qz * qx)
                             if abs(sinp) >= 1:
@@ -133,15 +213,21 @@ class UdpTwistTeleopNode(Node):
                             else:
                                 self.latest_pitch = math.asin(sinp)
 
+
+                            # ===================================
+                            # Convert quaternion → yaw
+                            # ===================================
                             siny_cosp = 2 * (qw * qz + qx * qy)
                             cosy_cosp = 1 - 2 * (qy * qy + qz * qz)
                             self.latest_yaw = math.atan2(siny_cosp, cosy_cosp)
-                            
+
+                # Ignore invalid JSON packets           
                 except json.JSONDecodeError:
                     pass 
                 except Exception as e:
                     self.get_logger().error(f"UDP Parse Error: {e}")
-                    
+
+        # Socket empty → continue normally            
         except BlockingIOError:
             pass 
 
@@ -213,6 +299,7 @@ class UdpTwistTeleopNode(Node):
         is_moving = abs(self.current_vx) > 0.01 or abs(self.current_vy) > 0.01 or abs(self.current_vz) > 0.01
         self._publish_arrow(twist_msg, is_moving)
 
+    # for visulaization publish arrow
     def _publish_arrow(self, twist_msg, is_moving):
         arrow = Marker()
         arrow.header.frame_id = 'base_link'

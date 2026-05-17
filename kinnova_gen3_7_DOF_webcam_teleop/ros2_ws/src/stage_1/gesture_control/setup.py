@@ -24,7 +24,10 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            'gesture_control_node = gesture_control.gesture_control_node:main'
+            'gesture_control_node = gesture_control.gesture_control_node:main',
+            'sensagram_twist_final = gesture_control.sensagram_twist_final:main',
+            'bend_arm = gesture_control.bend_arm:main',
+
         ],
     },
 )

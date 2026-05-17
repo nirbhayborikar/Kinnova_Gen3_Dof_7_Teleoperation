@@ -200,7 +200,7 @@ class AprilTagTeleop(Node):
             return # Exit function safely
 
         goal = GripperCommand.Goal() # Create a new action goal message
-        # 0.4867 = Closed | 0.0713 = Open (From physical testing!)
+        # 0.5867 = Closed | 0.0713 = Open (From physical testing!)
         goal.command.position = 0.5867 if close else 0.0713 
          
         self.get_logger().info(f'Sending Gripper Goal: {"CLOSE" if close else "OPEN"}')
