@@ -1,0 +1,62 @@
+services:
+  zenoh_router:
+    container_name: zenoh_router
+    image: fbe-dockerreg.rwu.de/prj-iki-ros2/robots/kortex_demo:kortex
+    extends:
+      file: common.yaml
+      service: kortex_real
+    command:
+      - bash
+      - -c
+      - |
+        ros2 run rmw_zenoh_cpp rmw_zenohd
+
+  kortex:
+    container_name: kortex
+    image: fbe-dockerreg.rwu.de/prj-iki-ros2/robots/kortex_demo:kortex
+    extends:
+      file: common.yaml
+      service: kortex_real
+    ulimits:
+      rtprio: 99
+      memlock: -1
+      nice: -20
+    command: 
+      - bash
+      - -c
+      - |
+        sleep 2
+        
+        # 1. Background task: Wait 15s, then switch controllers
+        (sleep 15 && ros2 service call /controller_manager/switch_controller controller_manager_msgs/srv/SwitchController '{activate_controllers: ["twist_controller"], deactivate_controllers: ["joint_trajectory_controller"], strictness: 1, activate_asap: true}') &        
+        
+        # 2. Foreground task: Start the main robot driver
+        ros2 launch kortex_demo_bringup kortex.launch.py
+
+
+
+  kortex_rviz:
+    container_name: kortex_rviz
+    image: fbe-dockerreg.rwu.de/prj-iki-ros2/robots/kortex_demo:kortex
+    extends:
+      file: common.yaml
+      service: kortex_real
+    command: 
+      - bash
+      - -c
+      - |
+        sleep 8
+        ros2 launch kortex_demo_bringup rviz.launch.py
+
+  kortex_moveit:
+    container_name: kortex_moveit
+    image: fbe-dockerreg.rwu.de/prj-iki-ros2/robots/kortex_demo:kortex
+    extends:
+      file: common.yaml
+      service: kortex_real
+    command:
+      - bash
+      - -c
+      - |
+        sleep 6
+        ros2 launch kortex_demo_bringup moveit.launch.py

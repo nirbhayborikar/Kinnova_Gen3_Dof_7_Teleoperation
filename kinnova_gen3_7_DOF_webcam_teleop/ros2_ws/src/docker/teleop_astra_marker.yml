@@ -32,7 +32,7 @@ services:
         colcon build --symlink-install --packages-select apriltag apriltag_msgs apriltag_ros webcam_tag_detection &&
         source /root/ros2_ws/install/setup.bash &&
         source install/setup.bash &&
-        sleep 3
+        sleep 2
         ros2 run webcam_tag_detection webcam_apriltag_node &&
         tail -f /dev/null
 
@@ -80,9 +80,6 @@ services:
       - bash
       - -c
       - |
-        source /opt/ros/jazzy/setup.bash &&
-        source install/setup.bash &&
-        sleep 6
         ros2 launch apriltag_ros apriltag.launch.py image_rect_topic:=/camera/color/image_enhanced camera_info_topic:=/camera/color/camera_info &&
         tail -f /dev/null
 
