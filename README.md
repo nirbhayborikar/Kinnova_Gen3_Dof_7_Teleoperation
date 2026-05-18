@@ -111,12 +111,10 @@ Sit facing the camera. Show both hands — you'll see landmark points and connec
 
 | Action | Image |
 |--------|-------|
-| Human hand in Angle | ![Both arms](media/images/Gripper_Open.png) |
-| Move Forward | ![Open](media/images/Gripper_Open.png) |
-| Move Up (pinch) | ![Pinch](media/images/Gripper_close_with_Pinch.png) |
-| Gripper Close (fist) | ![Fist](media/images/Gripper_close_with_fist.png) |
-| Gripper Open | ![Apart](media/images/away_position_moving_away_arm.png) |
-| Arms moving together (Y-direction) | ![Together](media/images/going_towards.png) |
+| Human hand in Angle | ![Both arms](media/images/Hand_Place_in_angle.png) |
+| Move Hand in Direction | ![Open](media/images/direction.png) |
+| Gripper Close (fist) | ![Fist](media/images/close_gripper.png) |
+| Gripper Open (fist open) | ![Apart](media/images/Hand_Place_in_angle.png) |
 
 
 
