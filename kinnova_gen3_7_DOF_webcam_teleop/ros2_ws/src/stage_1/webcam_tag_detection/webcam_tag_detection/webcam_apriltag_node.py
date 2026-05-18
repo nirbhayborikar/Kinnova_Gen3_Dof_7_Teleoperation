@@ -37,7 +37,7 @@ class AprilTagTeleop(Node):
         # --- Parameters ---
         self.declare_parameter('rate', 30.0)           # Loop rate (Hz)
         self.declare_parameter('speed_scale', 2.0)     # Sensitivity multiplier# dead
-        self.declare_parameter('max_speed', 0.08)       # Safety speed limit (m/s)
+        self.declare_parameter('max_speed', 0.05)       # Safety speed limit (m/s)
         self.declare_parameter('camera_frame', 'camera_link') # Define camera reference frame name
         self.declare_parameter('tag_frame', 'tag36h11_12')    # Default AprilTag frame to track
 
@@ -484,7 +484,7 @@ class AprilTagTeleop(Node):
 
 
             # 3. 
-            twist.linear.x = max(min(-(self.current_vy), self.max_speed), -self.max_speed)     
+            twist.linear.x = max(min((self.current_vy), self.max_speed), -self.max_speed)     
             # the above is confirm camera  - y , is robot x (lateral axis ) -
             # the position is inverse thats why -y of camera is +x of robot end effector.
 
