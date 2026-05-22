@@ -83,6 +83,21 @@ This single command will:
 3. Connect the astra camera
 4. Open the camera window with hand tracking overlay
 
+Furthermore for launching the robot use teleop.yaml file this present in repository of kortex_demo/docker and if not just copy the file from 
+cd Kinnova_Gen3_Dof_7_Teleoperation/kinnova_gen3_7_DOF_webcam_teleop/teleop.yaml and paste it to kortex_demo/docker.
+
+For kortex_demo repository contact Gebaüde E, Robotics lab, Hochschule Ravensburg Weingarten.
+
+
+### Step 5: Important parameter to change 
+
+Some parameter in node webcam_apriltag_node.py ([source](https://github.com/nirbhayborikar/Kinnova_Gen3_Dof_7_Teleoperation/blob/teleop_markerbased/kinnova_gen3_7_DOF_webcam_teleop/ros2_ws/src/stage_1/webcam_tag_detection/webcam_tag_detection/webcam_apriltag_node.py))
+need to change as everytime lighting condition, camera height, and camera view changes so to make the robot work smoothly and lag free, change this parameter : 
+1. max_speed 
+2. deadzone
+3. alpha 
+
+
 ## 🏗 Architecture
 
 
