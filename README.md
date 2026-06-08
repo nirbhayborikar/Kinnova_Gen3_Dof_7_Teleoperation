@@ -365,5 +365,11 @@ Once the node is running and the Sensagram app is actively streaming on your loc
 
 ## 🚀 For Depth Understanding
 
--   Follow this report ->
+-   Follow this report -> ![PDF Report] (https://drive.google.com/file/d/1mijuLVU8u65AzGb25MIwHbTnHwTMt3J3/view?usp=sharing)
+
+## Just for information
+Note:
+To add submodules this is the format
+git submodule add url
+git submodule add url
 
