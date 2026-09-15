@@ -1,0 +1,3 @@
+[submodule "submodules/libuvc"]
+	path = submodules/libuvc
+	url = https://github.com/libuvc/libuvc.git

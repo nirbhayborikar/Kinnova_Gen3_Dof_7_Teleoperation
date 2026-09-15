@@ -1,1 +1,0 @@
-# demotest_moveitServo_kinova_gen3

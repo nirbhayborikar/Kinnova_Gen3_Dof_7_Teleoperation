@@ -4,59 +4,61 @@ AprilTag 3D Linear Teleop Node for Kinova Gen3.
 Tracks absolute position via TF2 and uses derivatives to calculate Twist velocities.
 """
 
-import rclpy
-from rclpy.node import Node
-from geometry_msgs.msg import Twist
-from tf2_ros import Buffer, TransformListener, TransformException
-import math
+import rclpy # ros client library for python
+from rclpy.node import Node # Import Node class to create ROS2 nodes
+from geometry_msgs.msg import Twist # Import Twist message for robot movement (linear/angular velocity)
+from tf2_ros import Buffer, TransformListener, TransformException # Import TF tools for coordinate transforms and error handling
+import math # Import math functions (sin, cos, sqrt, etc.)
 
-# Do action client
-from rclpy.action import ActionClient
-from control_msgs.action import GripperCommand
+# Action client
+from rclpy.action import ActionClient # Import ROS2 action client for asynchronous task communication
+from control_msgs.action import GripperCommand # Import gripper action message for controlling robot gripper
 
-import cv2
-import mediapipe as mp
-from cv_bridge import CvBridge
-from sensor_msgs.msg import Image
+import cv2 # Import OpenCV for image processing
+import mediapipe as mp # Import MediaPipe for hand detection and tracking
+# Mediapipe is a machine learning model that uses bunch of model to detect palm, hand, and track hand in real-time
+from cv_bridge import CvBridge # Convert ROS image messages to OpenCV format and vice versa
+from sensor_msgs.msg import Image # Import ROS Image message type for camera data
+
+
 
 # MediaPipe helper variables (Must be AFTER importing mediapipe!)
-mp_hands = mp.solutions.hands
-mp_drawing = mp.solutions.drawing_utils
-mp_drawing_styles = mp.solutions.drawing_styles
+mp_hands = mp.solutions.hands # Load MediaPipe hand detection module
+mp_drawing = mp.solutions.drawing_utils # Load drawing utility for landmarks and connections
+mp_drawing_styles = mp.solutions.drawing_styles # Load predefined drawing styles for hand visualization
 
-
+# Create main ROS2 node class
 class AprilTagTeleop(Node):
+    # Constructor function will run when object is created
     def __init__(self):
-        super().__init__('apriltag_teleop')
+        # Initialize ROS2 node with name "apriltag_teleop"
+        super().__init__('apriltag_teleop') 
 
         # --- Parameters ---
         self.declare_parameter('rate', 30.0)           # Loop rate (Hz)
         self.declare_parameter('speed_scale', 2.0)     # Sensitivity multiplier# dead
-        self.declare_parameter('max_speed', 0.08)       # Safety speed limit (m/s)
-        self.declare_parameter('camera_frame', 'camera_link') 
-        self.declare_parameter('tag_frame', 'tag36h11_12')    # Default AprilTag ID 0
+        self.declare_parameter('max_speed', 0.05)       # Safety speed limit (m/s)
+        self.declare_parameter('camera_frame', 'camera_link') # Define camera reference frame name
+        self.declare_parameter('tag_frame', 'tag36h11_12')    # Default AprilTag frame to track
 
         self.rate = self.get_parameter('rate').value
-        self.scale = self.get_parameter('speed_scale').value
-        self.max_speed = self.get_parameter('max_speed').value
-        self.camera_frame = self.get_parameter('camera_frame').value
-        self.tag_frame = self.get_parameter('tag_frame').value
+        self.scale = self.get_parameter('speed_scale').value  # Get speed scaling value
+        self.max_speed = self.get_parameter('max_speed').value  # Get maximum speed value
+        self.camera_frame = self.get_parameter('camera_frame').value # Get camera frame name
+        self.tag_frame = self.get_parameter('tag_frame').value  # Get AprilTag frame name
 
 
 
         # --- SAFEGUARD PARAMETERS ---
-        # 1. Alpha: 0.01 (Heavy lag, very smooth) to 1.0 (Zero lag, very jittery)
+        # 1. Alpha: 0.01 (Heavy lag, very smooth) to 1.0 (Zero lag, very jittery), factor for EMA
         self.declare_parameter('alpha', 0.20)
         # 2. Deadzone: Ignore velocities smaller than this (m/s)
-        self.declare_parameter('dead_zone', 0.25) 
+        self.declare_parameter('dead_zone', 0.24) 
         # 3. Watchdog Timeout: Seconds before brakes apply when tag is hidden
         self.declare_parameter('tag_timeout', 0.25) 
 
-        self.rate = self.get_parameter('rate').value
-        self.scale = self.get_parameter('speed_scale').value
-        self.max_speed = self.get_parameter('max_speed').value
-        self.camera_frame = self.get_parameter('camera_frame').value
-        self.tag_frame = self.get_parameter('tag_frame').value
+
+        # Load safeguard parameter values
         self.alpha = self.get_parameter('alpha').value
         self.dead_zone = self.get_parameter('dead_zone').value
         self.timeout = self.get_parameter('tag_timeout').value
@@ -90,9 +92,9 @@ class AprilTagTeleop(Node):
 
 
 
-        # ==========================================
-        # GRIPPER ACTION CLIENT SETUP
-        # ==========================================
+        # =============================================================================
+        # GRIPPER ACTION CLIENT SETUP (Create action client to control Robotiq gripper)
+        # =============================================================================
         self.gripper_client = ActionClient(
             self, 
             GripperCommand, 
@@ -100,13 +102,10 @@ class AprilTagTeleop(Node):
         )
         self.last_gripper_state = None # Tracks if it is currently open or closed
 
-
-
-
         # ==========================================
         # MEDIAPIPE & CAMERA SUBSCRIPTION SETUP
         # ==========================================
-        self.bridge = CvBridge()
+        self.bridge = CvBridge() # Convert ROS images into OpenCV images
         
         # Initialize the MediaPipe AI
         self.mp_hands = mp.solutions.hands.Hands(
@@ -134,7 +133,7 @@ class AprilTagTeleop(Node):
         self.twist_pub = self.create_publisher(Twist, '/twist_controller/commands', 10)
 
 
-        # NEW: Publisher for the cleaned-up AprilTag image
+        # NEW: Publisher for the cleaned-up AprilTag image (black and white)
         self.enhanced_pub = self.create_publisher(Image, '/camera/color/image_enhanced', 10)
 
         # --- Memory for Calculus (Derivatives) ---
@@ -164,64 +163,86 @@ class AprilTagTeleop(Node):
         self.last_tf_time = 0.0
 
 
-        self.timer = self.create_timer(1.0 / self.rate, self._timer_cb)
+        self.timer = self.create_timer(1.0 / self.rate, self._timer_cb) # 33.3 ms
 
         self.get_logger().info("=========================================")
         self.get_logger().info("  AprilTag 3D Teleop Activated!          ")
         self.get_logger().info("  Show the tag to the camera to move.    ")
         self.get_logger().info("=========================================")
-
-    # Light issue / Tag is getting detected but flickering or jumping
-    
+   
+    # Function to remove tiny noisy movements smoothly. Light issue / Tag is getting detected but flickering or jumping
     def apply_smooth_deadzone(self, value, deadzone):
-        """Prevents sudden jerking when leaving the deadzone."""
+        """Prevents sudden jerking when leaving the deadzone.
+        Small movements caused by camera noise are ignored.
+        Larger movements are reduced smoothly instead of jumping suddenly """
+
+        # Check if input velocity is inside deadzone range
+
         if abs(value) <= deadzone: # 0.05
-            return 0.0
+            return 0.0 # Ignore tiny movements completely
+        
+        # Remove deadzone amount while preserving direction (+/-)
         return (abs(value) - deadzone) * math.copysign(1.0, value)
 
 
-
-
+    # Function to send open/close command to gripper
     def _send_gripper_command(self, close=True):
-        """Sends the exact motor positions to the Robotiq Gripper."""
-        if not self.gripper_client.wait_for_server(timeout_sec=0.1):
-            self.get_logger().warn('Gripper action server not ready')
-            return
+        # Sends target motor position to Robotiq gripper
 
-        goal = GripperCommand.Goal()
-        # 0.4867 = Closed | 0.0713 = Open (From your physical testing!)
-        goal.command.position = 0.5867 if close else 0.0713 # 0.5867
+        """ Uses ROS2 Action Client to asynchronously
+            send gripper open or close commands. 
+            Sends the exact motor positions to the Robotiq Gripper."""
+       
+        # Check if gripper action server is available
+        if not self.gripper_client.wait_for_server(timeout_sec=0.1):
+            
+            self.get_logger().warn('Gripper action server not ready') # Show warning if server is unavailable
+            return # Exit function safely
+
+        goal = GripperCommand.Goal() # Create a new action goal message
+        # 0.5867 = Closed | 0.0713 = Open (From physical testing!)
+        goal.command.position = 0.5867 if close else 0.0713 
          
         self.get_logger().info(f'Sending Gripper Goal: {"CLOSE" if close else "OPEN"}')
+        
+        # Send goal asynchronously without blocking program
         self.gripper_client.send_goal_async(goal)
 
 
 
-
-
-
+    # Image Callback runs whenever a new camera frame arrives
     def _image_cb(self, msg):
-            """Processes the raw camera image using MediaPipe to detect finger pinches."""
+            """
+            1. Converts ROS image → OpenCV image.
+            2. Enhances AprilTag visibility.
+            3. Detects hands with MediaPipe. 
+            4. Controls gripper using pinch gestures.
+            5. Video window with hand tracking and visual text.
+            """
+
+
             try:
                 # 1. Convert ROS Image to OpenCV format
                 cv_image = self.bridge.imgmsg_to_cv2(msg, desired_encoding='bgr8')
+                # 24 bits per pixel (8+8+8 = 24)
 
                 # ==========================================
                 # NEW: APRILTAG IMAGE ENHANCEMENT (CLAHE)
                 # ==========================================
 
                 """ AprilTags are just black and white squares. Color data is completely useless 
-                to the detector and just slows down your CPU. By stripping the color first, we make the math much faster."""
+                to the detector and just slows down CPU. By stripping the color first, we make the math much faster."""
+
                 # 1. Convert to Grayscale (AprilTags only care about black and white contrast)
                 gray_image = cv2.cvtColor(cv_image, cv2.COLOR_BGR2GRAY)
                 
                 # 2. Apply CLAHE (Auto-balances the lighting and boosts contrast locally)
                 # (Contrast Limited Adaptive Histogram Equalization)
-                clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(16,16)) # below 2.0 more dark # if light chnage sharp increas from 8,8 to 16,16
+                clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(16,16)) # below 2.0 more dark # if light change sharp then increas from 8,8 to 16,16
                 enhanced_gray = clahe.apply(gray_image)
                 
                 # 3. Publish the pristine grayscale image back to ROS 2
-                enhanced_msg = self.bridge.cv2_to_imgmsg(enhanced_gray, encoding="mono8")
+                enhanced_msg = self.bridge.cv2_to_imgmsg(enhanced_gray, encoding="mono8") # 8 bit per pixel
                 enhanced_msg.header = msg.header # CRITICAL: Keep the exact same timestamp for TF2 syncing!
                 self.enhanced_pub.publish(enhanced_msg)
                 
@@ -233,13 +254,13 @@ class AprilTagTeleop(Node):
                 # 2. MediaPipe requires RGB color space
                 rgb_image = cv2.cvtColor(cv_image, cv2.COLOR_BGR2RGB)
                 
-                # 3. Run the AI model
+                # 3. Run the AI model for hand detection
                 results = self.mp_hands.process(rgb_image)
                 
                 # 4. If a hand is found...
                 if results.multi_hand_landmarks:
                     
-                    # --- NEW: Draw the skeleton on the image! ---
+                    # Draw the skeleton on the image!
                     for hand_landmarks in results.multi_hand_landmarks:
                         mp_drawing.draw_landmarks(
                             cv_image,
@@ -247,12 +268,14 @@ class AprilTagTeleop(Node):
                             mp_hands.HAND_CONNECTIONS,
                             mp_drawing_styles.get_default_hand_landmarks_style(),
                             mp_drawing_styles.get_default_hand_connections_style())
-
+                    
+                    # Select first detected hand
                     hand = results.multi_hand_landmarks[0]
                     
                     # Get coordinates of Thumb Tip (4) and Index Tip (8)
-                    thumb = hand.landmark[mp_hands.HandLandmark.THUMB_TIP]
-                    index = hand.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP]
+                    
+                    thumb = hand.landmark[mp_hands.HandLandmark.THUMB_TIP] # Extract thumb tip position
+                    index = hand.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP]  # Extract index finger tip position
                     
                     # 5. Calculate 2D distance between Thumb (4) and Index (8)
                     pinch_dist = math.hypot(thumb.x - index.x, thumb.y - index.y)
@@ -261,12 +284,13 @@ class AprilTagTeleop(Node):
                     if pinch_dist < 0.05 and self.last_gripper_state != True:
                         self.last_gripper_state = True
                         self._send_gripper_command(close=True)
-                        
+
+                    # Open gripper if fingers separate    
                     elif pinch_dist > 0.10 and self.last_gripper_state != False:
                         self.last_gripper_state = False
                         self._send_gripper_command(close=False)
 
-                    # --- NEW: Visual Status Text ---
+                    #  Visual Status Text
                     state_text = "CLOSED (Pinching)" if self.last_gripper_state else "OPEN"
                     color = (0, 0, 255) if self.last_gripper_state else (0, 255, 0)
                     cv2.putText(cv_image, f"Gripper: {state_text}", (10, 40), 
@@ -276,10 +300,11 @@ class AprilTagTeleop(Node):
 
 
                 else:
+                    # Display message if no hand detected
                     cv2.putText(cv_image, "No Hand Detected", (10, 40), 
                                 cv2.FONT_HERSHEY_SIMPLEX, 1, (150, 150, 150), 2)
 
-                # --- NEW: SHOW THE VIDEO WINDOW ---
+                #  SHOW THE VIDEO WINDOW
                 cv2.imshow("MediaPipe Hand Tracker", cv_image)
                 cv2.waitKey(1) # Critical! This tells OpenCV to actually refresh the window
 
@@ -297,11 +322,11 @@ class AprilTagTeleop(Node):
 
 
 
-
-
-
+    # Timer callback runs repeatedly at fixed rate of 33.3 ms
 
     def _timer_cb(self):
+        
+        # Get current ROS system time
         current_time = self.get_clock().now()
 
         try:
@@ -316,15 +341,16 @@ class AprilTagTeleop(Node):
             # NEW: THE GHOST FRAME FIX
             # ==========================================
             # Calculate the exact timestamp of the camera frame
+            # tf_time will generate when the tf2 is generated
 
             tf_time = t.header.stamp.sec + (t.header.stamp.nanosec / 1e9)
             
-            if tf_time == self.last_tf_time:
+            if tf_time == self.last_tf_time: # check : did TF give me exactly the same timestamp as last time
                 # The tag is hidden! TF2 is just repeating the last known position.
                 # We raise an error to force the script down to the Watchdog block!
                 raise TransformException("Stale Frame - Tag is Hidden!")
                 
-            self.last_tf_time = tf_time
+            self.last_tf_time = tf_time # update the tag seen time 
 
             # ==========================================
 
@@ -333,7 +359,7 @@ class AprilTagTeleop(Node):
 
 
             # ==========================================
-            # NEW: Ask ROS 2 where the ROBOT is right NOW
+            # NEW: Ask ROS 2 where the ROBOT is right NOW, get robot end effector positon
             # ==========================================
             t_robot = self.tf_buffer.lookup_transform(
                 'base_link', 
@@ -348,7 +374,7 @@ class AprilTagTeleop(Node):
 
 
 
-
+            # AprilTag position extraction
 
             # Extract absolute Cartesian Position (in meters)
             curr_x = t.transform.translation.x
@@ -356,7 +382,7 @@ class AprilTagTeleop(Node):
             curr_z = t.transform.translation.z
 
 
-            # 1. Grab Raw Quaternions
+            #  Grab Raw Quaternions
             qx = t.transform.rotation.x
             qy = t.transform.rotation.y
             qz = t.transform.rotation.z
@@ -416,14 +442,15 @@ class AprilTagTeleop(Node):
             # ==========================================
 
 
-            # 3. Apply the Ghost Filter (Deadzone)
+            # 3. Apply the Ghost Filter (Deadzone), pass threshold velocity
             active_vx = self.apply_smooth_deadzone(raw_vx, self.dead_zone)
             active_vy = self.apply_smooth_deadzone(raw_vy, self.dead_zone)
             active_vz = self.apply_smooth_deadzone(raw_vz, self.dead_zone)
 
             # 4. MAPPING (1-to-1 Aligned Frames)
 
-    
+            # Here self.scale is simply a gain / amplifier, ex: active_vx = 2.0 m/s, target_vx = 2.0 x 2.0 (scale) =4.0 m/s
+            # This means "Move Robot twice as fast as hand motion"
             target_vx = active_vx * self.scale
             target_vy = active_vy * self.scale
             target_vz = active_vz * self.scale  # x up down  goes to robot z down up
@@ -435,7 +462,7 @@ class AprilTagTeleop(Node):
             self.current_vx = (self.alpha * target_vx) + ((1 - self.alpha) * self.current_vx)
             self.current_vy = (self.alpha * target_vy) + ((1 - self.alpha) * self.current_vy)
             self.current_vz = (self.alpha * target_vz) + ((1 - self.alpha) * self.current_vz)
-
+            # take 20 % of new velocity input , rest use 90 % the old one.
 
 
 
@@ -457,7 +484,7 @@ class AprilTagTeleop(Node):
 
 
             # 3. 
-            twist.linear.x = max(min(-(self.current_vy), self.max_speed), -self.max_speed)     
+            twist.linear.x = max(min((self.current_vy), self.max_speed), -self.max_speed)     
             # the above is confirm camera  - y , is robot x (lateral axis ) -
             # the position is inverse thats why -y of camera is +x of robot end effector.
 

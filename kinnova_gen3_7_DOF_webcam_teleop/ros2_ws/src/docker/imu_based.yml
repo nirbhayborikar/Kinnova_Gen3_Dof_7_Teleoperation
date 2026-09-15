@@ -1,0 +1,40 @@
+services:
+  kinova_teleop:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: kinova_gen3_teleop
+    container_name: kinova_gen3_teleop
+    stdin_open: true
+    tty: true
+    environment:
+      - DISPLAY=${DISPLAY}
+      - RMW_IMPLEMENTATION=rmw_zenoh_cpp  # cyclonedds # zenoh
+      - QT_X11_NO_MITSHM=1
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - ROS_DOMAIN_ID=145
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      
+      # - ../stage_1/kinova_gen3_teleop:/ros2_ws/src/stage_1/kinova_gen3_teleop:rw
+      - ../stage_1:/ros2_ws/src/stage_1:rw
+ 
+        
+    devices:
+      - /dev/video0:/dev/video0
+    network_mode: host
+    privileged: true
+    command:
+      - bash
+      - -c
+      - |
+        source /opt/ros/jazzy/setup.bash &&
+        colcon build --symlink-install --packages-select gesture_control &&
+        source ~/root/ros2_ws/install/setup.bash &&
+        source install/setup.bash &&
+        sleep 2
+        ros2 run gesture_control sensagram_twist_final &&
+        
+        tail -f /dev/null
+
